@@ -1,6 +1,6 @@
 import os
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
-from src.resources.locator import Locator
+from pages.locator import Locator
 from src.resources.tools import Tools
 
 class SettingsPage(DistributorPortalPage):

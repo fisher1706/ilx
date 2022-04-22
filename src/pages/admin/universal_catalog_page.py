@@ -1,6 +1,6 @@
 from src.pages.admin.admin_portal_page import AdminPortalPage
 from src.resources.tools import Tools
-from src.resources.locator import Locator
+from pages.locator import Locator
 
 class UniversalCatalogPage(AdminPortalPage):
     universal_product_body = {

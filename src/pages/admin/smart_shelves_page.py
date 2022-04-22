@@ -1,7 +1,7 @@
 import time
 from src.pages.admin.admin_portal_page import AdminPortalPage
 from src.resources.tools import Tools
-from src.resources.locator import Locator
+from pages.locator import Locator
 from glbl import Log, Error
 
 class SmartShelvesPage(AdminPortalPage):

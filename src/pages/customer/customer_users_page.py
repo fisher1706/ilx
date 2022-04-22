@@ -1,5 +1,5 @@
 from src.pages.customer.customer_portal_page import CustomerPortalPage
-from src.resources.locator import Locator
+from pages.locator import Locator
 
 class CustomerUsersPage(CustomerPortalPage):
     customer_user_body = {

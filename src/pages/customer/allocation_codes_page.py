@@ -1,6 +1,6 @@
 from selenium.webdriver.common.keys import Keys
 from src.pages.customer.customer_portal_page import CustomerPortalPage
-from src.resources.locator import Locator
+from pages.locator import Locator
 
 class AllocationCodesPage(CustomerPortalPage):
     allocation_code_body = {

@@ -1,7 +1,7 @@
 import copy
 import pytest
 from src.resources.tools import Tools
-from src.resources.locator import Locator
+from pages.locator import Locator
 from src.resources.permissions import Permissions
 from src.pages.general.login_page import LoginPage
 from src.pages.distributor.vmi_page import VmiPage

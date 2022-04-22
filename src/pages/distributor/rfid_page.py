@@ -1,6 +1,6 @@
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
 from src.resources.tools import Tools
-from src.resources.locator import Locator
+from pages.locator import Locator
 
 class RfidPage(DistributorPortalPage):
     xpath_rfid_add = f"{Locator.xpath_dialog+Locator.xpath_button_type}//span[text()='Add']"

@@ -1,5 +1,5 @@
 from src.pages.admin.admin_portal_page import AdminPortalPage
-from src.resources.locator import Locator
+from pages.locator import Locator
 
 class FeesPage(AdminPortalPage):
     fee_price = {

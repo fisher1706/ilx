@@ -1,5 +1,5 @@
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
-from src.resources.locator import Locator
+from pages.locator import Locator
 
 class DistributorSmartShelvesPage(DistributorPortalPage):
     smart_shelves_body = {

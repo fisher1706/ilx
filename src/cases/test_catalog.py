@@ -10,7 +10,7 @@ from src.api.admin.universal_catalog_api import UniversalCatalogApi
 from src.api.distributor.product_api import ProductApi
 from src.api.distributor.location_api import LocationApi
 from src.api.setups.setup_product import SetupProduct
-from src.resources.locator import Locator
+from pages.locator import Locator
 
 @pytest.mark.parametrize("permissions", [
     {

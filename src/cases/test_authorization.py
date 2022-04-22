@@ -5,7 +5,7 @@ from src.pages.distributor.distributor_portal_page import DistributorPortalPage
 from src.pages.customer.customer_portal_page import CustomerPortalPage
 from src.pages.checkout.checkout_portal_page import CheckoutPortalPage
 from src.pages.checkout.new_checkout_portal_page import NewCheckoutPortalPage
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.tools import Tools
 
 @pytest.mark.regression
@@ -19,7 +19,7 @@ def test_success_login_admin_portal(ui):
     lp.input_email(ui.admin_email)
     lp.input_password(ui.admin_password)
     lp.click_on_submit_button()
-    app.admin_sidebar_should_contain_email()
+    app.element(f"//span[text()='{ui.admin_email}']").get()
     app.sign_out()
     lp.it_should_be_login_page()
 
@@ -77,7 +77,7 @@ def test_reset_password_admin_portal(ui):
     lp.input_email("example.test-reset-password-@agilevision.io")
     lp.submit_button_should_be_enabled()
     lp.click_on_submit_button()
-    lp.get_element_by_xpath("//h2[text()='Please check your inbox']")
+    lp.element("//h2[text()='Please check your inbox']").get()
     lp.return_from_forgot_password_page()
     lp.it_should_be_login_page()
 
@@ -156,7 +156,7 @@ def test_redirect_distributor(smoke_ui):
     lp.input_password(smoke_ui.distributor_password)
     lp.click_on_submit_button()
     lp.url_should_be(url.distributor_portal+"/marketing")
-    lp.get_element_by_id(Locator.id_enter_here)
+    lp.get_element_by_id(L.id_enter_here)
 
     lp.follow_url(url.distributor_portal, url.distributor_portal+"/customers")
     lp.url_should_be(url.distributor_portal+"/customers")
@@ -241,7 +241,7 @@ class BaseAuthorization():
         lp.input_email(context.distributor_email)
         lp.input_password(context.distributor_password)
         lp.click_on_submit_button()
-        dpp.click_id(Locator.id_enter_here, timeout=30)
+        dpp.element(L.enter_here).click()
         dpp.distributor_sidebar_should_contain_email()
         dpp.url_should_contain("distributor")
         context.session_context.smoke_distributor_token = dpp.get_authorization_token()
@@ -257,7 +257,7 @@ class BaseAuthorization():
         lp.input_email(context.customer_email)
         lp.input_password(context.customer_password)
         lp.click_on_submit_button()
-        cpp.click_id(Locator.id_enter_here, timeout=30)
+        cpp.click_id(L.id_enter_here, timeout=30)
         cpp.customer_sidebar_should_contain_email()
         cpp.url_should_contain("customer")
 

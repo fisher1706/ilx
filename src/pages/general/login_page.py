@@ -1,7 +1,8 @@
 from src.pages.base_page import BasePage
-from src.resources.locator import Locator as L
+from src.pages.locator import Locator as L
 
 class LoginPage(BasePage):
+    #----FOLLOW URL----
     def follow_admin_portal(self):
         self.follow_url(self.url.admin_portal)
 
@@ -14,21 +15,29 @@ class LoginPage(BasePage):
     def follow_new_checkout_portal(self):
         self.follow_url(self.url.new_checkout_portal)
 
+    #----FIELDS AND BUTTONS----
     def input_email(self, email):
         self.element(L.email).enter(email)
 
     def input_password(self, password):
         self.element(L.password).enter(password, hide_log=True)
 
-    def submit_button_should_be_disabled(self):
-        self.should_be_disabled_xpath(L.xpath_submit_button)
+    def clear_email(self):
+        self.clear_id(L.id_email)
 
-    def submit_button_should_be_enabled(self):
-        self.should_be_enabled_xpath(L.xpath_submit_button)
+    def clear_password(self):
+        self.clear_id(L.id_password)
 
     def click_on_submit_button(self):
         self.element(L.submit_button).click()
 
+    def open_forgot_password_page(self):
+        self.element(L.forgot_password).click()
+
+    def return_from_forgot_password_page(self):
+        self.element("//a[@href='/sign-in']").click()
+
+    #----CHECKS----
     def error_should_be_present(self):
         self.get_element_by_xpath("//span[text()='Incorrect email address or password.']")
 
@@ -41,26 +50,21 @@ class LoginPage(BasePage):
     def required_password_message_should_be_present(self):
         self.get_element_by_xpath("//p[text()='Please enter password']")
 
-    def clear_email(self):
-        self.clear_id(L.id_email)
-
-    def clear_password(self):
-        self.clear_id(L.id_password)
-
     def it_should_be_login_page(self):
-        self.get_element_by_xpath(L.xpath_forgot_password)
-        self.get_element_by_id(L.id_email)
-        self.get_element_by_id(L.id_password)
-
-    def open_forgot_password_page(self):
-        self.click_xpath(L.xpath_forgot_password)
+        self.element(L.forgot_password).get()
+        self.element(L.email).get()
+        self.element(L.password).get()
 
     def incorrect_email_message_should_be_present(self):
         self.get_element_by_xpath("//span[text()='Please check if the entered email address is correct and try again.']")
 
-    def return_from_forgot_password_page(self):
-        self.click_xpath("//a[@href='/sign-in']")
+    def submit_button_should_be_disabled(self):
+        self.element(L.submit_button).wait_until_disabled()
 
+    def submit_button_should_be_enabled(self):
+        self.element(L.submit_button).wait_until_enabled()
+
+    #----FULL LOG IN----
     def log_in_admin_portal(self):
         self.follow_admin_portal()
         self.input_email(self.context.admin_email)

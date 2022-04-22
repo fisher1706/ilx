@@ -1,5 +1,5 @@
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
-from src.resources.locator import Locator
+from pages.locator import Locator
 
 class OrderStatusPage(DistributorPortalPage):
     def update_transaction(self, row, reorder_quantity=None, shipped_quantity=None, status=None):

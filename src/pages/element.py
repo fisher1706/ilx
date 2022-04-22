@@ -1,23 +1,29 @@
+from email.policy import default
 import time
+from timeit import default_timer
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from glbl import Log, Error
+from src.pages.waits import ElementToBeEnabled #pylint: disable=0301
 
 class Element():
+    default_timeout = 20
+    enabled_timeout = 5
+
     def __init__(self, context):
-        self.timeout = 20
         self.context = context
         self.driver = context.driver
+        self.xpath = None
 
     def __call__(self, xpath):
         self.xpath = xpath
         return self
 
     def get(self):
-        return WebDriverWait(self.driver, self.timeout).until(EC.presence_of_element_located((By.XPATH, self.xpath)))
+        return WebDriverWait(self.driver, self.default_timeout).until(EC.presence_of_element_located((By.XPATH, self.xpath)))
 
     def click(self, retries=5):
         selenium_element = self.get()
@@ -25,7 +31,7 @@ class Element():
             try:
                 actions = ActionChains(self.driver)
                 actions.move_to_element(selenium_element).perform()
-                WebDriverWait(self.driver, self.timeout).until(EC.element_to_be_clickable((By.XPATH, self.xpath)))
+                WebDriverWait(self.driver, self.default_timeout).until(EC.element_to_be_clickable((By.XPATH, self.xpath)))
                 selenium_element.click()
             except Exception as e:
                 if retries > 0:
@@ -73,3 +79,10 @@ class Element():
         selenium_element = self.get()
         return selenium_element.is_enabled()
 
+    def wait_until_enabled(self):
+        self.get()
+        WebDriverWait(self.driver, self.enabled_timeout).until(ElementToBeEnabled(self.xpath)) #pylint: disable=E1102
+
+    def wait_until_disabled(self):
+        self.get()
+        WebDriverWait(self.driver, self.enabled_timeout).until_not(ElementToBeEnabled(self.xpath)) #pylint: disable=E1102

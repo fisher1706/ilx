@@ -3,9 +3,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
-from src.waits import wait_until_disabled, page_url_is, dialog_is_not_present, elements_count_should_be, is_page_loading, last_page, wait_until_dropdown_list_loaded, wait_until_dropdown_is_not_empty #pylint: disable=C0301
-from src.resources.locator import Locator
+from src.waits import page_url_is, dialog_is_not_present, elements_count_should_be, is_page_loading, last_page, wait_until_dropdown_list_loaded, wait_until_dropdown_is_not_empty #pylint: disable=C0301
+from src.pages.locator import Locator as L
 from src.pages.element import Element
+from src.pages.waits import ElementToBeEnabled
 from glbl import Log, Error
 
 class BasePage():
@@ -29,32 +30,6 @@ class BasePage():
             Log.info(f"URL '{url}' is followed")
             self.wait_for_complete_ready_state()
 
-    def should_be_disabled_xpath(self, xpath, wait=False):
-        element = self.get_element_by_xpath(xpath)
-        if not wait:
-            assert not element.is_enabled(), f"Element with XPATH = '{xpath}' is enabled, but should be disabled"
-        else:
-            WebDriverWait(self.driver, 7).until(wait_until_disabled(xpath)) #pylint: disable=E1102
-            assert not element.is_enabled(), f"Element with XPATH = '{xpath}' is enabled, but should be disabled"
-
-    def should_be_enabled_xpath(self, xpath, wait=False):
-        element = self.get_element_by_xpath(xpath)
-        if not wait:
-            assert element.is_enabled(), f"Element with XPATH = '{xpath}' is disabled, but should be enabled"
-        else:
-            WebDriverWait(self.driver, 7).until_not(wait_until_disabled(xpath)) #pylint: disable=E1102
-            assert element.is_enabled(), f"Element with XPATH = '{xpath}' is disabled, but should be enabled"
-
-    def get_authorization_token(self):
-        cookies = self.driver.get_cookies()
-        token = None
-        for cookies_dict in cookies:
-            name = cookies_dict["name"].split(".")[-1]
-            if name == "idToken":
-                token = cookies_dict["value"]
-                break
-        return token
-
     def url_should_be(self, url):
         try:
             WebDriverWait(self.driver, 20).until(page_url_is(url)) #pylint: disable=E1102
@@ -70,24 +45,19 @@ class BasePage():
         else:
             Error.error(f"URL does not contain '{text}'")
 
+    def get_authorization_token(self):
+        cookies = self.driver.get_cookies()
+        token = None
+        for cookies_dict in cookies:
+            name = cookies_dict["name"].split(".")[-1]
+            if name == "idToken":
+                token = cookies_dict["value"]
+                break
+        return token
+
     def input_by_name(self, name, data, hide_log=None):
         if data is not None:
             self.input_data_xpath(data, f"//input[@name='{name}']", hide_log=hide_log)
-
-    def clear_id(self, element_id):
-        element = self.get_element_by_id(element_id, clickable=True)
-        length = len(element.get_attribute("value"))
-        for _ in range(length):
-            element.send_keys(Keys.BACKSPACE)
-
-    def clear_xpath(self, xpath):
-        element = self.get_element_by_xpath(xpath, clickable=True)
-        length = len(element.get_attribute("value"))
-        for _ in range(length):
-            try:
-                element.send_keys(Keys.BACKSPACE)
-            except:
-                Error.error(f"Cannot complete BACKSPACE for element {xpath}")
 
     def select_in_dropdown(self, xpath, name):
         if name is not None:
@@ -97,18 +67,18 @@ class BasePage():
 
     def manage_shipto(self, shiptos, prefix_path=""):
         if shiptos is not None:
-            self.click_xpath(Locator.xpath_button_by_name("Manage"))
-            self.get_element_by_xpath(Locator.xpath_select_button)
+            self.click_xpath(L.xpath_button_by_name("Manage"))
+            self.get_element_by_xpath(L.xpath_select_button)
             for shipto_name in shiptos:
-                self.get_element_by_xpath(f"{Locator.xpath_dialog}//span[text()='{shipto_name}']")
+                self.get_element_by_xpath(f"{L.xpath_dialog}//span[text()='{shipto_name}']")
             for shipto in shiptos:
-                for row in range(1, self.get_element_count(prefix_path+Locator.xpath_table_row)+1):
-                    if shipto == self.driver.find_element_by_xpath(Locator.xpath_table_item_in_dialog(row, 1)).text:
-                        self.click_xpath(f"{Locator.xpath_table_item_in_dialog(row, 5)}//button")
+                for row in range(1, self.get_element_count(prefix_path+L.xpath_table_row)+1):
+                    if shipto == self.driver.find_element_by_xpath(L.xpath_table_item_in_dialog(row, 1)).text:
+                        self.click_xpath(f"{L.xpath_table_item_in_dialog(row, 5)}//button")
                         break
                 else:
                     Error.error(f"There is no ShipTo '{shipto}'")
-            self.click_xpath(f"{Locator.xpath_dialog}{Locator.xpath_submit_button}//span[text()='Save']")
+            self.click_xpath(f"{L.xpath_dialog}{L.xpath_submit_button}//span[text()='Save']")
 
     def dialog_should_not_be_visible(self):
         try:
@@ -147,7 +117,7 @@ class BasePage():
         WebDriverWait(self.driver, 15).until(lambda x: x.execute_script("return document.readyState === 'complete'"))
 
     def open_last_page(self):
-        pagination_buttons = self.driver.find_elements_by_xpath(f"{Locator.xpath_pagination_bottom}//button")
+        pagination_buttons = self.driver.find_elements_by_xpath(f"{L.xpath_pagination_bottom}//button")
         if len(pagination_buttons) > 3:
             if pagination_buttons[-2].is_enabled():
                 self.wait_until_page_loaded()
@@ -160,20 +130,20 @@ class BasePage():
         self.wait_for_the_first_element_in_table()
         if wait:
             try:
-                WebDriverWait(self.driver, 7).until_not(wait_until_disabled(Locator.xapth_button_last_page)) #pylint: disable=E1102
+                WebDriverWait(self.driver, 7).until_not(ElementToBeEnabled(L.xapth_button_last_page)) #pylint: disable=E1102
             except:
                 pass
-        if self.get_element_by_xpath(Locator.xapth_button_last_page).is_enabled():
-            self.click_xpath(Locator.xapth_button_last_page)
+        if self.get_element_by_xpath(L.xapth_button_last_page).is_enabled():
+            self.click_xpath(L.xapth_button_last_page)
             self.wait_for_the_first_element_in_table()
 
     def wait_for_the_first_element_in_table(self):
-        self.get_element_by_xpath(Locator.xpath_get_table_item(2, 1))
+        self.get_element_by_xpath(L.xpath_get_table_item(2, 1))
 
     def select_pagination(self, number_of_elements):
         if number_of_elements is not None:
-            self.click_xpath(Locator.xpath_listbox)
-            self.click_xpath(Locator.xpath_select_pagination(number_of_elements))
+            self.click_xpath(L.xpath_listbox)
+            self.click_xpath(L.xpath_select_pagination(number_of_elements))
 
     def should_be_last_page(self):
         try:
@@ -184,18 +154,18 @@ class BasePage():
             Log.info("Last page is opened")
 
     def get_table_rows_number(self):
-        return self.get_element_count(Locator.xpath_table_row)
+        return self.get_element_count(L.xpath_table_row)
 
     def get_header_column(self, header):
-        self.get_element_by_xpath(Locator.xpath_table_header_column) #wait for the headers appear
-        headers = self.driver.find_elements_by_xpath(Locator.xpath_table_header_column)
+        self.get_element_by_xpath(L.xpath_table_header_column) #wait for the headers appear
+        headers = self.driver.find_elements_by_xpath(L.xpath_table_header_column)
         for index, item in enumerate(headers):
             if item.text == header:
                 return index+1
         return False
 
     def get_table_item_text_by_indexes(self, row, column):
-        xpath = Locator.xpath_table_item(row, column)
+        xpath = L.xpath_table_item(row, column)
         return self.get_element_text(xpath)
 
     def check_last_table_item_by_header(self, header, expected_text):
@@ -229,7 +199,7 @@ class BasePage():
                 if correctness:
                     Log.info(f"{row} element in '{header}' column is correct")
             else:
-                self.element_should_have_text(Locator.xpath_table_item(row, column), expected_text)
+                self.element_should_have_text(L.xpath_table_item(row, column), expected_text)
 
     def check_table_item(self, expected_text, cell=None, header=None, row=None, last=None):
         if expected_text is not None:
@@ -239,9 +209,9 @@ class BasePage():
 
             if isinstance(expected_text, list):
                 if last is not None:
-                    current_text = self.get_element_text(Locator.xpath_get_last_table_item(column))
+                    current_text = self.get_element_text(L.xpath_get_last_table_item(column))
                 elif row is not None:
-                    current_text = self.get_element_text(Locator.xpath_get_table_item(row, column))
+                    current_text = self.get_element_text(L.xpath_get_table_item(row, column))
                 else:
                     Error.error("Either 'row' or 'last' parameter should be defined")
                 correctness = True
@@ -255,9 +225,9 @@ class BasePage():
                     Log.info(f"{row} element in '{header}' column is correct")
             else:
                 if last is not None:
-                    self.element_should_have_text(Locator.xpath_get_last_table_item(column), expected_text)
+                    self.element_should_have_text(L.xpath_get_last_table_item(column), expected_text)
                 elif row is not None:
-                    self.element_should_have_text(Locator.xpath_get_table_item(row, column), expected_text)
+                    self.element_should_have_text(L.xpath_get_table_item(row, column), expected_text)
                 else:
                     Error.error("Either 'row' or 'last' parameter should be defined")
 
@@ -270,7 +240,7 @@ class BasePage():
             Error.error(f"Delete dialog about '{current_text}', but should be about '{expected_text}'")
 
     def delete_dialog_about(self):
-        xpath = Locator.xpath_dialog+"//b"
+        xpath = L.xpath_dialog+"//b"
         try:
             element = self.get_element_by_xpath(xpath)
         except:
@@ -305,20 +275,20 @@ class BasePage():
             Log.info(f"Checkbox with XPATH = '{xpath}' has been already unchecked")
 
     def select_checkbox_in_dialog_by_name(self, name):
-        self.select_checkbox(Locator.xpath_checkbox_in_dialog_by_name(name))
+        self.select_checkbox(L.xpath_checkbox_in_dialog_by_name(name))
 
     def unselect_checkbox_in_dialog_by_name(self, name):
-        self.unselect_checkbox(Locator.xpath_checkbox_in_dialog_by_name(name))
+        self.unselect_checkbox(L.xpath_checkbox_in_dialog_by_name(name))
 
     def set_checkbox_value_in_dialog_by_name(self, name, value):
         if value:
-            self.select_checkbox(Locator.xpath_checkbox_in_dialog_by_name(name))
+            self.select_checkbox(L.xpath_checkbox_in_dialog_by_name(name))
         else:
-            self.unselect_checkbox(Locator.xpath_checkbox_in_dialog_by_name(name))
+            self.unselect_checkbox(L.xpath_checkbox_in_dialog_by_name(name))
 
     def clear_all_checkboxes_in_dialog(self):
         try:
-            checkboxes = self.driver.find_elements_by_xpath(Locator.xpath_dialog+Locator.xpath_checkbox)
+            checkboxes = self.driver.find_elements_by_xpath(L.xpath_dialog+L.xpath_checkbox)
         except:
             Error.error("Checkboxes in dialog not found")
         else:
@@ -346,7 +316,7 @@ class BasePage():
     def scan_table(self, scan_by, column_header, body=None, pagination=True):
         column = self.get_header_column(column_header)
         if pagination:
-            pagination_buttons = self.driver.find_elements_by_xpath(Locator.xpath_pagination_bottom+"//button")
+            pagination_buttons = self.driver.find_elements_by_xpath(L.xpath_pagination_bottom+"//button")
         if column:
             is_break = False
             while True:
@@ -379,23 +349,23 @@ class BasePage():
         folder += "/output/"+filename
         self.get_element_by_id(element_id).send_keys(folder)
         self.dialog_should_be_visible()
-        self.click_xpath(Locator.xpath_continue_import)
+        self.click_xpath(L.xpath_continue_import)
         self.dialog_should_not_be_visible()
 
     def click_tab_by_name(self, tab_name):
-        self.click_xpath(Locator.xpath_button_tab_by_name(tab_name))
+        self.click_xpath(L.xpath_button_tab_by_name(tab_name))
         self.wait_until_progress_bar_loaded()
 
     def wait_until_progress_bar_loaded(self, time=4):
         try:
-            WebDriverWait(self.driver, time).until(EC.presence_of_element_located((By.XPATH, Locator.xpath_progress_bar)))
+            WebDriverWait(self.driver, time).until(EC.presence_of_element_located((By.XPATH, L.xpath_progress_bar)))
         except:
             pass
-        WebDriverWait(self.driver, 15).until_not(EC.presence_of_element_located((By.XPATH, Locator.xpath_progress_bar)))
+        WebDriverWait(self.driver, 15).until_not(EC.presence_of_element_located((By.XPATH, L.xpath_progress_bar)))
 
     def get_row_of_table_item_by_column(self, scan_by, column, prefix_path=""):
-        for index, row in enumerate(range(1, self.get_element_count(prefix_path+Locator.xpath_table_row)+1)):
-            if scan_by == self.driver.find_element_by_xpath(prefix_path+Locator.xpath_table_item(row, column)).text:
+        for index, row in enumerate(range(1, self.get_element_count(prefix_path+L.xpath_table_row)+1)):
+            if scan_by == self.driver.find_element_by_xpath(prefix_path+L.xpath_table_item(row, column)).text:
                 return index+1
 
     def set_slider(self, xpath, condition):
@@ -412,8 +382,8 @@ class BasePage():
 
     def get_row_of_table_item_by_header(self, scan_by, column_header, prefix_path=""):
         column = self.get_header_column(column_header)
-        for index, row in enumerate(range(1, self.get_element_count(prefix_path+Locator.xpath_table_row)+1)):
-            if scan_by == self.get_element_by_xpath(prefix_path+Locator.xpath_table_item(row, column)).text:
+        for index, row in enumerate(range(1, self.get_element_count(prefix_path+L.xpath_table_row)+1)):
+            if scan_by == self.get_element_by_xpath(prefix_path+L.xpath_table_item(row, column)).text:
                 return index+1
 
     def wait_until_dropdown_list_loaded(self, count):
@@ -457,9 +427,9 @@ class BasePage():
 
     def select_customer_shipto(self, customer_xpath=None, customer_name=None, shipto_xpath=None, shipto_name=None):
         if customer_xpath is None:
-            customer_xpath = Locator.xpath_by_count(Locator.xpath_select_box, 1)
+            customer_xpath = L.xpath_by_count(L.xpath_select_box, 1)
         if shipto_xpath is None:
-            shipto_xpath = Locator.xpath_by_count(Locator.xpath_select_box, 2)
+            shipto_xpath = L.xpath_by_count(L.xpath_select_box, 2)
         self.wait_until_page_loaded()
         self.select_in_dropdown(customer_xpath, customer_name)
         self.wait_until_page_loaded()
@@ -496,8 +466,8 @@ class BasePage():
 
     def select_shipto_sku(self, shipto=None, sku=None):
         if shipto is not None:
-            self.select_in_dropdown_via_input(Locator.xpath_dropdown_in_dialog(1), shipto)
+            self.select_in_dropdown_via_input(L.xpath_dropdown_in_dialog(1), shipto)
             self.wait_until_page_loaded()
         if sku is not None:
-            self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(2), sku)
+            self.select_in_dropdown(L.xpath_dropdown_in_dialog(2), sku)
             self.wait_until_page_loaded()

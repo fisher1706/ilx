@@ -1,5 +1,5 @@
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
-from src.resources.locator import Locator
+from pages.locator import Locator
 from src.api.distributor.warehouse_api import WarehouseApi
 
 class WarehousesPage(DistributorPortalPage):

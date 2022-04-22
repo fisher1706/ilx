@@ -1,10 +1,21 @@
 class Locator():
     'The class contains all base locators'
 
+    #----FIELDS----
     email = "//input[@id='email']"
     password = "//input[@id='password']"
-    enter_here = "redirectButton"
+
+    #----BUTTONS----
+    enter_here = "//button[@id='redirectButton']"
     add_button = "item-action-add"
+
+    #----TABLE----
+    role_row = "//div[@role='row']"
+
+    #----OTHERS----
+    forgot_password = "//a[text()='Reset my password']"
+
+
     item_action_customer_add = "item-action-customer-add"
     file_upload = "file-upload"
     upload_rfid_csv = "upload-rfid-csv"
@@ -36,7 +47,6 @@ class Locator():
     button = "//div[@role='button']"
     button_type = "//button[@type='button']"
     button_save = "//button[@label='Save']"
-    role_row = "//div[@role='row']"
     last_role_row = f"({role_row})[last()]"
     role_cell = "//div[@role='cell']"
     replenishment_item = "//div[@data-testid='replenishment-item']"

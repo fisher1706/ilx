@@ -3,7 +3,7 @@ from src.api.distributor.settings_api import SettingsApi
 from src.api.distributor.location_api import LocationApi
 from src.resources.tools import Tools
 from src.resources.process_email import ProcessEmail
-from src.resources.locator import Locator
+from pages.locator import Locator
 from src.aws.s3 import S3
 from src.api.setups.setup_distributor_user import SetupDistributorUser
 from src.api.setups.setup_customer import SetupCustomer

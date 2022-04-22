@@ -1,5 +1,5 @@
 from src.pages.base_page import BasePage
-from src.resources.locator import Locator
+from pages.locator import Locator
 from glbl import Log, Error
 
 class ActivityLogPage(BasePage):

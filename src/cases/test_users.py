@@ -1,6 +1,6 @@
 import pytest
 from src.resources.tools import Tools
-from src.resources.locator import Locator
+from pages.locator import Locator
 from src.resources.permissions import Permissions
 from src.api.admin.admin_user_api import AdminUserApi
 from src.api.distributor.user_api import UserApi

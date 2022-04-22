@@ -1,5 +1,5 @@
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
-from src.resources.locator import Locator
+from pages.locator import Locator
 from src.api.distributor.customer_api import CustomerApi
 from glbl import Log, Error
 
