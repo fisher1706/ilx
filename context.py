@@ -86,6 +86,7 @@ class Context():
     #main
     session_context = None
     dynamic_context = None
+    driver = None
     data = None
 
     def __setattr__(self, key, value):

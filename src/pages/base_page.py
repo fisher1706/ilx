@@ -1,137 +1,33 @@
 import os
-import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.action_chains import ActionChains
 from src.waits import wait_until_disabled, page_url_is, dialog_is_not_present, elements_count_should_be, is_page_loading, last_page, wait_until_dropdown_list_loaded, wait_until_dropdown_is_not_empty #pylint: disable=C0301
 from src.resources.locator import Locator
+from src.pages.element import Element
 from glbl import Log, Error
 
 class BasePage():
     def __init__(self, context):
         self.context = context
-        self.driver = context.driver
         self.url = self.context.session_context.url
-        self.data = context.data
+        self.driver = context.driver
+        self.element = Element(context)
 
     def follow_url(self, url, expected_url=None):
         try:
             self.driver.get(url)
-        except:
+        except Exception as e:
             expected_url = url if expected_url is None else expected_url
             current_url = self.driver.current_url
             if current_url != expected_url:
-                Error.error(f"Error during try to follow URL = '{url}'. Current: {current_url}; Expected: {expected_url}")
+                Error.error(f"Error during try to follow URL = '{url}'. Current: {current_url}; Expected: {expected_url}.\n{e}")
             else:
-                Log.info(f"URL = '{url}' is followed")
+                Log.info(f"URL '{url}' is followed")
         else:
-            Log.info(f"URL = '{url}' is followed")
+            Log.info(f"URL '{url}' is followed")
             self.wait_for_complete_ready_state()
-
-    def get_element_by_xpath(self, xpath, clickable=False):
-        try:
-            element = WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.XPATH, xpath)))
-            if clickable:
-                element = WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.XPATH, xpath)))
-        except:
-            Error.error(f"Element with XPATH = '{xpath}' not found")
-        else:
-            return element
-
-    def get_element_by_id(self, element_id, clickable=False):
-        try:
-            element = WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.ID, element_id)))
-            if clickable:
-                element = WebDriverWait(self.driver, 20).until(EC.element_to_be_clickable((By.ID, element_id)))
-        except:
-            Error.error(f"Element with ID = '{element_id}' not found")
-        else:
-            return element
-
-    def get_element_count(self, xpath):
-        try:
-            elements = self.driver.find_elements_by_xpath(xpath)
-        except:
-            Error.error(f"Elements with XPATH = '{xpath}' do not found")
-        else:
-            count = len(elements)
-            Log.info(f"There are '{count}' elements with XPATH = '{xpath}'")
-            return count
-
-    def get_element_text(self, xpath):
-        element = self.get_element_by_xpath(xpath)
-        return element.text
-
-    def click_id(self, element_id, timeout=20):
-        element = self.get_element_by_id(element_id)
-        try:
-            actions = ActionChains(self.driver)
-            actions.move_to_element(element).perform()
-            WebDriverWait(self.driver, timeout).until(EC.element_to_be_clickable((By.ID, element_id)))
-            element.click()
-        except TimeoutException:
-            Error.error(f"Element with ID = '{element_id}' is not clickable")
-        except:
-            Error.error(f"Element with ID = '{element_id}' cannot be clicked")
-        else:
-            Log.info(f"Element with ID = '{element_id}' is clicked")
-
-    def click_xpath(self, xpath, timeout=20, retries=5):
-        element = self.get_element_by_xpath(xpath)
-        for retry in range(retries):
-            try:
-                actions = ActionChains(self.driver)
-                actions.move_to_element(element).perform()
-                WebDriverWait(self.driver, timeout).until(EC.element_to_be_clickable((By.XPATH, xpath)))
-                element.click()
-            except TimeoutException:
-                if retry == retries - 1:
-                    Error.error(f"Element with XPATH = '{xpath}' is not clickable")
-                else:
-                    Log.info(f"Element with XPATH = '{xpath}' is not clickable")
-                time.sleep(1)
-                continue
-            except:
-                if retry == retries - 1:
-                    Error.error(f"Element with XPATH = '{xpath}' cannot be clicked")
-                else:
-                    Log.info(f"Element with XPATH = '{xpath}' cannot be clicked")
-                time.sleep(1)
-                continue
-            else:
-                Log.info(f"Element with XPATH = '{xpath}' is clicked")
-                break
-
-    def input_data_id(self, data, element_id, hide_log=False):
-        self.clear_id(element_id)
-        element = self.get_element_by_id(element_id, clickable=True)
-        try:
-            element.send_keys(data)
-        except:
-            Error.error(f"Cannot input '{data}' into element with ID = '{element_id}'")
-        else:
-            if hide_log:
-                data = "***"
-            Log.info(f"Data '{data}' inputed into element with ID = '{element_id}'")
-
-    def input_data_xpath(self, data, xpath, hide_log=False):
-        self.clear_xpath(xpath)
-        element = self.get_element_by_xpath(xpath, clickable=True)
-        try:
-            element.send_keys(data)
-        except:
-            Error.error(f"Cannot input '{data}' into element with XPATH = '{xpath}'")
-        else:
-            if hide_log:
-                data = "***"
-            Log.info(f"Data '{data}' inputed into element with XPATH = '{xpath}'")
-
-    def should_be_disabled_id(self, element_id):
-        element = self.get_element_by_id(element_id)
-        assert not element.is_enabled(), f"Element with ID = '{element_id}' is enabled, but should be disabled"
 
     def should_be_disabled_xpath(self, xpath, wait=False):
         element = self.get_element_by_xpath(xpath)
@@ -140,10 +36,6 @@ class BasePage():
         else:
             WebDriverWait(self.driver, 7).until(wait_until_disabled(xpath)) #pylint: disable=E1102
             assert not element.is_enabled(), f"Element with XPATH = '{xpath}' is enabled, but should be disabled"
-
-    def should_be_enabled_id(self, element_id):
-        element = self.get_element_by_id(element_id)
-        assert element.is_enabled(), f"Element with ID = '{element_id}' is disabled, but should be enabled"
 
     def should_be_enabled_xpath(self, xpath, wait=False):
         element = self.get_element_by_xpath(xpath)

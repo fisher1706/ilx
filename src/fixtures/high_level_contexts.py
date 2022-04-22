@@ -4,6 +4,7 @@ import pytest
 def ui(driver, base_context):
     context_object = base_context
     context_object.testrail_run_id = context_object.data.testrail_run_id
+    context_object.driver = driver
     return context_object
 
 @pytest.fixture(scope="function")
@@ -22,6 +23,7 @@ def mobile_api(base_context):
 def smoke_ui(driver, smoke_context):
     context_object = smoke_context
     context_object.testrail_run_id = context_object.data.smoke_testrail_run_id
+    context_object.driver = driver
     return context_object
 
 @pytest.fixture(scope="function")
@@ -33,6 +35,7 @@ def smoke_api(smoke_context):
 @pytest.fixture(scope="function")
 def permission_ui(driver, permission_context):
     context_object = permission_context
+    context_object.driver = driver
     return context_object
 
 @pytest.fixture(scope="function")

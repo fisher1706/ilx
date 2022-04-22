@@ -17,15 +17,15 @@ from src.resources.tools import Tools
 @pytest.fixture(scope="function")
 def driver(request, session_context):
     browser_name = session_context.browser_name
-    browser = None
+    driver = None
     if browser_name == "chrome":
         chrome_options = Options()
         chrome_options.add_argument("--window-size=1300,1000")
         capabilities = DesiredCapabilities.CHROME
         capabilities["goog:loggingPrefs"] = {"performance": "ALL"}
-        browser = webdriver.Chrome(options=chrome_options, desired_capabilities=capabilities)
+        driver = webdriver.Chrome(options=chrome_options, desired_capabilities=capabilities)
     elif browser_name == "firefox":
-        browser = webdriver.Firefox()
+        driver = webdriver.Firefox()
     elif browser_name == "chrome-headless":
         chrome_options = Options()
         chrome_options.add_argument("--window-size=1920,1080")
@@ -35,13 +35,12 @@ def driver(request, session_context):
         chrome_options.add_argument("--enable-automation")
         capabilities = DesiredCapabilities.CHROME
         capabilities["goog:loggingPrefs"] = {"performance": "ALL"}
-        browser = webdriver.Chrome(options=chrome_options, desired_capabilities=capabilities)
+        driver = webdriver.Chrome(options=chrome_options, desired_capabilities=capabilities)
     else:
         raise pytest.UsageError("--browser_name should be 'chrome', 'chrome-headless' or 'firefox'")
-    browser.set_page_load_timeout(30)
-    DRIVER = browser
-    yield 
-    DRIVER.quit()
+    driver.set_page_load_timeout(30)
+    yield driver
+    driver.quit()
 
 @pytest.fixture(scope="session")
 def session_context(request):

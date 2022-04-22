@@ -56,12 +56,11 @@ class Log():
 class Var():
     is_teardown = None
     teardown_error = None
-    driver = None
 
     @staticmethod
     def clear_teardown():
-        Var.is_teardown = False
-        Var.teardown_error = False
+        Var.is_teardown = None
+        Var.teardown_error = None
 
     def __setattr__(self, key, value):
         if hasattr(self, key):

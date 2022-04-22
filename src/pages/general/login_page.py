@@ -1,5 +1,5 @@
 from src.pages.base_page import BasePage
-from src.resources.locator import Locator
+from src.resources.locator import Locator as L
 
 class LoginPage(BasePage):
     def follow_admin_portal(self):
@@ -15,19 +15,19 @@ class LoginPage(BasePage):
         self.follow_url(self.url.new_checkout_portal)
 
     def input_email(self, email):
-        self.input_data_id(email, Locator.id_email)
+        self.element(L.email).enter(email)
 
     def input_password(self, password):
-        self.input_data_id(password, Locator.id_password, hide_log=True)
+        self.element(L.password).enter(password, hide_log=True)
 
     def submit_button_should_be_disabled(self):
-        self.should_be_disabled_xpath(Locator.xpath_submit_button)
+        self.should_be_disabled_xpath(L.xpath_submit_button)
 
     def submit_button_should_be_enabled(self):
-        self.should_be_enabled_xpath(Locator.xpath_submit_button)
+        self.should_be_enabled_xpath(L.xpath_submit_button)
 
     def click_on_submit_button(self):
-        self.click_xpath(Locator.xpath_submit_button)
+        self.element(L.submit_button).click()
 
     def error_should_be_present(self):
         self.get_element_by_xpath("//span[text()='Incorrect email address or password.']")
@@ -42,18 +42,18 @@ class LoginPage(BasePage):
         self.get_element_by_xpath("//p[text()='Please enter password']")
 
     def clear_email(self):
-        self.clear_id(Locator.id_email)
+        self.clear_id(L.id_email)
 
     def clear_password(self):
-        self.clear_id(Locator.id_password)
+        self.clear_id(L.id_password)
 
     def it_should_be_login_page(self):
-        self.get_element_by_xpath(Locator.xpath_forgot_password)
-        self.get_element_by_id(Locator.id_email)
-        self.get_element_by_id(Locator.id_password)
+        self.get_element_by_xpath(L.xpath_forgot_password)
+        self.get_element_by_id(L.id_email)
+        self.get_element_by_id(L.id_password)
 
     def open_forgot_password_page(self):
-        self.click_xpath(Locator.xpath_forgot_password)
+        self.click_xpath(L.xpath_forgot_password)
 
     def incorrect_email_message_should_be_present(self):
         self.get_element_by_xpath("//span[text()='Please check if the entered email address is correct and try again.']")
@@ -90,4 +90,4 @@ class LoginPage(BasePage):
         self.click_on_submit_button()
         self.title_should_be("SRX User Dashboard")
         self.follow_url(self.url.customer_portal)
-        self.click_xpath(Locator.xpath_button)
+        self.element(L.button).click()
