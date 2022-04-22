@@ -53,9 +53,10 @@ class LOG():
 class VAR():
     is_teardown = None
     teardown_error = None
+    driver = None
 
     @staticmethod
-    def clear():
+    def clear_teardown():
         VAR.is_teardown = False
         VAR.teardown_error = False
 
