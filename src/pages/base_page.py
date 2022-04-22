@@ -199,7 +199,8 @@ class BasePage():
 
     def select_in_dropdown(self, xpath, name):
         if name is not None:
-            self.click_xpath(xpath)
+            self.click(xpath)
+            xpath.click()
             LOG.info(f"Dropdown list with XPATH = '{xpath}' is opened")
             self.click_xpath(f"{xpath}/..//div[text()='{name}' and @tabindex='-1']")
 

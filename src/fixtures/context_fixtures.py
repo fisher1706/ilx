@@ -39,8 +39,9 @@ def driver(request, session_context):
     else:
         raise pytest.UsageError("--browser_name should be 'chrome', 'chrome-headless' or 'firefox'")
     browser.set_page_load_timeout(30)
-    yield browser
-    browser.quit()
+    DRIVER = browser
+    yield 
+    DRIVER.quit()
 
 @pytest.fixture(scope="session")
 def session_context(request):
@@ -72,7 +73,7 @@ def context(session_context):
     context_object.dynamic_context = defaultdict(list)
     context_object.session_context = session_context
     LOG.clear()
-    VAR.clear()
+    VAR.clear_teardown()
     return context_object
 
 @pytest.fixture(scope="function")
