@@ -1,29 +1,33 @@
 from selenium.webdriver.common.keys import Keys
+from glbl import LOG
 from src.pages.customer.customer_portal_page import CustomerPortalPage
 from src.resources.locator import Locator
+from src.api.customer.customer_user_api import CustomerUserApi
 
 class AllocationCodesPage(CustomerPortalPage):
     allocation_code_body = {
         "name": None,
         "type": None,
         "values": None,
-        "isRequired": None,
-        "shiptos": None
+        "isRequired": None
+        # "shiptos": None
     }
     xpath_add_to_list = "//span[text()='Add to list']"
 
     def add_allocation_code(self, allocation_code_body):
+        ca = CustomerUserApi(self.context)
+        allocation_codes_count = len(ca.get_allocation_codes())
         self.click_id(Locator.id_add_button)
         self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), allocation_code_body.pop("type"))
         self.set_slider(Locator.xpath_checkbox, allocation_code_body.pop("isRequired"))
-        self.manage_shipto(allocation_code_body.pop("shiptos"))
         self.enter_values(allocation_code_body.pop("values"))
         for field in allocation_code_body.keys():
             self.input_by_name(field, allocation_code_body[field])
         self.click_xpath(self.xpath_add_to_list)
         self.click_xpath(Locator.xpath_submit_button)
-        self.url_should_be(self.url.get_url_for_env("storeroomlogix.com/allocation-codes", "customer"))
-        self.wait_until_page_loaded()
+        self.click_xpath(Locator.xpath_reload_button)
+        self.element_should_have_text(Locator.xpath_get_table_item_by_index(allocation_codes_count, 1), allocation_code_body["name"])
+        self.click_xpath(Locator.xpath_last_role_row + Locator.xpath_info_button)
 
     def enter_values(self, values):
         if values is not None:
