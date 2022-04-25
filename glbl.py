@@ -1,5 +1,4 @@
 import logging
-import pytest
 
 class Error():
     @staticmethod
@@ -7,7 +6,7 @@ class Error():
         if Var.is_teardown:
             Var.teardown_error = True
         Log.error(message)
-        pytest.fail()
+        raise Exception() from None
 
     @staticmethod
     def check(statement: bool, message_if_true: str, message_if_false: str):

@@ -23,13 +23,16 @@ class LoginPage(BasePage):
         self.element(L.password).enter(password, hide_log=True)
 
     def clear_email(self):
-        self.clear_id(L.id_email)
+        self.element(L.email).clear()
 
     def clear_password(self):
-        self.clear_id(L.id_password)
+        self.element(L.password).clear()
 
     def click_on_submit_button(self):
         self.element(L.submit_button).click()
+
+    def click_on_submit_button_checkout(self):
+        self.element("//ion-button[@type='submit']").click()
 
     def open_forgot_password_page(self):
         self.element(L.forgot_password).click()
@@ -39,16 +42,16 @@ class LoginPage(BasePage):
 
     #----CHECKS----
     def error_should_be_present(self):
-        self.get_element_by_xpath("//span[text()='Incorrect email address or password.']")
+        self.element("//span[text()='Incorrect email address or password.']").get()
 
     def invalid_email_message_should_be_present(self):
-        self.get_element_by_xpath("//p[text()='Email must be a valid email']")
+        self.element("//p[text()='Email must be a valid email']").get()
 
     def required_email_message_should_be_present(self):
-        self.get_element_by_xpath("//p[text()='Email is a required field']")
+        self.element("//p[text()='Email is a required field']").get()
 
     def required_password_message_should_be_present(self):
-        self.get_element_by_xpath("//p[text()='Please enter password']")
+        self.element("//p[text()='Please enter password']").get()
 
     def it_should_be_login_page(self):
         self.element(L.forgot_password).get()
@@ -56,7 +59,7 @@ class LoginPage(BasePage):
         self.element(L.password).get()
 
     def incorrect_email_message_should_be_present(self):
-        self.get_element_by_xpath("//span[text()='Please check if the entered email address is correct and try again.']")
+        self.element("//span[text()='Please check if the entered email address is correct and try again.']").get()
 
     def submit_button_should_be_disabled(self):
         self.element(L.submit_button).wait_until_disabled()

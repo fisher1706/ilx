@@ -2,19 +2,30 @@ class Locator():
     'The class contains all base locators'
 
     #----FIELDS----
-    email = "//input[@id='email']"
-    password = "//input[@id='password']"
+    email = "//input[@name='email']"
+    password = "//input[@name='password']"
 
     #----BUTTONS----
     enter_here = "//button[@id='redirectButton']"
     add_button = "item-action-add"
+    submit_button = "//button[@type='submit']"
+    button_type = "//button[@type='button']"
+    select_button = "//button[@data-testid='select-button']"
+    button_last_page = "//button[@aria-label='Go to last page']"
+    button_tab = "//button[@role='tab']"
+
 
     #----TABLE----
+    table_row = "//div[@role='rowgroup']"
     role_row = "//div[@role='row']"
+    table_column = "//div[@role='gridcell']"
+    role_cell = "//div[@role='cell']"
+
 
     #----OTHERS----
     forgot_password = "//a[text()='Reset my password']"
-
+    dialog = "//div[@role='dialog']"
+    role_listbox = "//ul[@role='listbox']"
 
     item_action_customer_add = "item-action-customer-add"
     file_upload = "file-upload"
@@ -26,13 +37,8 @@ class Locator():
     confirm_password = "confirmPassword"
     item_action_import = "item-action-import"
     forgot_password = "//a[text()='Reset my password']"
-    submit_button = "//button[@type='submit']"
-    dialog = "//div[@role='dialog']"
     select_box = "//div[@test-id='select-box']/div"
     dropdown_list_item = select_box+"/div[2]/div/div"
-    button_tab = "//button[@role='tab']"
-    table_row = "//div[@role='rowgroup']"
-    table_column = "//div[@role='gridcell']"
     table_header_column = "//div[@role='columnheader']"
     table = "//div[@class='rt-table']"
     checkbox = "//input[@type='checkbox']"
@@ -44,11 +50,8 @@ class Locator():
     successfully_imported_msg = "//span[@id='client-snackbar']//strong[text()='Successfully imported']"
     successfully_uploaded_document_msg = "//span[text()='Document uploaded successfully!']"
     successfully_submitted_reorder_list = "//span[text()='Reorder list was successfully submitted']"
-    button = "//div[@role='button']"
-    button_type = "//button[@type='button']"
     button_save = "//button[@label='Save']"
     last_role_row = f"({role_row})[last()]"
-    role_cell = "//div[@role='cell']"
     replenishment_item = "//div[@data-testid='replenishment-item']"
     replenishment_item_sku = "//div[@data-testid='part-sku']"
     submit_reorder_list_button = "//button/span[text()='Submit']"
@@ -74,7 +77,6 @@ class Locator():
     associated_users = "//button[@data-testid='associated-users-button']"
     configure_button = "//button[@data-testid='configure-button']"
     view_button = "//button[@data-testid='view-button']"
-    select_button = "//button[@data-testid='select-button']"
     edit_status_button = "//button[@data-testid='edit-status-button']"
     split_button = "//button[@data-testid='split-button']"
     role_menu = "//ul[@role='menu']"
@@ -86,18 +88,16 @@ class Locator():
     reset_password = "//div[text()='Reset password']"
     actions_button = "//button[@data-testid='sticky-last-more-button']"
     listbox = "//div[@aria-haspopup='listbox']/.."
-    role_listbox = "//ul[@role='listbox']"
-    button_last_page = "//button[@aria-label='Go to last page']"
     reload_button = "//button[@data-testid='reload-button']"
     button_reset = "//button[@type='reset']"
 
     @staticmethod
-    def index(xpath, index):
+    def get_indexed(xpath, index):
         return f"({xpath})[{index}]"
 
     @staticmethod
-    def xpath_checkbox_in_dialog(index):
-        return Locator.xpath_by_count(Locator.xpath_dialog+Locator.xpath_checkbox, index)
+    def get_checkbox_in_dialog(index):
+        return Locator.get_indexed(Locator.xpath_dialog+Locator.xpath_checkbox, index)
 
     @staticmethod
     def xpath_dropdown_in_dialog(index):
@@ -108,16 +108,16 @@ class Locator():
         return f"{Locator.xpath_dialog}//span[text()='{name}']/..//input[@type='checkbox']"
 
     @staticmethod
-    def xpath_button_tab_by_name(name):
-        return f"{Locator.xpath_button_tab}//span[text()='{name}']"
+    def get_button_tab_by_name(name):
+        return f"{Locator.button_tab}//span[text()='{name}']"
 
     @staticmethod
-    def xpath_table_item(row, column, sub_xpath=""):
+    def get_table_item_outdated(row, column, sub_xpath=""):
         return f"(({sub_xpath}{Locator.xpath_table_row})[{row}]{Locator.xpath_table_column})[{column}]"
 
     @staticmethod
-    def xpath_get_table_item(row, column):
-        return f"(({Locator.xpath_role_row})[{row}]{Locator.xpath_role_cell})[{column}]"
+    def get_table_item(row, column):
+        return f"(({Locator.role_row})[{row}]{Locator.role_cell})[{column}]"
 
     @staticmethod
     def xpath_get_last_table_item(column):
@@ -132,12 +132,12 @@ class Locator():
         return f"//div[@role='row' and @data-row-index='{index}']{Locator.xpath_role_cell}[{column}]"
 
     @staticmethod
-    def xpath_table_item_in_dialog(row, column):
-        return f"(({Locator.xpath_dialog}{Locator.xpath_table_row})[{row}]{Locator.xpath_table_column})[{column}]"
+    def get_table_item_in_dialog(row, column):
+        return f"(({Locator.dialog}{Locator.table_row})[{row}]{Locator.table_column})[{column}]"
 
     @staticmethod
-    def xpath_button_by_name(name):
-        return f"//button[@type='button']//span[text()='{name}']"
+    def get_button_by_name(name):
+        return f"{Locator.button_type}//span[text()='{name}']"
 
     @staticmethod
     def xpath_planogram(door, cell):
@@ -148,8 +148,8 @@ class Locator():
         return f"{Locator.xpath_dropdown_list_item}//span[text()='{sku}']/../.."
 
     @staticmethod
-    def xpath_select_pagination(value):
-        return f"{Locator.xpath_role_listbox}/li[@data-value='{value}']"
+    def get_select_pagination(value):
+        return f"{Locator.role_listbox}/li[@data-value='{value}']"
 
     def __setattr__(self, key, value):
         if hasattr(key):

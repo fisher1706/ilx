@@ -1,13 +1,12 @@
-from email.policy import default
 import time
-from timeit import default_timer
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from glbl import Log, Error
-from src.pages.waits import ElementToBeEnabled #pylint: disable=0301
+from src.pages.waits import ElementToBeEnabled, ElementsNumberToBe
+from src.pages.locator import Locator as L
 
 class Element():
     default_timeout = 20
@@ -23,7 +22,19 @@ class Element():
         return self
 
     def get(self):
-        return WebDriverWait(self.driver, self.default_timeout).until(EC.presence_of_element_located((By.XPATH, self.xpath)))
+        try:
+            return WebDriverWait(self.driver, self.default_timeout).until(EC.presence_of_element_located((By.XPATH, self.xpath)))
+        except Exception as e:
+            Error.error(f"Cannot find element'{self.xpath}'.\n{e}")
+
+    def get_list(self):
+        count = self.count()
+        list_of_elements = list()
+        for index in range(1, count+1):
+            element = Element(self.driver)
+            xpath = L.get_indexed(self.xpath, index)
+            list_of_elements.append(element(xpath))
+        return list_of_elements
 
     def click(self, retries=5):
         selenium_element = self.get()
@@ -81,8 +92,22 @@ class Element():
 
     def wait_until_enabled(self):
         self.get()
-        WebDriverWait(self.driver, self.enabled_timeout).until(ElementToBeEnabled(self.xpath)) #pylint: disable=E1102
+        WebDriverWait(self.driver, self.enabled_timeout).until(ElementToBeEnabled(self.xpath))
 
     def wait_until_disabled(self):
         self.get()
-        WebDriverWait(self.driver, self.enabled_timeout).until_not(ElementToBeEnabled(self.xpath)) #pylint: disable=E1102
+        WebDriverWait(self.driver, self.enabled_timeout).until_not(ElementToBeEnabled(self.xpath))
+
+    def wait_until_disappeared(self):
+        try:
+            return WebDriverWait(self.driver, self.default_timeout).until_not(EC.presence_of_element_located((By.XPATH, self.xpath)))
+        except Exception as e:
+            Error.error(f"Element '{self.xpath}' is still present.\n{e}")
+
+    def wait_elements_number(self, xpath, number):
+        try:
+            WebDriverWait(self.driver, self.default_timeout).until(ElementsNumberToBe(xpath, number))
+        except Exception as e:
+            Error.error(f"Number of elements is incorrect: should be '{number}', now '{self.count()}'.\n{e}")
+        else:
+            Log.info("Number of elements is correct")

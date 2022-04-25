@@ -55,15 +55,15 @@ def test_invalid_login_new_checkout_portal(ui):
     cpp = NewCheckoutPortalPage(ui)
 
     lp.follow_new_checkout_portal()
-    cpp.input_email_checkout_portal("example@agilevision.io")
-    cpp.input_password_checkout_portal("example")
-    cpp.sign_in_checkout_portal()
+    lp.input_email("example@agilevision.io")
+    lp.input_password("example")
+    lp.click_on_submit_button_checkout()
     cpp.wrong_user_error_should_be_present()
-    cpp.clear_email()
-    cpp.clear_password()
-    cpp.input_email_checkout_portal(ui.customer_email)
-    cpp.input_password_checkout_portal("example")
-    cpp.sign_in_checkout_portal()
+    lp.clear_email()
+    lp.clear_password()
+    lp.input_email(ui.customer_email)
+    lp.input_password("example")
+    lp.click_on_submit_button_checkout()
     cpp.wrong_password_error_should_be_present()
 
 @pytest.mark.regression
@@ -156,8 +156,7 @@ def test_redirect_distributor(smoke_ui):
     lp.input_password(smoke_ui.distributor_password)
     lp.click_on_submit_button()
     lp.url_should_be(url.distributor_portal+"/marketing")
-    lp.get_element_by_id(L.id_enter_here)
-
+    lp.element(L.enter_here).get()
     lp.follow_url(url.distributor_portal, url.distributor_portal+"/customers")
     lp.url_should_be(url.distributor_portal+"/customers")
     dpp.distributor_sidebar_should_contain_email()
@@ -173,9 +172,9 @@ def test_log_out_checkout_portal(ui):
     cpp = NewCheckoutPortalPage(ui)
 
     lp.follow_new_checkout_portal()
-    cpp.input_email_checkout_portal(ui.customer_email)
-    cpp.input_password_checkout_portal(ui.customer_password)
-    cpp.sign_in_checkout_portal()
+    lp.input_email(ui.customer_email)
+    lp.input_password(ui.customer_password)
+    lp.click_on_submit_button_checkout()
     cpp.open_hide_menu()
     cpp.log_out_checkout_portal()
     lp.url_should_be(f"{ui.session_context.url.new_checkout_portal}/auth")
@@ -188,11 +187,11 @@ def test_log_in_checkout_passcode(ui):
     cpp = NewCheckoutPortalPage(ui)
 
     lp.follow_new_checkout_portal()
-    cpp.input_email_checkout_portal(ui.checkout_group_email)
-    cpp.input_password_checkout_portal(ui.checkout_group_password)
-    cpp.sign_in_checkout_portal()
+    lp.input_email(ui.checkout_group_email)
+    lp.input_password(ui.checkout_group_password)
+    lp.click_on_submit_button_checkout()
     cpp.input_passcode(ui.data.passcode)
-    cpp.sign_in_checkout_portal()
+    lp.click_on_submit_button_checkout()
     lp.url_should_be(f"{ui.session_context.url.new_checkout_portal}/dashboard")
 
 @pytest.mark.regression
@@ -203,15 +202,15 @@ def test_log_out_checkout_passcode(ui):
     cpp = NewCheckoutPortalPage(ui)
 
     lp.follow_new_checkout_portal()
-    cpp.input_email_checkout_portal(ui.checkout_group_email)
-    cpp.input_password_checkout_portal(ui.checkout_group_password)
-    cpp.sign_in_checkout_portal()
+    lp.input_email(ui.checkout_group_email)
+    lp.input_password(ui.checkout_group_password)
+    lp.click_on_submit_button_checkout()
     cpp.input_passcode(ui.data.passcode)
-    cpp.sign_in_checkout_portal()
+    lp.click_on_submit_button_checkout()
     cpp.open_hide_menu()
     cpp.log_out_checkout_portal()
     lp.url_should_be(f"{ui.session_context.url.new_checkout_portal}/auth")
-    cpp.log_out_checkout_groupe()
+    cpp.log_out_checkout_group()
 
 @pytest.mark.regression
 def test_invalid_log_in_passcode(ui):
@@ -221,11 +220,11 @@ def test_invalid_log_in_passcode(ui):
     cpp = NewCheckoutPortalPage(ui)
 
     lp.follow_new_checkout_portal()
-    cpp.input_email_checkout_portal(ui.checkout_group_email)
-    cpp.input_password_checkout_portal(ui.checkout_group_password)
-    cpp.sign_in_checkout_portal()
+    lp.input_email(ui.checkout_group_email)
+    lp.input_password(ui.checkout_group_password)
+    lp.click_on_submit_button_checkout()
     cpp.input_passcode(Tools.random_string_l(3))
-    cpp.sign_in_checkout_portal()
+    lp.click_on_submit_button_checkout()
     cpp.wrong_passcode_error_should_be_present()
 
 class BaseAuthorization():
@@ -257,7 +256,7 @@ class BaseAuthorization():
         lp.input_email(context.customer_email)
         lp.input_password(context.customer_password)
         lp.click_on_submit_button()
-        cpp.click_id(L.id_enter_here, timeout=30)
+        cpp.element(L.enter_here).click()
         cpp.customer_sidebar_should_contain_email()
         cpp.url_should_contain("customer")
 
@@ -266,12 +265,11 @@ class BaseAuthorization():
         context.testrail_case_id = 1975
 
         lp = LoginPage(context)
-        cpp = CheckoutPortalPage(context)
 
         lp.follow_checkout_portal()
-        cpp.input_email_checkout_portal(context.customer_email)
-        cpp.input_password_checkout_portal(context.customer_password)
-        cpp.sign_in_checkout_portal()
+        lp.element("//input[@name='login']").enter(context.customer_email)
+        lp.input_password(context.customer_password)
+        lp.element(L.button_type).click()
         lp.url_should_be(f"{context.session_context.url.checkout_portal}/actions")
 
     @staticmethod
@@ -279,10 +277,9 @@ class BaseAuthorization():
         context.testrail_case_id = 4554
 
         lp = LoginPage(context)
-        cpp = NewCheckoutPortalPage(context)
 
         lp.follow_new_checkout_portal()
-        cpp.input_email_checkout_portal(context.customer_email)
-        cpp.input_password_checkout_portal(context.customer_password)
-        cpp.sign_in_checkout_portal()
+        lp.input_email(context.customer_email)
+        lp.input_password(context.customer_password)
+        lp.click_on_submit_button_checkout()
         lp.url_should_be(f"{context.session_context.url.new_checkout_portal}/dashboard")
