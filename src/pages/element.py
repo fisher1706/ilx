@@ -31,7 +31,7 @@ class Element():
         count = self.count()
         list_of_elements = list()
         for index in range(1, count+1):
-            element = Element(self.driver)
+            element = Element(self.context)
             xpath = L.get_indexed(self.xpath, index)
             list_of_elements.append(element(xpath))
         return list_of_elements
@@ -61,6 +61,7 @@ class Element():
 
     def enter(self, text, hide_log=None):
         selenium_element = self.get()
+        self.clear()
         try:
             selenium_element.send_keys(text)
         except Exception as e:

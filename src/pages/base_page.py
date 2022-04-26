@@ -84,6 +84,9 @@ class BasePage():
             WebDriverWait(self.driver, 15).until_not(lambda x: x.execute_script("return document.readyState === 'complete'"))
         WebDriverWait(self.driver, 15).until(lambda x: x.execute_script("return document.readyState === 'complete'"))
 
+    def wait_until_progress_bar_loaded(self):
+        self.element(L.progress_bar).wait_until_disappeared()
+
     def open_last_page(self):
         self.element(f"{L.pagination_bottom}//button").get()
         pagination_buttons = self.driver.find_elements_by_xpath(f"{L.pagination_bottom}//button")
@@ -91,6 +94,7 @@ class BasePage():
             if pagination_buttons[-2].is_enabled():
                 pagination_buttons[-2].click()
                 self.should_be_last_page()
+                self.wait_until_progress_bar_loaded()
 
     def last_page(self, pagination=None, wait=True):
         self.select_pagination(pagination)
@@ -132,7 +136,7 @@ class BasePage():
         return False
 
     def get_table_item_text_by_indexes(self, row, column):
-        xpath = L.get_table_item(row, column)
+        xpath = L.get_table_item_outdated(row, column)
         return self.element(xpath).text()
 
     def check_last_table_item_by_header(self, header, expected_text):
@@ -164,7 +168,7 @@ class BasePage():
                 if correctness:
                     Log.info(f"{row} element in '{header}' column is correct")
             else:
-                self.element_should_have_text(L.xpath_table_item(row, column), expected_text)
+                self.element_should_have_text(L.get_table_item_outdated(row, column), expected_text)
 
     def check_table_item(self, expected_text, cell=None, header=None, row=None, last=None):
         if expected_text is not None:
@@ -223,13 +227,13 @@ class BasePage():
         if checked == 'true':
             Log.info(f"Checkbox with XPATH = '{xpath}' has been already checked")
         elif checked is None:
-            self.element(xpath).click()
+            self.element(xpath).get().click()
             Log.info(f"Checkbox with XPATH = '{xpath}' is checked")
 
     def unselect_checkbox(self, xpath):
         checked = self.element(xpath).get().get_attribute("checked")
         if checked == 'true':
-            self.element(xpath).click()
+            self.element(xpath).get().click()
             Log.info(f"Checkbox with XPATH = '{xpath}' is unchecked")
         elif checked is None:
             Log.info(f"Checkbox with XPATH = '{xpath}' has been already unchecked")
@@ -303,7 +307,6 @@ class BasePage():
     def dialog_should_not_be_visible(self):
         self.element(L.dialog).wait_until_disappeared()
 
-
     def import_csv(self, element_id, filename):
         folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         folder += "/output/"+filename
@@ -330,6 +333,10 @@ class BasePage():
 
     def page_refresh(self):
         self.driver.refresh()
+
+    def table_refresh(self):
+        element = self.element("rt-table").get()
+        element.send_keys(Keys.CONTROL, Keys.SHIFT, Keys.SPACE)
 
     def get_row_of_table_item_by_header(self, scan_by, column_header, prefix_path=""):
         column = self.get_header_column(column_header)
