@@ -15,7 +15,7 @@ class CheckoutGroupsPage(CustomerPortalPage):
         self.click_id(Locator.id_add_button)
         for field in checkout_group_body.keys():
             self.input_by_name(field, checkout_group_body[field])
-        self.click_xpath(Locator.xpath_dropdown_in_dialog(1))
+        self.click_xpath(Locator.get_dropdown_in_dialog(1))
         self.click_xpath(Locator.xpath_dropdown_list_item+"/div")
         self.click_xpath(Locator.xpath_submit_button)
         self.dialog_should_not_be_visible()
@@ -34,7 +34,7 @@ class CheckoutGroupsPage(CustomerPortalPage):
 
     def update_new_checkout_group(self, checkout_group_body, row):
         self.click_xpath(Locator.xpath_by_count(Locator.xpath_table_row, row))
-        self.click_xpath(Locator.xpath_dropdown_in_dialog(1))
+        self.click_xpath(Locator.get_dropdown_in_dialog(1))
         self.click_xpath(Locator.xpath_dropdown_list_item+"/div[last()]")
         for field in checkout_group_body.keys():
             self.input_by_name(field, checkout_group_body[field])

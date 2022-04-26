@@ -14,9 +14,9 @@ class HardwarePage(AdminPortalPage):
 
     def create_iothub(self, distributor):
         self.click_id(Locator.id_add_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), "IoT Hub")
-        self.get_element_by_xpath(Locator.xpath_dropdown_in_dialog(6))
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(6), distributor)
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), "IoT Hub")
+        self.get_element_by_xpath(Locator.get_dropdown_in_dialog(6))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(6), distributor)
         self.click_xpath(Locator.xpath_submit_button)
         self.wait_until_page_loaded()
         self.get_element_by_xpath("//h6[text()='IoTHub provision information']")
@@ -46,7 +46,7 @@ class HardwarePage(AdminPortalPage):
     def update_last_iothub(self, distributor):
         self.open_last_page()
         self.click_xpath(Locator.xpath_by_count(Locator.xpath_table_row, self.get_table_rows_number())+Locator.xpath_edit_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(7), distributor)
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(7), distributor)
         self.click_xpath(Locator.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.wait_until_page_loaded()
@@ -69,8 +69,8 @@ class HardwarePage(AdminPortalPage):
     def is_iothub_available_in_dialog(self, type_name, hub_text):
         result = False
         self.click_id(Locator.id_add_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), type_name)
-        self.click_xpath(Locator.xpath_dropdown_in_dialog(5))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), type_name)
+        self.click_xpath(Locator.get_dropdown_in_dialog(5))
         number_of_dropdown_list_items = self.get_element_count(Locator.xpath_dropdown_list_item+"/div")
         for index in range(1, number_of_dropdown_list_items+1):
             dropdown_list_item_text = self.get_element_text(Locator.xpath_by_count(Locator.xpath_dropdown_list_item+"/div", index))
@@ -96,23 +96,23 @@ class HardwarePage(AdminPortalPage):
 
     def create_locker(self, distributor, iothub_name):
         self.click_id(Locator.id_add_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), "Locker")
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(5), iothub_name)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(7), "Standard")
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), "Locker")
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(5), iothub_name)
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(7), "Standard")
         self.click_xpath(Locator.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.wait_until_page_loaded()
 
     def create_vending(self, iothub_name):
         self.click_id(Locator.id_add_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), "Vending")
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(5), iothub_name)
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), "Vending")
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(5), iothub_name)
         self.click_xpath(Locator.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.wait_until_page_loaded()
 
     def configure_locker_door(self, door_number=None, serial_number=None, is_weight=False):
-        self.click_xpath(Locator.xpath_by_count(Locator.xpath_table_row, self.get_table_rows_number())+Locator.xpath_planogram_button)
+        self.click_xpath(Locator.xpath_by_count(Locator.xpath_table_row, self.get_table_rows_number())+Locator.get_planogram_button)
         self.get_element_by_xpath(Locator.xpath_configure_button)
         if door_number is None:
             count = self.get_element_count(Locator.xpath_configure_button)

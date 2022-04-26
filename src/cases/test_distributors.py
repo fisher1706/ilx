@@ -45,7 +45,6 @@ def test_distributor_crud(ui):
 
     lp.log_in_admin_portal()
     dp.sidebar_distributors()
-    dp.wait_until_page_loaded()
     dp.open_last_page()
     check_mark = dp.create_distributor(distributor_body.copy(), checkbox_list=checkbox_list)
     dp.check_last_distributor(distributor_body.copy(), state_short_code="MB", table_cells_checkbox=table_cells_checkbox, check_mark=check_mark)

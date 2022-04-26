@@ -7,7 +7,7 @@ class Locator():
 
     #----BUTTONS----
     enter_here = "//button[@id='redirectButton']"
-    add_button = "item-action-add"
+    add_button = "//button[@id='item-action-add']"
     submit_button = "//button[@type='submit']"
     button_type = "//button[@type='button']"
     select_button = "//button[@data-testid='select-button']"
@@ -27,7 +27,7 @@ class Locator():
     dialog = "//div[@role='dialog']"
     role_listbox = "//ul[@role='listbox']"
 
-    item_action_customer_add = "item-action-customer-add"
+    item_action_customer_add = "//button[@id='item-action-customer-add']"
     file_upload = "file-upload"
     upload_rfid_csv = "upload-rfid-csv"
     upload_rfid_available = "upload-rfid-available"
@@ -97,15 +97,15 @@ class Locator():
 
     @staticmethod
     def get_checkbox_in_dialog(index):
-        return Locator.get_indexed(Locator.xpath_dialog+Locator.xpath_checkbox, index)
+        return Locator.get_indexed(Locator.dialog+Locator.checkbox, index)
 
     @staticmethod
-    def xpath_dropdown_in_dialog(index):
-        return Locator.xpath_by_count(Locator.xpath_select_box, index)
+    def get_dropdown_in_dialog(index):
+        return Locator.get_indexed(Locator.select_box, index)
 
     @staticmethod
-    def xpath_checkbox_in_dialog_by_name(name):
-        return f"{Locator.xpath_dialog}//span[text()='{name}']/..//input[@type='checkbox']"
+    def get_checkbox_in_dialog_by_name(name):
+        return f"{Locator.dialog}//span[text()='{name}']/..//input[@type='checkbox']"
 
     @staticmethod
     def get_button_tab_by_name(name):
@@ -113,23 +113,23 @@ class Locator():
 
     @staticmethod
     def get_table_item_outdated(row, column, sub_xpath=""):
-        return f"(({sub_xpath}{Locator.xpath_table_row})[{row}]{Locator.xpath_table_column})[{column}]"
+        return f"(({sub_xpath}{Locator.table_row})[{row}]{Locator.table_column})[{column}]"
 
     @staticmethod
     def get_table_item(row, column):
         return f"(({Locator.role_row})[{row}]{Locator.role_cell})[{column}]"
 
     @staticmethod
-    def xpath_get_last_table_item(column):
-        return f"(({Locator.xpath_role_row})[last()]{Locator.xpath_role_cell})[{column}]"
+    def get_last_table_item(column):
+        return f"(({Locator.role_row})[last()]{Locator.role_cell})[{column}]"
 
     @staticmethod
-    def xpath_get_row_by_index(index):
+    def get_row_by_index(index):
         return f"//div[@role='row' and @data-row-index='{index}']"
 
     @staticmethod
-    def xpath_get_table_item_by_index(index, column):
-        return f"//div[@role='row' and @data-row-index='{index}']{Locator.xpath_role_cell}[{column}]"
+    def get_table_item_by_index(index, column):
+        return f"//div[@role='row' and @data-row-index='{index}']{Locator.role_cell}[{column}]"
 
     @staticmethod
     def get_table_item_in_dialog(row, column):
@@ -140,12 +140,12 @@ class Locator():
         return f"{Locator.button_type}//span[text()='{name}']"
 
     @staticmethod
-    def xpath_planogram(door, cell):
+    def get_planogram(door, cell):
         return f"//div[@data-door='{door}']//div[@data-cell='{cell}']"
 
     @staticmethod
-    def xpath_dropdown_sku(sku):
-        return f"{Locator.xpath_dropdown_list_item}//span[text()='{sku}']/../.."
+    def get_dropdown_sku(sku):
+        return f"{Locator.dropdown_list_item}//span[text()='{sku}']/../.."
 
     @staticmethod
     def get_select_pagination(value):

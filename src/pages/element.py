@@ -38,14 +38,18 @@ class Element():
 
     def click(self, retries=5):
         selenium_element = self.get()
+        try:
+            actions = ActionChains(self.driver)
+            actions.move_to_element(selenium_element).perform()
+            WebDriverWait(self.driver, self.default_timeout).until(EC.element_to_be_clickable((By.XPATH, self.xpath)))
+        except Exception as e:
+            Error.error(f"Element '{self.xpath}' is not clickable.\n{e}")
+
         while(retries):
             try:
-                actions = ActionChains(self.driver)
-                actions.move_to_element(selenium_element).perform()
-                WebDriverWait(self.driver, self.default_timeout).until(EC.element_to_be_clickable((By.XPATH, self.xpath)))
                 selenium_element.click()
             except Exception as e:
-                if retries > 0:
+                if retries > 1:
                     retries -= 1
                     Log.warning(f"Cannot click element '{self.xpath}'. Next try in 1 second")
                     time.sleep(1)

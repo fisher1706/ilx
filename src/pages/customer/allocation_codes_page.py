@@ -14,7 +14,7 @@ class AllocationCodesPage(CustomerPortalPage):
 
     def add_allocation_code(self, allocation_code_body):
         self.click_id(Locator.id_add_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), allocation_code_body.pop("type"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), allocation_code_body.pop("type"))
         self.set_slider(Locator.xpath_checkbox, allocation_code_body.pop("isRequired"))
         self.manage_shipto(allocation_code_body.pop("shiptos"))
         self.enter_values(allocation_code_body.pop("values"))

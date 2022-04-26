@@ -36,14 +36,14 @@ class CatalogPage(DistributorPortalPage):
         pa = ProductApi(self.context)
         start_number_of_rows = pa.get_products_total_elements()
         self.click_id(Locator.id_add_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), product_body.pop("lifecycleStatus"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), product_body.pop("lifecycleStatus"))
         for field in product_body.keys():
             self.input_by_name(field, product_body[field])
         self.click_xpath(Locator.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.wait_until_page_loaded()
         self.last_page(10)
-        self.get_element_by_xpath(Locator.xpath_get_row_by_index(start_number_of_rows%10))
+        self.get_element_by_xpath(Locator.get_row_by_index(start_number_of_rows%10))
 
     def check_last_product(self, product_body):
         table_cells = {
@@ -58,7 +58,7 @@ class CatalogPage(DistributorPortalPage):
 
     def update_last_product(self, product_body):
         self.click_xpath(Locator.xpath_last_role_row+Locator.xpath_edit_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), product_body.pop("lifecycleStatus"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), product_body.pop("lifecycleStatus"))
         for field in product_body.keys():
             self.input_by_name(field, product_body[field])
         self.click_xpath(Locator.xpath_submit_button)

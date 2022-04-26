@@ -1,5 +1,4 @@
 from src.pages.base_page import BasePage
-from src.pages.locator import Locator as L
 
 class AdminPortalPage(BasePage):
     def sign_out(self):

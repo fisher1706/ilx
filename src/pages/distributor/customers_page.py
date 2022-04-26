@@ -18,16 +18,16 @@ class CustomersPage(DistributorPortalPage):
         ca = CustomerApi(self.context)
         start_number_of_rows = ca.get_customers(full=True)["totalElements"]
         self.click_id(Locator.id_item_action_customer_add)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), customer_body.pop("customerType"))
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(2), customer_body.pop("marketType"))
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(3), customer_body.pop("warehouse"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), customer_body.pop("customerType"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(2), customer_body.pop("marketType"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(3), customer_body.pop("warehouse"))
         self.set_slider(Locator.xpath_dialog+Locator.xpath_checkbox, customer_body.pop("supplyForce"))
         for field in customer_body.keys():
             self.input_by_name(field, customer_body[field])
         self.click_xpath(Locator.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.last_page(10)
-        self.get_element_by_xpath(Locator.xpath_get_row_by_index(start_number_of_rows%10))
+        self.get_element_by_xpath(Locator.get_row_by_index(start_number_of_rows%10))
 
     def check_last_customer(self, customer_body):
         table_cells = {
@@ -42,8 +42,8 @@ class CustomersPage(DistributorPortalPage):
 
     def update_last_customer(self, customer_body):
         self.click_xpath(Locator.xpath_last_role_row+Locator.xpath_customer_info_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), customer_body.pop("customerType"))
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(2), customer_body.pop("marketType"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), customer_body.pop("customerType"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(2), customer_body.pop("marketType"))
         self.set_slider(Locator.xpath_checkbox, customer_body.pop("supplyForce"))
         for field in customer_body.keys():
             self.input_by_name(field, customer_body[field])
@@ -65,8 +65,8 @@ class CustomersPage(DistributorPortalPage):
 
     def add_customer_info(self, customer_body):
         self.wait_until_page_loaded()
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), customer_body.pop("customerType"))
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(2), customer_body.pop("marketType"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), customer_body.pop("customerType"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(2), customer_body.pop("marketType"))
         for field in customer_body.keys():
             self.input_by_name(field, customer_body[field])
         self.click_xpath(Locator.xpath_next)
@@ -101,7 +101,7 @@ class CustomersPage(DistributorPortalPage):
         ca = CustomerApi(self.context)
         start_number_of_rows = ca.get_customers(full=True)["totalElements"]
         self.last_page(10)
-        self.get_element_by_xpath(Locator.xpath_get_row_by_index(start_number_of_rows%10))
+        self.get_element_by_xpath(Locator.get_row_by_index(start_number_of_rows%10))
         self.wait_until_page_loaded()
 
     def change_automation_settings(self, email):

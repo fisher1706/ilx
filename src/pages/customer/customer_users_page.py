@@ -14,7 +14,7 @@ class CustomerUsersPage(CustomerPortalPage):
         self.wait_until_page_loaded()
         start_number_of_rows = self.get_table_rows_number()
         self.click_id(Locator.id_add_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), customer_user_body.pop("role"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), customer_user_body.pop("role"))
         self.manage_shipto(customer_user_body.pop("shiptos"), Locator.xpath_dialog)
         for field in customer_user_body.keys():
             self.input_by_name(field, customer_user_body[field])
@@ -36,7 +36,7 @@ class CustomerUsersPage(CustomerPortalPage):
 
     def update_last_customer_user(self, customer_user_body):
         self.click_xpath(Locator.xpath_by_count(Locator.xpath_table_row, self.get_table_rows_number()))
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), customer_user_body.pop("role"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), customer_user_body.pop("role"))
         self.manage_shipto(customer_user_body.pop("shiptos"), Locator.xpath_dialog)
         for field in customer_user_body.keys():
             self.input_by_name(field, customer_user_body[field])

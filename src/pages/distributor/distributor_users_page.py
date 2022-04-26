@@ -24,8 +24,8 @@ class DistributorUsersPage(DistributorPortalPage):
         ua = UserApi(self.context)
         start_number_of_rows = ua.get_distributor_user(full=True)["totalElements"]
         self.click_id(Locator.id_add_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), distributor_user_body.pop("role"))
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(2), distributor_user_body.pop("position"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), distributor_user_body.pop("role"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(2), distributor_user_body.pop("position"))
         for checkbox in distributor_user_body.pop("warehouses"):
             self.select_checkbox_in_dialog_by_name(checkbox)
         for field in distributor_user_body.keys():
@@ -33,7 +33,7 @@ class DistributorUsersPage(DistributorPortalPage):
         self.click_xpath(Locator.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.last_page(10)
-        self.get_element_by_xpath(Locator.xpath_get_row_by_index(start_number_of_rows%10))
+        self.get_element_by_xpath(Locator.get_row_by_index(start_number_of_rows%10))
 
     def check_last_distributor_user(self, distributor_user_body):
         splitted_warehouses = []
@@ -51,7 +51,7 @@ class DistributorUsersPage(DistributorPortalPage):
 
     def update_last_distributor_user(self, distributor_user_body):
         self.click_xpath(Locator.xpath_last_role_row+Locator.xpath_edit_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), distributor_user_body.pop("role"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), distributor_user_body.pop("role"))
         for checkbox in distributor_user_body.pop("warehouses"):
             self.select_checkbox_in_dialog_by_name(checkbox)
         for field in distributor_user_body.keys():
@@ -69,14 +69,14 @@ class DistributorUsersPage(DistributorPortalPage):
         ua = UserApi(self.context)
         start_number_of_rows = ua.get_distributor_user(full=True)["totalElements"]
         self.click_id(Locator.id_add_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), distributor_superuser_body.pop("role"))
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(2), distributor_superuser_body.pop("position"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), distributor_superuser_body.pop("role"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(2), distributor_superuser_body.pop("position"))
         for field in distributor_superuser_body.keys():
             self.input_by_name(field, distributor_superuser_body[field])
         self.click_xpath(Locator.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.last_page(10)
-        self.get_element_by_xpath(Locator.xpath_get_row_by_index(start_number_of_rows%10))
+        self.get_element_by_xpath(Locator.get_row_by_index(start_number_of_rows%10))
 
     def check_last_distributor_super_user(self, distributor_superuser_body):
         table_cells = {

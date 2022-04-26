@@ -20,12 +20,12 @@ class DistributorSmartShelvesPage(DistributorPortalPage):
         self.click_xpath(Locator.xpath_by_count(Locator.xpath_edit_button, self.get_table_rows_number()))
         self.should_be_disabled_xpath("//input[@name='serialNumber']")
         self.should_be_disabled_xpath("//input[@name='cellsQuantity']")
-        self.should_be_disabled_xpath(f"{Locator.xpath_dropdown_in_dialog(2)}//input")
+        self.should_be_disabled_xpath(f"{Locator.get_dropdown_in_dialog(2)}//input")
         # input Assign To and check if Door Number is editable
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), smart_shelves_body["assign_to"])
-        self.should_be_enabled_xpath(Locator.xpath_dropdown_in_dialog(2))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), smart_shelves_body["assign_to"])
+        self.should_be_enabled_xpath(Locator.get_dropdown_in_dialog(2))
         # input Door Number
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(2), smart_shelves_body["door_number"])
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(2), smart_shelves_body["door_number"])
         self.click_xpath(Locator.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.wait_until_page_loaded()
@@ -86,10 +86,10 @@ class DistributorSmartShelvesPage(DistributorPortalPage):
         self.click_xpath(Locator.xpath_by_count(Locator.xpath_table_row, row_number)+Locator.xpath_edit_button)
         self.wait_until_progress_bar_loaded()
         # input Assign To and check if Door Number is editable
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), locker)
-        self.should_be_enabled_xpath(Locator.xpath_dropdown_in_dialog(2))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), locker)
+        self.should_be_enabled_xpath(Locator.get_dropdown_in_dialog(2))
         # input Door Number
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(2), door_number)
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(2), door_number)
         self.click_xpath(Locator.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.wait_until_page_loaded()

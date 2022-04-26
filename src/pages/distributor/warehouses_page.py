@@ -20,14 +20,14 @@ class WarehousesPage(DistributorPortalPage):
         wa = WarehouseApi(self.context)
         start_number_of_rows = wa.get_warehouses()["totalElements"]
         self.click_id(Locator.id_add_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), warehouse_body.pop("state"))
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(2), warehouse_body.pop("timezone"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), warehouse_body.pop("state"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(2), warehouse_body.pop("timezone"))
         for field in warehouse_body.keys():
             self.input_by_name(field, warehouse_body[field])
         self.click_xpath(Locator.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.last_page(10)
-        self.get_element_by_xpath(Locator.xpath_get_row_by_index(start_number_of_rows%10))
+        self.get_element_by_xpath(Locator.get_row_by_index(start_number_of_rows%10))
 
     def check_last_warehouse(self, warehouse_body):
         table_cells = {
@@ -43,8 +43,8 @@ class WarehousesPage(DistributorPortalPage):
 
     def update_last_warehouse(self, warehouse_body):
         self.click_xpath(Locator.xpath_last_role_row+Locator.xpath_edit_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), warehouse_body.pop("state"))
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(2), warehouse_body.pop("timezone"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), warehouse_body.pop("state"))
+        self.select_in_dropdown(Locator.get_dropdown_in_dialog(2), warehouse_body.pop("timezone"))
         for field in warehouse_body.keys():
             self.input_by_name(field, warehouse_body[field])
         self.click_xpath(Locator.xpath_submit_button)

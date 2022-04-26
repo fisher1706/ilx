@@ -22,7 +22,7 @@ class DistributorSecurityGroups(DistributorPortalPage):
         self.click_xpath(Locator.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.last_page(10)
-        self.element_should_have_text(Locator.xpath_get_table_item_by_index(start_number_of_rows%10, 1), distributor_security_group_body["name"])
+        self.element_should_have_text(Locator.get_table_item_by_index(start_number_of_rows%10, 1), distributor_security_group_body["name"])
 
     def check_security_group(self, distributor_security_group_body):
         self.click_xpath(Locator.xpath_last_role_row + Locator.xpath_view_button)

@@ -3,10 +3,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
-from src.waits import wait_until_dropdown_list_loaded, wait_until_dropdown_is_not_empty
 from src.pages.locator import Locator as L
 from src.pages.element import Element
-from src.pages.waits import ElementToBeEnabled, PageUrlToBe
+from src.pages.waits import ElementToBeEnabled, PageUrlToBe, TextToBeEmpty
 from glbl import Log, Error
 
 class BasePage():
@@ -86,6 +85,7 @@ class BasePage():
         WebDriverWait(self.driver, 15).until(lambda x: x.execute_script("return document.readyState === 'complete'"))
 
     def open_last_page(self):
+        self.element(f"{L.pagination_bottom}//button").get()
         pagination_buttons = self.driver.find_elements_by_xpath(f"{L.pagination_bottom}//button")
         if len(pagination_buttons) > 3:
             if pagination_buttons[-2].is_enabled():
@@ -174,9 +174,9 @@ class BasePage():
 
             if isinstance(expected_text, list):
                 if last is not None:
-                    current_text = self.get_element_text(L.xpath_get_last_table_item(column))
+                    current_text = self.element(L.get_last_table_item(column)).text()
                 elif row is not None:
-                    current_text = self.get_element_text(L.xpath_get_table_item(row, column))
+                    current_text = self.element(L.get_last_table_item(row, column)).text()
                 else:
                     Error.error("Either 'row' or 'last' parameter should be defined")
                 correctness = True
@@ -188,9 +188,9 @@ class BasePage():
                     Log.info(f"{row} element in '{header}' column is correct")
             else:
                 if last is not None:
-                    self.element_should_have_text(L.xpath_get_last_table_item(column), expected_text)
+                    self.element_should_have_text(L.get_last_table_item(column), expected_text)
                 elif row is not None:
-                    self.element_should_have_text(L.xpath_get_table_item(row, column), expected_text)
+                    self.element_should_have_text(L.get_table_item(row, column), expected_text)
                 else:
                     Error.error("Either 'row' or 'last' parameter should be defined")
 
@@ -235,16 +235,16 @@ class BasePage():
             Log.info(f"Checkbox with XPATH = '{xpath}' has been already unchecked")
 
     def select_checkbox_in_dialog_by_name(self, name):
-        self.select_checkbox(L.xpath_checkbox_in_dialog_by_name(name))
+        self.select_checkbox(L.get_checkbox_in_dialog_by_name(name))
 
     def unselect_checkbox_in_dialog_by_name(self, name):
-        self.unselect_checkbox(L.xpath_checkbox_in_dialog_by_name(name))
+        self.unselect_checkbox(L.get_checkbox_in_dialog_by_name(name))
 
     def set_checkbox_value_in_dialog_by_name(self, name, value):
         if value:
-            self.select_checkbox(L.xpath_checkbox_in_dialog_by_name(name))
+            self.select_checkbox(L.get_checkbox_in_dialog_by_name(name))
         else:
-            self.unselect_checkbox(L.xpath_checkbox_in_dialog_by_name(name))
+            self.unselect_checkbox(L.get_checkbox_in_dialog_by_name(name))
 
     def clear_all_checkboxes_in_dialog(self):
         try:
@@ -300,16 +300,20 @@ class BasePage():
         else:
             Error.error(f"There is no header '{column_header}'")
 
+    def dialog_should_not_be_visible(self):
+        self.element(L.dialog).wait_until_disappeared()
+
+
     def import_csv(self, element_id, filename):
         folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         folder += "/output/"+filename
         self.element(element_id).get().send_keys(folder)
         self.element(L.dialog).get()
-        self.click_xpath(L.xpath_continue_import)
-        self.element(L.dialog).wait_until_disappeared()
+        self.element(L.continue_import).click()
+        self.dialog_should_not_be_visible()
 
     def click_tab_by_name(self, tab_name):
-        self.element(L.xpath_button_tab_by_name(tab_name)).click
+        self.element(L.get_button_tab_by_name(tab_name)).click
 
     def get_row_of_table_item_by_column(self, scan_by, column, prefix_path=""):
         for index, row in enumerate(range(1, self.element(prefix_path+L.table_row).count()+1)):
@@ -327,25 +331,15 @@ class BasePage():
     def page_refresh(self):
         self.driver.refresh()
 
-
-    #=========================NOT REFACTORED========================
     def get_row_of_table_item_by_header(self, scan_by, column_header, prefix_path=""):
         column = self.get_header_column(column_header)
-        for index, row in enumerate(range(1, self.get_element_count(prefix_path+L.xpath_table_row)+1)):
-            if scan_by == self.get_element_by_xpath(prefix_path+L.xpath_table_item(row, column)).text:
+        for index, row in enumerate(range(1, self.element(prefix_path+L.table_row).count()+1)):
+            if scan_by == self.element(prefix_path+L.get_table_item_outdated(row, column)).text():
                 return index+1
 
-    def wait_until_dropdown_list_loaded(self, count):
-        try:
-            WebDriverWait(self.driver, 15).until(wait_until_dropdown_list_loaded(count)) #pylint: disable=E1102
-        except:
-            Error.error("Dropdown list is not loaded")
-        else:
-            Log.info("Dropdown list is loaded")
-
     def check_found_dropdown_list_item(self, item_xpath, expected_text):
-        item_text = self.get_element_text(item_xpath)
-        number = self.get_element_count(item_xpath)
+        item_text = self.element(item_xpath).text()
+        number = self.element(item_xpath).count()
         if number == 1:
             if item_text == expected_text:
                 Log.info("Dropdown list element has been found")
@@ -356,67 +350,48 @@ class BasePage():
 
     def select_in_dropdown_via_input(self, xpath, name, span=None):
         if name is not None:
-            self.click_xpath(xpath)
+            self.element(xpath).click()
             Log.info(f"Dropdown list with XPATH = '{xpath}' is opened")
-            self.input_data_xpath(name, f"{xpath}//input")
-            #self.get_element_by_xpath(f"{xpath}//input").send_keys(Keys.ENTER)
+            self.element(f"{xpath}//input").enter(name)
             if span:
-                self.click_xpath(f"{xpath}/..//div[@tabindex='-1']//span[text()='{name}']")
+                self.element(f"{xpath}/..//div[@tabindex='-1']//span[text()='{name}']").click()
             else:
-                self.click_xpath(f"{xpath}/..//div[text()='{name}' and @tabindex='-1']")
+                self.element(f"{xpath}/..//div[text()='{name}' and @tabindex='-1']").click()
 
     def input_inline_xpath(self, data, xpath):
         if data is not None:
-            self.click_xpath(xpath)
-            self.click_xpath(xpath)
-            element = self.get_element_by_xpath(f"{xpath}//input")
+            self.element(xpath).click()
+            self.element(xpath).click()
+            element = self.element(f"{xpath}//input").get()
             self.driver.execute_script("arguments[0].value = arguments[1]", element, "")
-            self.input_data_xpath(data, f"{xpath}//input")
+            self.element(f"{xpath}//input").enter(data)
             element.send_keys(Keys.ENTER)
 
     def select_customer_shipto(self, customer_xpath=None, customer_name=None, shipto_xpath=None, shipto_name=None):
         if customer_xpath is None:
-            customer_xpath = L.xpath_by_count(L.xpath_select_box, 1)
+            customer_xpath = L.get_indexed(L.select_box, 1)
         if shipto_xpath is None:
-            shipto_xpath = L.xpath_by_count(L.xpath_select_box, 2)
-        self.wait_until_page_loaded()
+            shipto_xpath = L.get_indexed(L.select_box, 2)
         self.select_in_dropdown(customer_xpath, customer_name)
-        self.wait_until_page_loaded()
         self.select_in_dropdown(shipto_xpath, shipto_name)
-        self.wait_until_page_loaded()
 
     def element_should_have_text(self, xpath, text):
-        self.get_element_by_xpath(xpath)
+        self.element(xpath).get()
         try:
             WebDriverWait(self.driver, 15).until(EC.text_to_be_present_in_element((By.XPATH, xpath), text))
         except:
-            Error.error(f"Element with XPATH = '{xpath}' was found but text is different: '{self.get_element_text(xpath)}' != '{text}'")
+            Error.error(f"Element with XPATH = '{xpath}' was found but text is different: '{self.element(xpath).text()}' != '{text}'")
         else:
             Log.info(f"Element with XPATH = '{xpath}' contains correct text")
 
-    def element_should_have_text_id(self, element_id, text):
-        self.get_element_by_id(element_id)
+    def wait_until_dropdown_not_empty(self, xpath):
         try:
-            WebDriverWait(self.driver, 15).until(EC.text_to_be_present_in_element((By.ID, element_id), text))
-        except:
-            Error.error(f"Element with XPATH = '{element_id}' was found but text is different")
-        else:
-            Log.info(f"Element with XPATH = '{element_id}' contains correct text")
-
-    def element_text_should_be_empty(self, xpath):
-        text = self.get_element_text(xpath)
-        assert text is None or text == "", f"Element {xpath} contains text: {text}"
-
-    def wait_untill_dropdown_not_empty(self, xpath):
-        try:
-            WebDriverWait(self.driver, 15).until(wait_until_dropdown_is_not_empty(By.XPATH, xpath)) #pylint: disable=E1102
+            WebDriverWait(self.driver, 15).until_not(TextToBeEmpty(xpath)) #pylint: disable=E1102
         except:
             pass
 
     def select_shipto_sku(self, shipto=None, sku=None):
         if shipto is not None:
-            self.select_in_dropdown_via_input(L.xpath_dropdown_in_dialog(1), shipto)
-            self.wait_until_page_loaded()
+            self.select_in_dropdown_via_input(L.get_dropdown_in_dialog(1), shipto)
         if sku is not None:
-            self.select_in_dropdown(L.xpath_dropdown_in_dialog(2), sku)
-            self.wait_until_page_loaded()
+            self.select_in_dropdown(L.get_dropdown_in_dialog(2), sku)

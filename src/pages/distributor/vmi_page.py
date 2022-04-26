@@ -23,7 +23,7 @@ class VmiPage(DistributorPortalPage):
 
     def create_location(self, location_body):
         self.click_id(Locator.id_add_button)
-        self.select_in_dropdown_via_input(Locator.xpath_dropdown_in_dialog(1), location_body.pop("sku"), span=True)
+        self.select_in_dropdown_via_input(Locator.get_dropdown_in_dialog(1), location_body.pop("sku"), span=True)
         for field in location_body.keys():
             self.input_by_name(field, location_body[field])
         self.click_xpath(Locator.xpath_submit_button)

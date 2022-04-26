@@ -8,7 +8,7 @@ class OrderStatusPage(DistributorPortalPage):
             if reorder_quantity is not None:
                 self.input_by_name("reorderQuantity", reorder_quantity)
             if status is not None:
-                self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), status)
+                self.select_in_dropdown(Locator.get_dropdown_in_dialog(1), status)
             if shipped_quantity is not None:
                 self.input_by_name("shippedQuantity", shipped_quantity)
             self.click_xpath(Locator.xpath_submit_button)

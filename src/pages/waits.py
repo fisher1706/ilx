@@ -28,3 +28,13 @@ class ElementsNumberToBe():
         if count == self.number:
             return True
         return False
+
+class TextToBeEmpty(): 
+    def __init__(self, xpath):
+        self.xpath = xpath
+
+    def __call__(self, driver):
+        text = driver.find_element_by_xpath(self.xpath).text
+        if text == "":
+            return True
+        return False

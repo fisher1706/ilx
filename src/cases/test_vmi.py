@@ -33,7 +33,7 @@ def test_vmi_list_partial_sku_match(ui):
     vp.wait_until_page_loaded()
     vp.click_id(Locator.id_add_button)
     vp.input_data_xpath(product_sku, Locator.xpath_dialog+Locator.xpath_select_box+"//input")
-    vp.wait_until_dropdown_list_loaded(1)
+    vp.wait_until_dropdown_list_loaded(1)#need new implementation
     vp.check_found_dropdown_list_item(Locator.xpath_dropdown_list_item, f"DSKU: {product_sku}")
 
 @pytest.mark.parametrize("permissions", [
