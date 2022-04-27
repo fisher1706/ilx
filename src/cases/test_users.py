@@ -1,6 +1,6 @@
 import pytest
 from src.resources.tools import Tools
-from pages.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.permissions import Permissions
 from src.api.admin.admin_user_api import AdminUserApi
 from src.api.distributor.user_api import UserApi
@@ -69,13 +69,13 @@ def test_customer_user_crud(ui):
 
     lp.log_in_customer_portal()
     cup.sidebar_users_and_groups()
-    cup.click_xpath(Locator.xpath_button_tab_by_name("Users"))
+    cup.click_xpath(L.xpath_button_tab_by_name("Users"))
     cup.create_customer_user(customer_user_body.copy())
     cup.check_last_customer_user(customer_user_body.copy())
-    cup.click_xpath(Locator.xpath_reload_button)
+    cup.click_xpath(L.xpath_reload_button)
     cup.last_page(wait=False)
     cup.update_last_customer_user(edit_customer_user_body.copy())
-    cup.click_xpath(Locator.xpath_reload_button)
+    cup.click_xpath(L.xpath_reload_button)
     cup.last_page(wait=False)
     cup.sidebar_users_and_groups()
     cup.check_last_customer_user(edit_customer_user_body.copy())
@@ -120,7 +120,7 @@ def test_distributor_user_crud(ui, permission_ui, permissions, delete_distributo
     dup.create_distributor_user(distributor_user_body.copy())
     dup.check_last_distributor_user(distributor_user_body.copy())
     dup.update_last_distributor_user(edit_distributor_user_body.copy())
-    dup.click_xpath(Locator.xpath_reload_button)
+    dup.click_xpath(L.xpath_reload_button)
     dup.last_page(wait=False)
     dup.check_last_distributor_user(edit_distributor_user_body.copy())
     full_name = edit_distributor_user_body["firstName"] + " " + edit_distributor_user_body["lastName"]
@@ -173,7 +173,7 @@ def test_distributor_superuser_crud(ui):
     dup.create_distributor_super_user(distributor_superuser_body.copy())
     dup.check_last_distributor_super_user(distributor_superuser_body.copy())
     dup.update_last_distributor_super_user(edit_distributor_superuser_body.copy())
-    dup.click_xpath(Locator.xpath_reload_button)
+    dup.click_xpath(L.xpath_reload_button)
     dup.last_page(wait=False)
     dup.check_last_distributor_super_user(edit_distributor_superuser_body.copy())
     full_name = edit_distributor_superuser_body["firstName"] + " " + edit_distributor_superuser_body["lastName"]
@@ -202,7 +202,7 @@ def test_checkout_user_import_without_group(ui):
 
     lp.log_in_customer_portal()
     cup.sidebar_users_and_groups()
-    cup.click_xpath(Locator.xpath_button_tab_by_name("Fobs & Passcodes"))
+    cup.click_xpath(L.xpath_button_tab_by_name("Fobs & Passcodes"))
     cup.import_checkout_user(checkout_users)
     row = cup.scan_table(checkout_user_body["firstName"], "First Name", pagination=False)
     cup.check_new_checkout_user(checkout_user_body.copy(), row)
@@ -231,13 +231,13 @@ def test_checkout_user_crud(ui):
 
     lp.log_in_customer_portal()
     cup.sidebar_users_and_groups()
-    cup.click_xpath(Locator.xpath_button_tab_by_name("Fobs & Passcodes"))
+    cup.click_xpath(L.xpath_button_tab_by_name("Fobs & Passcodes"))
     cup.create_checkout_user(checkout_user_body.copy())
     row = cup.scan_table(checkout_user_body["firstName"], "First Name", pagination=False)
     cup.check_new_checkout_user(checkout_user_body.copy(), row)
     cup.update_new_checkout_user(edit_checkout_user_body.copy(), row, first_group=True)
     cup.sidebar_users_and_groups()
-    cup.click_xpath(Locator.xpath_button_tab_by_name("Fobs & Passcodes"))
+    cup.click_xpath(L.xpath_button_tab_by_name("Fobs & Passcodes"))
     cup.wait_until_page_loaded()
     row = cup.scan_table(edit_checkout_user_body["firstName"], "First Name", pagination=False)
     cup.check_new_checkout_user(edit_checkout_user_body.copy(), row)
@@ -265,7 +265,7 @@ def test_customer_security_group_crud(ui):
     row = csg.get_row_of_table_item_by_column(security_group_body["name"], 1)
     csg.check_security_group(security_group_body, row)
     csg.update_security_group(edit_security_group_body, row)
-    csg.element_should_have_text(Locator.xpath_table_item(row, 1), edit_security_group_body["name"])
+    csg.element_should_have_text(L.xpath_table_item(row, 1), edit_security_group_body["name"])
     csg.check_security_group(edit_security_group_body, row)
     csg.delete_security_group(edit_security_group_body, row)
 
@@ -287,13 +287,13 @@ def test_checkout_group_crud(ui):
 
     lp.log_in_customer_portal()
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(Locator.xpath_button_tab_by_name("Checkout Groups"))
+    cgp.click_xpath(L.xpath_button_tab_by_name("Checkout Groups"))
     cgp.create_checkout_group(checkout_group_body.copy())
     row = cgp.scan_table(checkout_group_body["name"], "Checkout Group Name", pagination=False)
     cgp.check_new_checkout_group(checkout_group_body.copy(), row)
     cgp.update_new_checkout_group(edit_checkout_group_body.copy(), row)
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(Locator.xpath_button_tab_by_name("Checkout Groups"))
+    cgp.click_xpath(L.xpath_button_tab_by_name("Checkout Groups"))
     cgp.wait_until_page_loaded()
     row = cgp.scan_table(edit_checkout_group_body["name"], "Checkout Group Name", pagination=False)
     cgp.check_new_checkout_group(edit_checkout_group_body.copy(), row)
@@ -313,25 +313,25 @@ def test_checkout_group_assign_user(ui, delete_customer_user, delete_checkout_gr
 
     lp.log_in_customer_portal()
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(Locator.xpath_button_tab_by_name("Checkout Groups"))
+    cgp.click_xpath(L.xpath_button_tab_by_name("Checkout Groups"))
     cgp.wait_until_page_loaded()
     row = cgp.scan_table(response_checkout_group["group"]["name"], "Checkout Group Name", pagination=False)
-    cgp.click_xpath(Locator.xpath_by_count(Locator.xpath_associated_users, row))
+    cgp.click_xpath(L.xpath_by_count(L.xpath_associated_users, row))
     cgp.assign_user(response_customer_user["user"]["email"])
     cgp.check_assigned_user(response_customer_user["user"], 1)
 
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(Locator.xpath_button_tab_by_name("Fobs & Passcodes"))
+    cgp.click_xpath(L.xpath_button_tab_by_name("Fobs & Passcodes"))
     cgp.wait_until_page_loaded()
     row = cgp.scan_table(response_customer_user["user"]["email"], "Email", pagination=False)
     cgp.check_table_item_by_header(row, "Checkout Group", response_checkout_group["group"]["name"])
 
-    cgp.click_xpath(Locator.xpath_button_tab_by_name("Checkout Groups"))
+    cgp.click_xpath(L.xpath_button_tab_by_name("Checkout Groups"))
     cgp.wait_until_page_loaded()
     row = cgp.scan_table(response_checkout_group["group"]["name"], "Checkout Group Name", pagination=False)
-    cgp.click_xpath(Locator.xpath_by_count(Locator.xpath_associated_users, row))
+    cgp.click_xpath(L.xpath_by_count(L.xpath_associated_users, row))
     cgp.unassign_user(1)
-    cgp.get_element_by_xpath(Locator.xpath_no_data_found)
+    cgp.get_element_by_xpath(L.xpath_no_data_found)
 
 @pytest.mark.regression
 def test_checkout_group_assign_shipto(ui, delete_shipto, delete_checkout_group):
@@ -345,14 +345,14 @@ def test_checkout_group_assign_shipto(ui, delete_shipto, delete_checkout_group):
 
     lp.log_in_customer_portal()
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(Locator.xpath_button_tab_by_name("Checkout Groups"))
+    cgp.click_xpath(L.xpath_button_tab_by_name("Checkout Groups"))
     cgp.wait_until_page_loaded()
     row = cgp.scan_table(response_checkout_group["group"]["name"], "Checkout Group Name", pagination=False)
-    cgp.click_xpath(Locator.xpath_by_count(Locator.xpath_associated_shiptos, row))
+    cgp.click_xpath(L.xpath_by_count(L.xpath_associated_shiptos, row))
     cgp.assign_shipto(response_shipto["shipto"]["number"])
     cgp.check_assigned_shipto(response_shipto["shipto"], 1)
     cgp.unassign_shipto(1)
-    cgp.get_element_by_xpath(Locator.xpath_no_data_found)
+    cgp.get_element_by_xpath(L.xpath_no_data_found)
 
 @pytest.mark.parametrize("case", [
     {

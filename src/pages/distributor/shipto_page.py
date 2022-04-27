@@ -1,5 +1,5 @@
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
-from pages.locator import Locator
+from src.pages.locator import Locator as L
 
 class ShiptoPage(DistributorPortalPage):
     shipto_body = {
@@ -22,15 +22,15 @@ class ShiptoPage(DistributorPortalPage):
         self.wait_until_page_loaded()
         self.open_last_page()
         start_number_of_rows = self.get_table_rows_number()
-        self.click_id(Locator.id_add_button)
-        self.select_in_dropdown(Locator.get_dropdown_in_dialog(2), shipto_body.pop("state"))
+        self.click_id(L.id_add_button)
+        self.select_in_dropdown(L.get_dropdown_in_dialog(2), shipto_body.pop("state"))
         for field in shipto_body.keys():
             self.input_by_name(field, shipto_body[field])
-        self.click_xpath(Locator.xpath_submit_button)
+        self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.open_last_page()
         self.wait_until_page_loaded()
-        self.elements_count_should_be(Locator.xpath_table_row, start_number_of_rows+1)
+        self.elements_count_should_be(L.xpath_table_row, start_number_of_rows+1)
 
     def check_last_shipto(self, shipto_body):
         self.open_last_page()
@@ -45,21 +45,21 @@ class ShiptoPage(DistributorPortalPage):
 
     def update_last_shipto(self, shipto_body, actions_pop_up=True):
         if actions_pop_up:
-            self.click_xpath(Locator.xpath_by_count(Locator.xpath_actions_button, self.get_table_rows_number()))
-        self.click_xpath(Locator.xpath_by_count(Locator.xpath_shipto_info_button, self.get_table_rows_number()))
-        self.select_in_dropdown(Locator.get_dropdown_in_dialog(2), shipto_body.pop("state"))
+            self.click_xpath(L.xpath_by_count(L.xpath_actions_button, self.get_table_rows_number()))
+        self.click_xpath(L.xpath_by_count(L.xpath_shipto_info_button, self.get_table_rows_number()))
+        self.select_in_dropdown(L.get_dropdown_in_dialog(2), shipto_body.pop("state"))
         for field in shipto_body.keys():
             self.input_by_name(field, shipto_body[field])
-        self.click_xpath(Locator.xpath_submit_button)
+        self.click_xpath(L.xpath_submit_button)
         self.wait_until_page_loaded()
 
     def delete_last_shipto(self, actions_pop_up=True):
         start_number_of_rows = self.get_table_rows_number()
         name = self.get_last_table_item_text_by_header("Shipto Number")
         if actions_pop_up:
-            self.click_xpath(Locator.xpath_by_count(Locator.xpath_actions_button, self.get_table_rows_number()))
-        self.click_xpath(Locator.xpath_by_count(Locator.xpath_remove_button, self.get_table_rows_number()))
+            self.click_xpath(L.xpath_by_count(L.xpath_actions_button, self.get_table_rows_number()))
+        self.click_xpath(L.xpath_by_count(L.xpath_remove_button, self.get_table_rows_number()))
         self.delete_dialog_should_be_about(name)
-        self.click_xpath(Locator.xpath_submit_button)
+        self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
-        self.elements_count_should_be(Locator.xpath_table_row, start_number_of_rows-1)
+        self.elements_count_should_be(L.xpath_table_row, start_number_of_rows-1)

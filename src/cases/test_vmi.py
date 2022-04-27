@@ -1,7 +1,7 @@
 import copy
 import pytest
 from src.resources.tools import Tools
-from pages.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.permissions import Permissions
 from src.pages.general.login_page import LoginPage
 from src.pages.distributor.vmi_page import VmiPage
@@ -31,10 +31,10 @@ def test_vmi_list_partial_sku_match(ui):
 
     vp.follow_location_url()
     vp.wait_until_page_loaded()
-    vp.click_id(Locator.id_add_button)
-    vp.input_data_xpath(product_sku, Locator.xpath_dialog+Locator.xpath_select_box+"//input")
+    vp.click_id(L.id_add_button)
+    vp.input_data_xpath(product_sku, L.xpath_dialog+L.xpath_select_box+"//input")
     vp.wait_until_dropdown_list_loaded(1)#need new implementation
-    vp.check_found_dropdown_list_item(Locator.xpath_dropdown_list_item, f"DSKU: {product_sku}")
+    vp.check_found_dropdown_list_item(L.xpath_dropdown_list_item, f"DSKU: {product_sku}")
 
 @pytest.mark.parametrize("permissions", [
     {

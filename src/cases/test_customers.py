@@ -1,7 +1,7 @@
 import random
 import pytest
 from src.resources.tools import Tools
-from pages.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.permissions import Permissions
 from src.pages.general.login_page import LoginPage
 from src.pages.distributor.customers_page import CustomersPage
@@ -145,11 +145,11 @@ def test_shipto_crud(ui, permission_ui, permissions, delete_distributor_security
 
     lp.log_in_distributor_portal()
     sp.follow_shipto_url()
-    sp.get_element_by_xpath(Locator.xpath_table_item(1, 1))
+    sp.get_element_by_xpath(L.xpath_table_item(1, 1))
     sp.create_shipto(shipto_body.copy())
     sp.check_last_shipto(shipto_body.copy())
     sp.update_last_shipto(edit_shipto_body.copy(), True if permissions["user"] is None else False)
-    sp.should_be_disabled_xpath(Locator.xpath_submit_button)
+    sp.should_be_disabled_xpath(L.xpath_submit_button)
     sp.driver.find_element_by_link_text('Shiptos').click()
     sp.wait_until_page_loaded()
     sp.check_last_shipto(edit_shipto_body.copy())

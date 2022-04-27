@@ -13,7 +13,7 @@ class Locator():
     select_button = "//button[@data-testid='select-button']"
     button_last_page = "//button[@aria-label='Go to last page']"
     button_tab = "//button[@role='tab']"
-
+    action_button = "//button[@data-testid='action-button']"
 
     #----TABLE----
     table_row = "//div[@role='rowgroup']"
@@ -28,7 +28,7 @@ class Locator():
     role_listbox = "//ul[@role='listbox']"
 
     item_action_customer_add = "//button[@id='item-action-customer-add']"
-    file_upload = "file-upload"
+    file_upload = "//input[@id='file-upload']"
     upload_rfid_csv = "upload-rfid-csv"
     upload_rfid_available = "upload-rfid-available"
     intercom_container = "intercom-container"

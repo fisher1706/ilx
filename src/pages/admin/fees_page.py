@@ -11,8 +11,8 @@ class FeesPage(AdminPortalPage):
     def set_fee_price(self, fee_price):
         self.click_tab_by_name("ShipTo Fees")
         for row, field in enumerate(fee_price.keys()):
-            self.input_inline_xpath(fee_price[field], f"{L.xpath_table_item(row+1, 2)}")
-        self.wait_until_page_loaded()
+            self.input_inline_xpath(fee_price[field], f"{L.get_table_item_outdated(row+1, 2)}")
+            self.wait_until_progress_bar_loaded()
 
     def check_fee_price(self, fee_price):
         self.page_refresh()
@@ -21,5 +21,5 @@ class FeesPage(AdminPortalPage):
 
     def undo(self, fee_price):
         for _ in fee_price.keys():
-            self.click_id("item-action-undefined")
-        self.wait_until_page_loaded()
+            self.element(L.action_button).click()
+            self.wait_until_progress_bar_loaded()

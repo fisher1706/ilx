@@ -1,5 +1,5 @@
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
-from pages.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.tools import Tools
 
 class VmiPage(DistributorPortalPage):
@@ -12,7 +12,7 @@ class VmiPage(DistributorPortalPage):
         "customerSku": None,
         "type": None
     }
-    xpath_button_bulk_operations = f"{Locator.xpath_button_type}//span[text()='Bulk operations']"
+    xpath_button_bulk_operations = f"{L.xpath_button_type}//span[text()='Bulk operations']"
 
     def follow_location_url(self, customer_id=None, shipto_id=None):
         if customer_id is None:
@@ -22,11 +22,11 @@ class VmiPage(DistributorPortalPage):
         self.follow_url(f"{self.url.distributor_portal}/customers/{customer_id}/shiptos/{shipto_id}#vmi-list")
 
     def create_location(self, location_body):
-        self.click_id(Locator.id_add_button)
-        self.select_in_dropdown_via_input(Locator.get_dropdown_in_dialog(1), location_body.pop("sku"), span=True)
+        self.click_id(L.id_add_button)
+        self.select_in_dropdown_via_input(L.get_dropdown_in_dialog(1), location_body.pop("sku"), span=True)
         for field in location_body.keys():
             self.input_by_name(field, location_body[field])
-        self.click_xpath(Locator.xpath_submit_button)
+        self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.wait_until_page_loaded()
 
@@ -40,7 +40,7 @@ class VmiPage(DistributorPortalPage):
 
     def import_location(self, locations):
         Tools.generate_csv("locations.csv", locations)
-        self.click_id(Locator.id_item_action_import)
-        self.import_csv(Locator.id_file_upload, "locations.csv")
-        self.get_element_by_xpath(Locator.xpath_successfully_imported_msg)
+        self.click_id(L.id_item_action_import)
+        self.import_csv(L.id_file_upload, "locations.csv")
+        self.get_element_by_xpath(L.xpath_successfully_imported_msg)
         self.wait_until_page_loaded()

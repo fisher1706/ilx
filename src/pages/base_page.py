@@ -85,6 +85,10 @@ class BasePage():
         WebDriverWait(self.driver, 15).until(lambda x: x.execute_script("return document.readyState === 'complete'"))
 
     def wait_until_progress_bar_loaded(self):
+        try:
+            self.element(L.progress_bar).get(appeared_timeout=1)
+        except:
+            pass
         self.element(L.progress_bar).wait_until_disappeared()
 
     def open_last_page(self):
@@ -101,11 +105,11 @@ class BasePage():
         self.wait_for_the_first_element_in_table()
         if wait:
             try:
-                WebDriverWait(self.driver, 7).until_not(ElementToBeEnabled(L.button_last_page)) #pylint: disable=E1102
+                WebDriverWait(self.driver, 7).until_not(ElementToBeEnabled(L.button_last_page))
             except:
                 pass
         if self.element(L.button_last_page).is_enabled():
-            self.element(L.button_last_page)
+            self.element(L.button_last_page).click()
             self.wait_for_the_first_element_in_table()
 
     def wait_for_the_first_element_in_table(self):
@@ -316,7 +320,7 @@ class BasePage():
         self.dialog_should_not_be_visible()
 
     def click_tab_by_name(self, tab_name):
-        self.element(L.get_button_tab_by_name(tab_name)).click
+        self.element(L.get_button_tab_by_name(tab_name)).click()
 
     def get_row_of_table_item_by_column(self, scan_by, column, prefix_path=""):
         for index, row in enumerate(range(1, self.element(prefix_path+L.table_row).count()+1)):

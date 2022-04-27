@@ -21,9 +21,10 @@ class Element():
         self.xpath = xpath
         return self
 
-    def get(self):
+    def get(self, timeout=None):
+        timeout = self.default_timeout if timeout is None else timeout
         try:
-            return WebDriverWait(self.driver, self.default_timeout).until(EC.presence_of_element_located((By.XPATH, self.xpath)))
+            return WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((By.XPATH, self.xpath)))
         except Exception as e:
             Error.error(f"Cannot find element'{self.xpath}'.\n{e}")
 
@@ -105,7 +106,7 @@ class Element():
 
     def wait_until_disappeared(self):
         try:
-            return WebDriverWait(self.driver, self.default_timeout).until_not(EC.presence_of_element_located((By.XPATH, self.xpath)))
+            WebDriverWait(self.driver, self.default_timeout).until_not(EC.presence_of_element_located((By.XPATH, self.xpath)))
         except Exception as e:
             Error.error(f"Element '{self.xpath}' is still present.\n{e}")
 

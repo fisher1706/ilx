@@ -1,6 +1,6 @@
 from src.pages.admin.admin_portal_page import AdminPortalPage
 from src.resources.tools import Tools
-from pages.locator import Locator
+from src.pages.locator import Locator as L
 
 class UniversalCatalogPage(AdminPortalPage):
     universal_product_body = {
@@ -22,29 +22,29 @@ class UniversalCatalogPage(AdminPortalPage):
         return new_body
 
     def create_universal_product(self, product_body):
-        self.click_id(Locator.id_add_button)
+        self.element(L.add_button).click()
         for field in product_body.keys():
             self.input_by_name(field, product_body[field])
-        self.click_xpath(Locator.xpath_submit_button)
+        self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        self.wait_until_progress_bar_loaded()
 
     def update_universal_product(self, product_body, row):
-        self.click_xpath(Locator.xpath_by_count(Locator.xpath_edit_button, row))
+        self.element(L.get_indexed(L.edit_button, row))
         for field in product_body.keys():
             self.input_by_name(field, product_body[field])
-        self.click_xpath(Locator.xpath_submit_button)
+        self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        self.wait_until_progress_bar_loaded()
 
     def delete_universal_product(self, row):
-        self.click_xpath(Locator.xpath_by_count(Locator.xpath_remove_button, row))
-        self.click_xpath(Locator.xpath_dialog+Locator.xpath_confirm_button)
+        self.element(L.get_indexed(L.remove_button, row))
+        self.element(L.dialog+L.confirm_button)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        self.wait_until_progress_bar_loaded()
 
     def import_universal_catalog(self, elements):
         Tools.generate_csv("universal_catalog.csv", elements)
-        self.import_csv(Locator.id_file_upload, "universal_catalog.csv")
-        self.get_element_by_xpath(Locator.xpath_successfully_imported_msg)
-        self.wait_until_page_loaded()
+        self.import_csv(L.file_upload, "universal_catalog.csv")
+        self.element(L.successfully_imported_msg).get()
+        self.wait_until_progress_bar_loaded()

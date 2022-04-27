@@ -4,7 +4,7 @@ from src.resources.permissions import Permissions
 from src.pages.general.login_page import LoginPage
 from src.pages.distributor.warehouses_page import WarehousesPage
 from src.api.distributor.warehouse_api import WarehouseApi
-from pages.locator import Locator
+from src.pages.locator import Locator as L
 
 @pytest.mark.parametrize("permissions", [
     {
@@ -56,7 +56,7 @@ def test_warehouses_crud(ui, permission_ui, permissions, delete_distributor_secu
     wp.create_warehouse(warehouse_body.copy())
     wp.check_last_warehouse(warehouse_body.copy())
     wp.update_last_warehouse(edit_warehouse_body.copy())
-    wp.click_xpath(Locator.xpath_reload_button)
+    wp.click_xpath(L.xpath_reload_button)
     wp.last_page(wait=False)
     wp.check_last_warehouse(edit_warehouse_body.copy())
     wp.delete_last_warehouse(edit_warehouse_body["name"])

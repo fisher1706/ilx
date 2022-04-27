@@ -3,7 +3,7 @@ from src.api.distributor.settings_api import SettingsApi
 from src.api.distributor.location_api import LocationApi
 from src.resources.tools import Tools
 from src.resources.process_email import ProcessEmail
-from pages.locator import Locator
+from src.pages.locator import Locator as L
 from src.aws.s3 import S3
 from src.api.setups.setup_distributor_user import SetupDistributorUser
 from src.api.setups.setup_customer import SetupCustomer
@@ -59,8 +59,8 @@ def test_accept_distributor_user_invitation_and_reset_password(ui, conditions, d
     lp.input_email(user_email)
     lp.input_password(temporary_password)
     lp.click_on_submit_button()
-    lp.input_data_id(new_password, Locator.id_new_password)
-    lp.input_data_id(new_password, Locator.id_confirm_password)
+    lp.input_data_id(new_password, L.id_new_password)
+    lp.input_data_id(new_password, L.id_confirm_password)
     lp.click_on_submit_button()
     lp.title_should_be("SRX Distributor Portal")
     lp.follow_url(lp.url.distributor_portal)
@@ -88,8 +88,8 @@ def test_accept_distributor_user_invitation_and_reset_password(ui, conditions, d
     #set a new password
     new_reset_password = Tools.random_string_l()
 
-    lp.input_data_id(new_reset_password, Locator.id_new_password)
-    lp.input_data_id(new_reset_password, Locator.id_confirm_password)
+    lp.input_data_id(new_reset_password, L.id_new_password)
+    lp.input_data_id(new_reset_password, L.id_confirm_password)
     lp.click_on_submit_button()
     lp.log_in_distributor_portal(user_email, new_reset_password)
 
@@ -132,8 +132,8 @@ def test_accept_new_customer_user_invitation(ui, delete_customer):
     lp.input_email(user_email)
     lp.input_password(temporary_password)
     lp.click_on_submit_button()
-    lp.input_data_id(new_password, Locator.id_new_password)
-    lp.input_data_id(new_password, Locator.id_confirm_password)
+    lp.input_data_id(new_password, L.id_new_password)
+    lp.input_data_id(new_password, L.id_confirm_password)
     lp.click_on_submit_button()
     lp.title_should_be("SRX User Dashboard")
     lp.follow_url(lp.url.customer_portal)
@@ -170,8 +170,8 @@ def test_accept_customer_user_invitation_and_reset_password(ui, delete_customer_
     lp.input_email(user_email)
     lp.input_password(temporary_password)
     lp.click_on_submit_button()
-    lp.input_data_id(new_password, Locator.id_new_password)
-    lp.input_data_id(new_password, Locator.id_confirm_password)
+    lp.input_data_id(new_password, L.id_new_password)
+    lp.input_data_id(new_password, L.id_confirm_password)
     lp.click_on_submit_button()
     lp.title_should_be("SRX User Dashboard")
     lp.follow_url(lp.url.customer_portal)
@@ -199,8 +199,8 @@ def test_accept_customer_user_invitation_and_reset_password(ui, delete_customer_
     #set a new password
     new_reset_password = Tools.random_string_l()
 
-    lp.input_data_id(new_reset_password, Locator.id_new_password)
-    lp.input_data_id(new_reset_password, Locator.id_confirm_password)
+    lp.input_data_id(new_reset_password, L.id_new_password)
+    lp.input_data_id(new_reset_password, L.id_confirm_password)
     lp.click_on_submit_button()
     lp.log_in_customer_portal(user_email, new_reset_password)
 
@@ -235,7 +235,7 @@ def test_accept_checkout_group_invitation_and_reset_password(ui, delete_checkout
     cpp.sign_in_checkout_portal()
     cpp.input_data_id(new_password, "mat-input-2")
     cpp.input_data_id(new_password, "mat-input-3")
-    cpp.click_xpath(Locator.xpath_button_type)
+    cpp.click_xpath(L.xpath_button_type)
     cpp.input_email_checkout_portal(user_email)
     cpp.input_password_checkout_portal(new_password)
     cpp.sign_in_checkout_portal()
@@ -244,10 +244,10 @@ def test_accept_checkout_group_invitation_and_reset_password(ui, delete_checkout
 
     #sigh out and reset password
     lp.click_xpath("//img")
-    lp.click_xpath(Locator.xpath_sign_out)
-    lp.click_xpath(Locator.xpath_reset_password)
+    lp.click_xpath(L.xpath_sign_out)
+    lp.click_xpath(L.xpath_reset_password)
     lp.input_by_name("login", user_email)
-    lp.click_xpath(Locator.xpath_button_type)
+    lp.click_xpath(L.xpath_button_type)
 
     #waiting for email with reset password confirmation
     s3.wait_for_new_object(ui.data.email_data_bucket, objects_count+1)
@@ -264,7 +264,7 @@ def test_accept_checkout_group_invitation_and_reset_password(ui, delete_checkout
 
     cpp.input_data_id(new_reset_password, "mat-input-0")
     cpp.input_data_id(new_reset_password, "mat-input-1")
-    cpp.click_xpath(Locator.xpath_button_type)
+    cpp.click_xpath(L.xpath_button_type)
     cpp.input_email_checkout_portal(user_email)
     cpp.input_password_checkout_portal(new_reset_password)
     cpp.sign_in_checkout_portal()
