@@ -147,7 +147,7 @@ def test_smoke_label_transaction_and_activity_log(smoke_api):
     transactions = ta.get_transaction(status="ACTIVE")
     if transactions["totalElements"] != 0:
         Log.info("There are some active transactions, they will be closed")
-        ta.update_transactions_with_specific_status("ACTIVE", 0, "DO_NOT_REORDER")
+        ta.update_transactions_with_specific_status("ACTIVE", "DO_NOT_REORDER")
     transactions = ta.get_transaction(status="ACTIVE")
     assert transactions["totalElements"] == 0
     location["onHandInventory"] = 0
@@ -167,8 +167,9 @@ def test_smoke_label_transaction_and_activity_log(smoke_api):
         Error.error("New transaction has not been created")
 
     transaction_id = transactions["entities"][0]["id"]
+    reorder_quantity = transactions["entities"][0]["reorderQuantity"]
     assert transactions["totalElements"] != 0, "There is no ACTIVE transaction"
-    ta.update_replenishment_item(transaction_id, 0, "DO_NOT_REORDER")
+    ta.update_replenishment_item(transaction_id, reorder_quantity, "DO_NOT_REORDER")
     for _ in range(3):
         time.sleep(10)
         activity_log_after = ala.get_activity_log()
