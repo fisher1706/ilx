@@ -1,5 +1,5 @@
 from src.pages.customer.customer_portal_page import CustomerPortalPage
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from glbl import Log
 
 class AssetsPage(CustomerPortalPage):
@@ -18,7 +18,7 @@ class AssetsPage(CustomerPortalPage):
         self.get_element_by_xpath("//span[text()='All assets']")
         self.click_tab_by_name("All assets")
         self.click_xpath(self.xpath_filter)
-        self.select_in_dropdown(Locator.xpath_select_box, shipto)
+        self.select_in_dropdown(L.xpath_select_box, shipto)
         self.click_xpath(self.xpath_apply)
         self.element_should_have_text(f"{self.xpath_available}/../div[2]", f"{avaliable}")
         self.element_should_have_text(f"{self.xpath_total}/../div[2]", f"{total}")
@@ -27,7 +27,7 @@ class AssetsPage(CustomerPortalPage):
     def check_checked_out_tab(self, asset, shipto, avaliable, total, checked_out):
         self.click_tab_by_name("Checked Out")
         self.click_xpath(self.xpath_filter)
-        self.select_in_dropdown(Locator.xpath_select_box, shipto)
+        self.select_in_dropdown(L.xpath_select_box, shipto)
         self.click_xpath(self.xpath_apply)
         if checked_out == 1:
             self.element_should_have_text(f"{self.xpath_checked_out}/../div[2]", "1 item")
@@ -50,6 +50,6 @@ class AssetsPage(CustomerPortalPage):
 
     def ping_to_return_last_asset(self):
         self.click_tab_by_name("Checked Out")
-        self.click_xpath(f"{Locator.xpath_ping_to_return}")
+        self.click_xpath(f"{L.xpath_ping_to_return}")
         self.wait_until_progress_bar_loaded()
         self.elements_count_should_be(f"({self.xpath_asset_card})[1]{self.xpath_return_requested_text}", 1)

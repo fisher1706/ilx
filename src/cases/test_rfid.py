@@ -1,6 +1,6 @@
 
 import pytest
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.tools import Tools
 from src.resources.permissions import Permissions
 from src.pages.general.login_page import LoginPage
@@ -44,7 +44,7 @@ def test_rfid_label_crud(ui, permission_ui, permissions, delete_shipto, delete_d
     rfid_label = rp.add_rfid_label()
     rp.check_last_rfid_label(rfid_label, "ASSIGNED")
     rp.update_last_rfid_label_status("ISSUED")
-    rp.should_be_disabled_xpath(Locator.xpath_by_count(Locator.xpath_unassign_button, rp.get_table_rows_number()))
+    rp.should_be_disabled_xpath(L.xpath_by_count(L.xpath_unassign_button, rp.get_table_rows_number()))
     new_status = "AVAILABLE"
     rp.page_refresh()
     rp.select_shipto_sku(shipto_text, product_sku)

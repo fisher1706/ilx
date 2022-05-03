@@ -1,26 +1,26 @@
 from src.pages.base_page import BasePage
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from glbl import Log, Error
 
 class ActivityLogPage(BasePage):
     def get_full_activity_log_row(self, row_number):
         self.expand_activity_log_row(row_number)
-        expanded_row_xpath = f"({Locator.xpath_by_count(Locator.xpath_table, 1)}{Locator.xpath_table_row})[{row_number}]{Locator.xpath_table_row}"
+        expanded_row_xpath = f"({L.xpath_by_count(L.xpath_table, 1)}{L.xpath_table_row})[{row_number}]{L.xpath_table_row}"
         expanded_rows_number = len(self.driver.find_elements_by_xpath(expanded_row_xpath))
         expanded_rows_text = dict()
         for index in range(1, expanded_rows_number+1):
-            expanded_colum_xpath = Locator.xpath_by_count(expanded_row_xpath, index)+Locator.xpath_table_column
-            expanded_rows_text[self.get_element_text(Locator.xpath_by_count(expanded_colum_xpath, 1))] = self.get_element_text(Locator.xpath_by_count(expanded_colum_xpath, 2))
+            expanded_colum_xpath = L.xpath_by_count(expanded_row_xpath, index)+L.xpath_table_column
+            expanded_rows_text[self.get_element_text(L.xpath_by_count(expanded_colum_xpath, 1))] = self.get_element_text(L.xpath_by_count(expanded_colum_xpath, 2))
         return self.get_main_activity_log_row(row_number), expanded_rows_text
 
     def get_main_activity_log_row(self, row_number):
-        header_objects = self.driver.find_elements_by_xpath(Locator.xpath_table_header_column)
+        header_objects = self.driver.find_elements_by_xpath(L.xpath_table_header_column)
         del header_objects[0]
         headers_text = list()
         for header in header_objects:
             headers_text.append(header.text)
-        row_objects = self.driver.find_elements_by_xpath(f"(({Locator.xpath_by_count(Locator.xpath_table, 1)}{Locator.xpath_table_row})" + \
-            f"[{row_number}]{Locator.xpath_role_row})[1]{Locator.xpath_table_column}")
+        row_objects = self.driver.find_elements_by_xpath(f"(({L.xpath_by_count(L.xpath_table, 1)}{L.xpath_table_row})" + \
+            f"[{row_number}]{L.xpath_role_row})[1]{L.xpath_table_column}")
         del row_objects[0]
         rows_text = list()
         for row in row_objects:
@@ -28,7 +28,7 @@ class ActivityLogPage(BasePage):
         return dict(zip(headers_text, rows_text))
 
     def expand_activity_log_row(self, row_number):
-        expanding_xpath = Locator.xpath_table_item(row_number, 1, sub_xpath=Locator.xpath_by_count(Locator.xpath_table, 1))
+        expanding_xpath = L.xpath_table_item(row_number, 1, sub_xpath=L.xpath_by_count(L.xpath_table, 1))
         expanding_element = self.get_element_by_xpath(f"{expanding_xpath}/div/div")
         if expanding_element.get_attribute('class') == "rt-expander -open":
             Log.info(f"Row '{row_number}' already expanded")

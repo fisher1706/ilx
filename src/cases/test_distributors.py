@@ -11,8 +11,6 @@ def test_distributor_crud(ui):
     dp = DistributorAdminPage(ui)
     distributor_body = dp.distributor_body.copy()
     edit_distributor_body = dp.distributor_body.copy()
-    table_cells_checkbox = dp.table_cells_checkbox.copy()
-    edit_table_cells_checkbox = dp.table_cells_checkbox.copy()
 
     #-------------------
     distributor_body["name"] = "my First"
@@ -36,19 +34,15 @@ def test_distributor_crud(ui):
     edit_distributor_body["address.city"] = "Fairbanks"
     edit_distributor_body["address.zipCode"] = "99703"
     edit_distributor_body["country"] = "USA"
-    edit_distributor_body["state"] = "Manitoba"
+    edit_distributor_body["state"] = "Alaska"
     edit_distributor_body["ship_to_level"] = "Level 3"
     edit_checkbox_list = ["Processing Fee", "Supply Force"]
-    edit_table_cells_checkbox["Process.Fee"] = False
-    edit_table_cells_checkbox["SupplyForce"] = False
     #-------------------
 
     lp.log_in_admin_portal()
     dp.sidebar_distributors()
-    dp.wait_until_page_loaded()
-    dp.open_last_page()
-    check_mark = dp.create_distributor(distributor_body.copy(), checkbox_list=checkbox_list)
-    dp.check_last_distributor(distributor_body.copy(), state_short_code="MB", table_cells_checkbox=table_cells_checkbox, check_mark=check_mark)
+    number_of_rows = dp.create_distributor(distributor_body.copy(), checkbox_list=checkbox_list)
+    dp.check_last_distributor(distributor_body.copy(), state_short_code="MB", number_of_checkboxes=len(checkbox_list), row=number_of_rows)
     dp.update_last_distributor(edit_distributor_body.copy(), checkbox_list=edit_checkbox_list)
-    dp.check_last_distributor(edit_distributor_body.copy(), "AK", table_cells_checkbox=edit_table_cells_checkbox, check_mark=check_mark)
+    dp.check_last_distributor(edit_distributor_body.copy(), "AK", number_of_checkboxes=len(edit_checkbox_list), row=number_of_rows)
     dp.delete_last_distributor()

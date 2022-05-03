@@ -22,4 +22,4 @@ class CustomerPortalPage(BasePage):
     def customer_sidebar_should_contain_email(self, email=None):
         if email is None:
             email = self.context.customer_email
-        self.get_element_by_xpath(f"//span[text()='{email}']")
+        self.element(f"//span[text()='{email}']").get()
