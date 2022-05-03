@@ -95,12 +95,13 @@ class TransactionApi(API):
         response = self.get_transaction(sku=sku, status=status, shipto_id=shipto_id)
         return response["entities"][0]["id"], response["entities"][0]["reorderQuantity"]
 
-    def update_transactions_with_specific_status(self, status_before, quantity, status_after):
+    def update_transactions_with_specific_status(self, status_before, status_after):
         transactions_response = self.get_transaction(status=status_before)
         tranactions_list = transactions_response["entities"]
         for item in range(transactions_response["totalElements"]):
             transaction_id = tranactions_list[item]["id"]
-            self.update_replenishment_item(transaction_id, quantity, status_after)
+            reorder_quantity = tranactions_list[item]["reorderQuantity"]
+            self.update_replenishment_item(transaction_id, reorder_quantity, status_after)
 
     @default_expected_code(200)
     def submit_transaction(self, dto, expected_status_code=None):
