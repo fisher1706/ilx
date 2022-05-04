@@ -24,7 +24,9 @@ class UserApi(API):
         url = self.url.get_api_url_for_env(f"/distributor-portal/distributor/customers/{customer_id}/users")
         token = self.get_distributor_token()
         dto = {
-            "email": email
+            "email": email,
+            "firstName": Tools.random_string_l(),
+            "lastName": Tools.random_string_l()
         }
         response = self.send_put(url, token, dto)
         if response.status_code == 201:
