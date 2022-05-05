@@ -90,6 +90,8 @@ class Locator():
     listbox = "//div[@aria-haspopup='listbox']/.."
     reload_button = "//button[@data-testid='reload-button']"
     button_reset = "//button[@type='reset']"
+    info_button = "//button[@data-testid='info-button']"
+
 
     @staticmethod
     def get_indexed(xpath, index):
