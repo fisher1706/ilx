@@ -4,6 +4,8 @@ class Locator():
     #----FIELDS----
     email = "//input[@name='email']"
     password = "//input[@name='password']"
+    new_password = "//input[@id='newPassword']"
+    confirm_password = "//input[@id='confirmPassword']"
 
     #----BUTTONS----
     enter_here = "//button[@id='redirectButton']"
@@ -21,7 +23,6 @@ class Locator():
     table_column = "//div[@role='gridcell']"
     role_cell = "//div[@role='cell']"
 
-
     #----OTHERS----
     forgot_password = "//a[text()='Reset my password']"
     dialog = "//div[@role='dialog']"
@@ -33,8 +34,6 @@ class Locator():
     upload_rfid_available = "upload-rfid-available"
     intercom_container = "intercom-container"
     drop_down_button = "dropDownButton"
-    new_password = "//input[@id='newPassword']"
-    confirm_password = "//input[@id='confirmPassword']"
     item_action_import = "item-action-import"
     forgot_password = "//a[text()='Reset my password']"
     select_box = "//div[@test-id='select-box']/div"

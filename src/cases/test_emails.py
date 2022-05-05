@@ -270,10 +270,12 @@ def test_accept_checkout_group_invitation_and_reset_password(ui, delete_checkout
     cpp.element(f"//div[text()='{user_email}']").get()
     assert "Passcode" in ui.driver.page_source
 
+@pytest.mark.regression
 def test_magic_link_distributor_portal(ui, delete_distributor_user):
+    ui.testrail_case_id = 12525
+
     s3 = S3(ui)
     lp = LoginPage(ui)
-    dpp = DistributorPortalPage(ui)
 
     s3.clear_bucket(ui.data.email_data_bucket)
     objects = s3.get_objects_in_bucket(ui.data.email_data_bucket)
@@ -305,9 +307,51 @@ def test_magic_link_distributor_portal(ui, delete_distributor_user):
     email_filename = "magic_link"
     s3.download_by_key(ui.data.email_data_bucket, last_email_key, email_filename)
     magic_link = ProcessEmail.get_magic_link_from_email(email_filename)[0]
-    print(magic_link)
     lp.follow_url(magic_link)
+    lp.element(L.button_type).click()
+    lp.title_should_be("SRX Distributor Portal")
+    lp.element(L.enter_here).click()
 
+@pytest.mark.regression
+def test_magic_link_customer_portal(ui, delete_customer_user):
+    ui.testrail_case_id = 12526
+
+    s3 = S3(ui)
+    lp = LoginPage(ui)
+
+    s3.clear_bucket(ui.data.email_data_bucket)
+    objects = s3.get_objects_in_bucket(ui.data.email_data_bucket)
+    objects_count = len(objects)
+
+    #create new user
+    setup_user = SetupCustomerUserAsCustomer(ui)
+    user_email = ui.data.ses_email.format(suffix=Tools.random_string_l(15))
+    setup_user.add_option("email", user_email)
+    setup_user.setup()
+
+    #waiting for new email with the temporary password and clear bucket
+    s3.wait_for_new_object(ui.data.email_data_bucket, objects_count)
+    s3.clear_bucket(ui.data.email_data_bucket)
+    objects = s3.get_objects_in_bucket(ui.data.email_data_bucket)
+    objects_count = len(objects)
+
+    #enter email
+    lp.follow_auth_portal()
+    lp.input_email(user_email)
+    lp.click_on_submit_button()
+
+    #waiting for new email with the magic link
+    s3.wait_for_new_object(ui.data.email_data_bucket, objects_count)
+
+    #parse email and get temporary password
+    last_email_key = s3.get_last_modified_object_in_bucket(ui.data.email_data_bucket).key
+    email_filename = "magic_link"
+    s3.download_by_key(ui.data.email_data_bucket, last_email_key, email_filename)
+    magic_link = ProcessEmail.get_magic_link_from_email(email_filename)[0]
+    lp.follow_url(magic_link)
+    lp.element(L.button_type).click()
+    lp.title_should_be("SRX User Dashboard")
+    lp.element(L.enter_here).click()
 
 @pytest.mark.parametrize("conditions", [
     {
