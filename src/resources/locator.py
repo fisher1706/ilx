@@ -83,6 +83,7 @@ class Locator():
     xapth_button_last_page = "//button[@aria-label='Go to last page']"
     xpath_reload_button = "//button[@data-testid='reload-button']"
     xpath_button_reset = "//button[@type='reset']"
+    xpath_info_button = "//button[@data-testid='info-button']"
 
     @staticmethod
     def xpath_by_count(xpath, count):
