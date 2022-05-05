@@ -13,6 +13,7 @@ from src.api.distributor.customer_api import CustomerApi
 from src.api.distributor.shipto_api import ShiptoApi
 from src.api.setups.setup_shipto import SetupShipto
 from src.api.setups.setup_customer import SetupCustomer
+from src.api.setups.setup_organization import SetupOrganization
 
 @pytest.mark.parametrize("permissions", [
     {
@@ -215,11 +216,35 @@ def test_usage_history_import(ui, permission_ui, permissions, delete_distributor
     uhp.check_last_usage_history(usage_history_body.copy())
 
 @pytest.mark.regression
-def test_allocation_code_crud(ui):
+def test_allocation_code_crud(ui, delete_site, delete_subsite, delete_supplier):
     ui.testrail_case_id = 42
 
     lp = LoginPage(ui)
     acp = AllocationCodesPage(ui)
+    setup_organization = SetupOrganization(ui)
+
+    setup_organization.add_option("site")
+    setup_organization.add_option("subsite")
+    setup_organization.add_option("supplier")
+    setup_organization.add_option("shipto")
+    response_organization = setup_organization.setup()
+    
+    setup_organization.add_option("site", False)
+    setup_organization.add_option("subsite", False)
+    setup_organization.add_option("shipto", False)
+    response_second_supplier = setup_organization.setup()
+    
+    setup_organization.setup_customer_shipto.add_option("subsite_id", response_organization['subsite_id'])
+    setup_organization.setup_customer_shipto.add_option("supplier_id", response_second_supplier['supplier_id'])
+    response_second_customer_shipto = setup_organization.setup_customer_shipto.setup()
+    
+    subsite_name = response_organization['subsite']['name']
+    subsite_number = response_organization['subsite']['number']
+    shipto_name_1 = response_organization['shipto']['name']
+    shipto_number_1 = response_organization['shipto']['number']
+    shipto_name_2 = response_second_customer_shipto['shipto']['name']
+    shipto_number_2 = response_second_customer_shipto['shipto']['number']
+
     # ala = ActivityLogApi(ui)
     allocation_code_body = acp.allocation_code_body.copy()
     edit_allocation_code_body = acp.allocation_code_body.copy()
@@ -228,12 +253,12 @@ def test_allocation_code_crud(ui):
     allocation_code_body["name"] = Tools.random_string_u(10)
     allocation_code_body["type"] = "Dropdown"
     allocation_code_body["values"] = [Tools.random_string_u(7), Tools.random_string_u(7)]
-    allocation_code_body["isRequired"] = True
+    allocation_code_body["isRequired"] = "true"
     # allocation_code_body["shiptos"] = [ui.data.shipto_number]
     #-------------------
     edit_allocation_code_body["name"] = Tools.random_string_u(10)
     edit_allocation_code_body["values"] = [Tools.random_string_u(7)]
-    edit_allocation_code_body["isRequired"] = False
+    edit_allocation_code_body["isRequired"] = "false"
     #-------------------
     # options = {
     #     "action": None,
@@ -245,22 +270,24 @@ def test_allocation_code_crud(ui):
     acp.sidebar_allocation_codes()
     acp.add_allocation_code(allocation_code_body.copy())
 
-    # acp.check_allocation_code(allocation_code_body.copy())
+    acp.check_allocation_code(allocation_code_body.copy())
     # allocation_code_event = ala.get_activity_log(size=1, shiptos=[f"{ui.data.shipto_id}"], wait=5)
     # options["action"] = "ALLOCATION_CODES_CREATE"
     # options["name"] = allocation_code_body["name"]
     # ala.check_event(allocation_code_event, options)
 
-    # acp.update_allocation_code(allocation_code_body["name"], edit_allocation_code_body.copy())
+    acp.update_allocation_code(edit_allocation_code_body.copy())
     # options["action"] = "ALLOCATION_CODES_UPDATE"
     # options["name"] = edit_allocation_code_body["name"]
     # allocation_code_event = ala.get_activity_log(size=1, shiptos=[f"{ui.data.shipto_id}"], wait=5)
     # ala.check_event(allocation_code_event, options)
 
-    # acp.sidebar_allocation_codes()
-    # acp.wait_until_page_loaded()
-    # acp.check_allocation_code(edit_allocation_code_body.copy())
-    # acp.delete_allocation_code(edit_allocation_code_body["name"])
+    acp.check_allocation_code(edit_allocation_code_body.copy())
+    acp.associate_subsite_with_allocation_code(subsite_name, subsite_number)
+    acp.check_associated(subsite_name, subsite_number, shipto_name_1, shipto_number_1, shipto_name_2, shipto_number_2, True)
+    acp.update_associated(subsite_name, subsite_number)
+    acp.check_associated(subsite_name, subsite_number, shipto_name_1, shipto_number_1, shipto_name_2, shipto_number_2, False)
+    acp.delete_allocation_code(edit_allocation_code_body.copy())
     # allocation_code_event = ala.get_activity_log(size=1, shiptos=[f"{ui.data.shipto_id}"], wait=5)
     # options["action"] = "ALLOCATION_CODES_DELETE"
     # options["name"] = edit_allocation_code_body["name"]

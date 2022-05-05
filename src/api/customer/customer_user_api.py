@@ -60,8 +60,8 @@ class CustomerUserApi(API):
         token = self.get_customer_token()
         response = self.send_get(url,token)
         if response.status_code == 200:
-            LOG.info(Message.entity_operation_done.format(entity="Allocation codes", operation="got"))
+            Log.info(Message.entity_operation_done.format(entity="Allocation codes", operation="got"))
         else:
-            ERROR(str(response.content))
+            Error.error(str(response.content))
         response_json = response.json()
         return response_json["data"]
