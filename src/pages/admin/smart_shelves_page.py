@@ -18,23 +18,23 @@ class SmartShelvesPage(AdminPortalPage):
         self.sidebar_hardware()
         self.click_tab_by_name("Smart Shelves")
         self.open_last_page()
-        self.get_element_by_xpath(L.xpath_table_row)
+        self.element(L.table_row).get()
 
     def create_smart_shelves(self, smart_shelves_body):
-        self.click_id(L.id_add_button)
+        self.element(L.add_button).click()
         # input Serial Number
         self.input_by_name("serialNumber", smart_shelves_body["serialNumber"])
         # input Distributor and check if Assign To is editable
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), smart_shelves_body["distributor"])
-        self.should_be_enabled_xpath(L.get_dropdown_in_dialog(2))
+        self.element(L.get_dropdown_in_dialog(2)).wait_until_enabled()
         # input Assign To and check if Door Number is editable
         self.select_in_dropdown(L.get_dropdown_in_dialog(2), smart_shelves_body["assign_to"])
-        self.should_be_enabled_xpath(L.get_dropdown_in_dialog(3))
+        self.element(L.get_dropdown_in_dialog(3)).wait_until_enabled()
         # input Door Number
         self.select_in_dropdown(L.get_dropdown_in_dialog(3), smart_shelves_body["door_number"])
-        self.click_xpath(L.xpath_submit_button)
+        self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
-        
+        self.wait_until_progress_bar_loaded()
 
     def check_last_smart_shelf(self, smart_shelves_body):
         table_cells = {
@@ -47,65 +47,65 @@ class SmartShelvesPage(AdminPortalPage):
             self.check_last_table_item_by_header(cell, value)
 
     def update_smart_shelves(self, smart_shelves_body):
-        self.click_xpath(L.xpath_by_count(L.xpath_edit_button, self.get_table_rows_number()))
+        self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
         # input Serial Number
         self.input_by_name("serialNumber", smart_shelves_body["serialNumber"])
         # change Distributor and check if fields "Assign To" and "Door Number" become empty
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), smart_shelves_body["distributor"])
-        self.should_be_disabled_xpath(f"{L.get_dropdown_in_dialog(3)}//input", wait=True)
-        text = self.get_element_text(L.get_dropdown_in_dialog(2))
+        self.element(f"{L.get_dropdown_in_dialog(3)}//input").wait_until_disabled()
+        text = self.element(L.get_dropdown_in_dialog(2)).get()
         assert text is None or text == "", f"Element {L.get_dropdown_in_dialog(2)} contains text: {text}"
         # input Assign To and check if Door Number is editable
         self.select_in_dropdown(L.get_dropdown_in_dialog(2), smart_shelves_body["assign_to"])
-        self.should_be_enabled_xpath(L.get_dropdown_in_dialog(3))
+        self.element(L.get_dropdown_in_dialog(3)).wait_until_enabled()
         # input Door Number
         time.sleep(3)#need to use wait
         self.select_in_dropdown(L.get_dropdown_in_dialog(3), smart_shelves_body["door_number"])
-        self.click_xpath(L.xpath_submit_button)
+        self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
-        
+        self.wait_until_progress_bar_loaded()
 
     def delete_smart_shelf(self, serial_number):
         self.get_last_table_item_text_by_header("Serial Number")
-        self.click_xpath(L.xpath_by_count(L.xpath_remove_button, self.get_table_rows_number()))
+        self.element(L.get_indexed(L.remove_button, self.get_table_rows_number())).click()
         self.delete_dialog_should_be_about(f"{serial_number}")
-        self.click_xpath(L.xpath_confirm_button)
+        self.element(L.confirm_button).click()
         self.dialog_should_not_be_visible()
 
     def merge_cells(self, number_of_cells):
-        self.get_element_by_xpath(L.xpath_edit_button)
-        self.click_xpath(L.xpath_by_count(L.xpath_edit_button, self.get_table_rows_number()))
+        self.element(L.edit_button).get()
+        self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
         for cell in range(number_of_cells):
-            self.click_xpath(f"//div[@data-cell='{cell}']")
-        self.click_xpath(self.xpath_merge_cells)
-        self.click_xpath(L.xpath_submit_button)
-        self.click_xpath(L.xpath_label_confirm)
+            self.element(f"//div[@data-cell='{cell}']").click()
+        self.element(self.xpath_merge_cells).click()
+        self.element(L.submit_button).click()
+        self.element(L.label_confirm).click()
         self.dialog_should_not_be_visible()
-        
+        self.wait_until_progress_bar_loaded()
 
     def split_cells(self, position_of_cell):
-        self.click_xpath(L.xpath_by_count(L.xpath_edit_button, self.get_table_rows_number()))
-        self.click_xpath(f"//div[@data-cell='{position_of_cell}']")
-        self.click_xpath(self.xpath_split_cells)
-        self.click_xpath(L.xpath_submit_button)
-        self.click_xpath(L.xpath_label_confirm)
+        self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
+        self.element(f"//div[@data-cell='{position_of_cell}']").click()
+        self.element(self.xpath_split_cells).click()
+        self.element(L.submit_button).click()
+        self.element(L.label_confirm).click()
         self.dialog_should_not_be_visible()
-        
+        self.wait_until_progress_bar_loaded()
 
     def check_cells_number(self, number_of_cells):
-        self.get_element_by_xpath(L.xpath_table_row)
+        self.element(L.table_row).get()
         self.check_last_table_item_by_header("Qnty of Cells", "4")
-        self.click_xpath(L.xpath_by_count(L.xpath_edit_button, self.get_table_rows_number()))
-        self.elements_count_should_be("//div[@data-cell]", number_of_cells)
-        self.click_xpath(L.xpath_label_cancel)
+        self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
+        self.element("//div[@data-cell]").wait_elements_number(number_of_cells)
+        self.element(L.label_cancel).click()
         self.dialog_should_not_be_visible()
-        
+        self.wait_until_progress_bar_loaded()
 
     def check_first_door_is_unavaliable(self, locker, create=None):
         if create is None:
-            self.click_xpath(L.xpath_by_count(L.xpath_edit_button, self.get_table_rows_number()))
+            self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
         elif create:
-            self.click_id(L.id_add_button)
+            self.element(L.add_button).click()
             # input Serial Number
             self.input_by_name("serialNumber", Tools.random_string_u())
             # input Distributor
@@ -113,53 +113,47 @@ class SmartShelvesPage(AdminPortalPage):
         # input Assign To
         self.select_in_dropdown(L.get_dropdown_in_dialog(2), locker)
         # check Door Number
-        self.click_xpath(L.get_dropdown_in_dialog(3))
+        self.element(L.get_dropdown_in_dialog(3)).click()
         time.sleep(3)#need to use wait
-        text = self.get_element_text(f"{L.xpath_dropdown_list_item}/div")
+        text = self.element(f"{L.dropdown_list_item}/div").text()
         if f"{text}" == "2":
             Log.info("First door is unavailable as expected")
         else:
             Error.error("First door shoud not be avaliable")
-        self.click_xpath(L.get_dropdown_in_dialog(3))
-        self.click_xpath(L.xpath_label_cancel)
+        self.element(L.get_dropdown_in_dialog(3)).click()
+        self.element(L.label_cancel).click()
         self.dialog_should_not_be_visible()
-        
+        self.wait_until_progress_bar_loaded()
 
     def clear_fields_smart_shelves(self, distributor=None, locker=None):
-        self.click_xpath(L.xpath_by_count(L.xpath_edit_button, self.get_table_rows_number()))
+        self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
         self.element_should_have_text(L.get_dropdown_in_dialog(3), "1")
         if locker is not None:
-            self.click_xpath(f"{L.get_dropdown_in_dialog(2)}/div/div[2]/div")
+            self.element(f"{L.get_dropdown_in_dialog(2)}/div/div[2]/div").click()
         if distributor is not None:
-            self.click_xpath(f"{L.get_dropdown_in_dialog(1)}/div/div[2]/div")
-        self.click_xpath(L.xpath_submit_button)
+            self.element(f"{L.get_dropdown_in_dialog(1)}/div/div[2]/div").click()
+        self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
-        
+        self.wait_until_progress_bar_loaded()
 
     def assign_smart_shelf_locker_planogram(self, locker, smart_shelf):
-        self.get_element_by_xpath(L.xpath_table_row)
+        self.element(L.table_row).get()
         self.open_last_page()
-        self.get_element_by_xpath(L.xpath_table_row)
+        self.element(L.table_row).get()
         locker_row = self.get_row_of_table_item_by_header(locker, "Serial Number")
-        
-        self.click_xpath(L.xpath_by_count(L.xpath_table_row, locker_row)+L.get_planogram_button)
-        self.get_element_by_xpath(L.xpath_configure_button)
-        self.click_xpath(L.xpath_configure_button)
+        self.element(L.get_indexed(L.table_row, locker_row)+L.planogram_button).click()
+        self.element(L.configure_button).click()
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), smart_shelf)
-        self.click_xpath(L.xpath_submit_button)
+        self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
 
     def check_smart_shelf_unavailable_via_planogram(self, locker, smart_shelf, in_list=False):
-        
-        self.get_element_by_xpath(L.xpath_table_row)
-        locker_row = self.scan_table(scan_by=locker, column_header="Serial Number")
-        self.click_xpath(L.xpath_by_count(L.xpath_table_row, locker_row)+L.get_planogram_button)
-        self.get_element_by_xpath(L.xpath_configure_button)
-        self.click_xpath(L.xpath_configure_button)
-        self.click_xpath(L.get_dropdown_in_dialog(1))
-        self.get_element_by_xpath(L.xpath_dropdown_list_item)
-        self.input_data_xpath(smart_shelf, f"{L.get_dropdown_in_dialog(1)}//input")
-        text = self.get_element_text(f"{L.xpath_dropdown_list_item}/div")
+        self.open_last_page()
+        self.element(L.get_indexed(L.table_row, self.get_table_rows_number())+L.planogram_button).click()
+        self.element(L.configure_button).click()
+        self.element(L.get_dropdown_in_dialog(1)).click()
+        self.element(f"{L.get_dropdown_in_dialog(1)}//input").enter(smart_shelf)
+        text = self.element(f"{L.dropdown_list_item}/div").text()
         if in_list:
             if f"{text}" == f"{smart_shelf}":
                 Log.info(f"There is {smart_shelf} as expected")
@@ -170,5 +164,5 @@ class SmartShelvesPage(AdminPortalPage):
                 Error.error(f"Smart Shelf {smart_shelf} should not be in the list")
             else:
                 Log.info(f"There is no {smart_shelf} as expected")
-        self.click_xpath(L.xpath_close_button)
+        self.element(L.close_button).click()
         self.dialog_should_not_be_visible()

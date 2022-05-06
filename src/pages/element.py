@@ -21,12 +21,15 @@ class Element():
         self.xpath = xpath
         return self
 
-    def get(self, timeout=None):
+    def get(self, timeout=None, no_exception=False):
         timeout = self.default_timeout if timeout is None else timeout
         try:
             return WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((By.XPATH, self.xpath)))
         except Exception as e:
-            Error.error(f"Cannot find element'{self.xpath}'.\n{e}")
+            if no_exception:
+                Log.warning(f"Cannot find element'{self.xpath}'.\n{e}")
+            else:
+                Error.error(f"Cannot find element'{self.xpath}'.\n{e}")
 
     def get_list(self):
         count = self.count()
@@ -112,7 +115,7 @@ class Element():
 
     def wait_for_not_appeared(self, timeout=5):
         try:
-            WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((By.XPATH, self.xpath)))
+            self.get(timeout=timeout, no_exception=True)
         except:
             pass
         else:

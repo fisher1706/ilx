@@ -91,6 +91,7 @@ class Locator():
     reload_button = "//button[@data-testid='reload-button']"
     button_reset = "//button[@type='reset']"
     info_button = "//button[@data-testid='info-button']"
+    next_button = "//button[@data-testid='next-button']"
 
     @staticmethod
     def get_indexed(xpath, index):

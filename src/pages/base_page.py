@@ -13,6 +13,7 @@ class BasePage():
         self.context = context
         self.url = self.context.session_context.url
         self.driver = context.driver
+        self.data = context.data
         self.element = Element(context)
 
     def follow_url(self, url, expected_url=None):
@@ -84,9 +85,9 @@ class BasePage():
             WebDriverWait(self.driver, 15).until_not(lambda x: x.execute_script("return document.readyState === 'complete'"))
         WebDriverWait(self.driver, 15).until(lambda x: x.execute_script("return document.readyState === 'complete'"))
 
-    def wait_until_progress_bar_loaded(self):
+    def wait_until_progress_bar_loaded(self, get_timeout=1):
         try:
-            self.element(L.progress_bar).get(appeared_timeout=1)
+            self.element(L.progress_bar).get(timeout=get_timeout, no_exception=True)
         except:
             pass
         self.element(L.progress_bar).wait_until_disappeared()
