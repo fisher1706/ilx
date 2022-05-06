@@ -53,7 +53,7 @@ class CustomersPage(DistributorPortalPage):
         self.click_xpath("//button/span[text()='Customer setup wizard']")
 
     def check_customer_setup_wizard_button(self):
-        self.wait_until_page_loaded()
+        
         if self.get_element_count("//button/span[text()='Customer setup wizard']") == 0:
             Log.info("Button is hidden for user")
         else:
@@ -64,7 +64,7 @@ class CustomersPage(DistributorPortalPage):
         self.click_xpath(L.xpath_next)
 
     def add_customer_info(self, customer_body):
-        self.wait_until_page_loaded()
+        
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), customer_body.pop("customerType"))
         self.select_in_dropdown(L.get_dropdown_in_dialog(2), customer_body.pop("marketType"))
         for field in customer_body.keys():
@@ -72,20 +72,20 @@ class CustomersPage(DistributorPortalPage):
         self.click_xpath(L.xpath_next)
 
     def add_customer_portal_user(self, email):
-        self.wait_until_page_loaded()
+        
         self.select_checkbox(L.xpath_checkbox)
         self.get_element_by_xpath("//input[@value='']").send_keys(email)
 
     def click_complete(self):
         self.click_xpath(L.xpath_complete_button)
-        self.wait_until_page_loaded()
+        
 
     def click_next(self):
         self.click_xpath(L.xpath_next)
-        self.wait_until_page_loaded()
+        
 
     def check_customer_portal_user(self, expected_email):
-        self.wait_until_page_loaded()
+        
         table_cells = {
             "Email": expected_email
         }
@@ -93,7 +93,7 @@ class CustomersPage(DistributorPortalPage):
             self.check_table_item(value, header=cell, last=True)
 
     def check_settings_reorder_list_settings(self, expected_email):
-        self.wait_until_page_loaded()
+        
         self.click_xpath("//span[text()='Reorder List Settings']")
         assert self.get_element_by_xpath("//input[@name='email']").get_attribute("value") == expected_email
 
@@ -102,17 +102,17 @@ class CustomersPage(DistributorPortalPage):
         start_number_of_rows = ca.get_customers(full=True)["totalElements"]
         self.last_page(10)
         self.get_element_by_xpath(L.get_row_by_index(start_number_of_rows%10))
-        self.wait_until_page_loaded()
+        
 
     def change_automation_settings(self, email):
-        self.wait_until_page_loaded()
+        
         self.click_xpath("//span[text()='Use Defaults']")
         self.clear_xpath("//input[@name='email']")
         self.get_element_by_xpath("//input[@name='email']").send_keys(email)
         self.click_xpath("//span[text()='Submit Immediately']")
         self.click_xpath("//span[text()='Auto-submit as ORDER']")
         self.click_xpath(L.xpath_complete_button)
-        self.wait_until_page_loaded()
+        
 
     def delete_last_customer(self, value):
         self.click_xpath(L.xpath_last_role_row+L.xpath_remove_button)

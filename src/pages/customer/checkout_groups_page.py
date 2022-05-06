@@ -10,7 +10,7 @@ class CheckoutGroupsPage(CustomerPortalPage):
     id_associate = "item-action-associate"
 
     def create_checkout_group(self, checkout_group_body):
-        self.wait_until_page_loaded()
+        
         start_number_of_rows = self.get_table_rows_number()
         self.click_id(L.id_add_button)
         for field in checkout_group_body.keys():
@@ -19,7 +19,7 @@ class CheckoutGroupsPage(CustomerPortalPage):
         self.click_xpath(L.xpath_dropdown_list_item+"/div")
         self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
         self.elements_count_should_be(L.xpath_table_row, start_number_of_rows+1)
 
     def check_new_checkout_group(self, checkout_group_body, row, owner=None, shipto=None):
@@ -58,7 +58,7 @@ class CheckoutGroupsPage(CustomerPortalPage):
             Error.error(f"There is no shipto '{shipto_number}'")
         self.click_xpath(L.xpath_button_save)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
 
     def check_assigned_shipto(self, shipto_body, row):
         table_cells = {
@@ -88,7 +88,7 @@ class CheckoutGroupsPage(CustomerPortalPage):
             Error.error(f"There is no shipto '{user_email}'")
         self.click_xpath(L.xpath_button_save)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
 
     def check_assigned_user(self, user_body, row):
         table_cells = {

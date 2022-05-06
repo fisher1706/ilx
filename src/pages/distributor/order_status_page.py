@@ -13,11 +13,11 @@ class OrderStatusPage(DistributorPortalPage):
                 self.input_by_name("shippedQuantity", shipped_quantity)
             self.click_xpath(L.xpath_submit_button)
             self.dialog_should_not_be_visible()
-            self.wait_until_page_loaded()
+            
 
     def split_transaction(self, row, quantity):
         self.click_xpath(L.xpath_by_count(L.xpath_split_button, row))
         self.input_by_name("splitFrom", quantity)
         self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        

@@ -94,15 +94,16 @@ class BasePage():
     def open_last_page(self):
         self.element(f"{L.pagination_bottom}//button").get()
         pagination_buttons = self.driver.find_elements_by_xpath(f"{L.pagination_bottom}//button")
+        pages = self.element(L.old_table).get().get_attribute("data-page-count")
         if len(pagination_buttons) > 3:
             if pagination_buttons[-2].is_enabled():
                 pagination_buttons[-2].click()
                 self.should_be_last_page()
-                self.wait_until_progress_bar_loaded()
+                self.element(L.get_table_item_by_index_outdated(0, 1, pages)).get()
 
     def last_page(self, pagination=None, wait=True):
         self.select_pagination(pagination)
-        self.wait_for_the_first_element_in_table()
+        self.element(L.get_table_item(2, 1)).get()
         if wait:
             try:
                 WebDriverWait(self.driver, 7).until_not(ElementToBeEnabled(L.button_last_page))
@@ -110,10 +111,7 @@ class BasePage():
                 pass
         if self.element(L.button_last_page).is_enabled():
             self.element(L.button_last_page).click()
-            self.wait_for_the_first_element_in_table()
-
-    def wait_for_the_first_element_in_table(self):
-        self.element(L.get_table_item(2, 1)).get()
+            self.element(L.get_table_item(2, 1)).get()
 
     def select_pagination(self, number_of_elements):
         if number_of_elements is not None:

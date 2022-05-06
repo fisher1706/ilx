@@ -211,7 +211,6 @@ def test_transaction_crud_and_split(ui, permission_ui, permissions, delete_distr
     TransactionApi(ui).create_active_item(response_location["shipto_id"], la.get_ordering_config_by_sku(response_location["shipto_id"], distributor_sku))
     lp.log_in_distributor_portal()
     osp.sidebar_order_status()
-    osp.wait_until_page_loaded()
     new_transaction_row = osp.scan_table(distributor_sku, "Distributor SKU")
     quantity = osp.get_table_item_text_by_header("Quantity Ordered", new_transaction_row)
     assert osp.get_table_item_text_by_header("Status", new_transaction_row) == "ACTIVE"

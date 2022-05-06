@@ -34,7 +34,7 @@ class SmartShelvesPage(AdminPortalPage):
         self.select_in_dropdown(L.get_dropdown_in_dialog(3), smart_shelves_body["door_number"])
         self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
 
     def check_last_smart_shelf(self, smart_shelves_body):
         table_cells = {
@@ -63,7 +63,7 @@ class SmartShelvesPage(AdminPortalPage):
         self.select_in_dropdown(L.get_dropdown_in_dialog(3), smart_shelves_body["door_number"])
         self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
 
     def delete_smart_shelf(self, serial_number):
         self.get_last_table_item_text_by_header("Serial Number")
@@ -81,7 +81,7 @@ class SmartShelvesPage(AdminPortalPage):
         self.click_xpath(L.xpath_submit_button)
         self.click_xpath(L.xpath_label_confirm)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
 
     def split_cells(self, position_of_cell):
         self.click_xpath(L.xpath_by_count(L.xpath_edit_button, self.get_table_rows_number()))
@@ -90,7 +90,7 @@ class SmartShelvesPage(AdminPortalPage):
         self.click_xpath(L.xpath_submit_button)
         self.click_xpath(L.xpath_label_confirm)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
 
     def check_cells_number(self, number_of_cells):
         self.get_element_by_xpath(L.xpath_table_row)
@@ -99,7 +99,7 @@ class SmartShelvesPage(AdminPortalPage):
         self.elements_count_should_be("//div[@data-cell]", number_of_cells)
         self.click_xpath(L.xpath_label_cancel)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
 
     def check_first_door_is_unavaliable(self, locker, create=None):
         if create is None:
@@ -123,7 +123,7 @@ class SmartShelvesPage(AdminPortalPage):
         self.click_xpath(L.get_dropdown_in_dialog(3))
         self.click_xpath(L.xpath_label_cancel)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
 
     def clear_fields_smart_shelves(self, distributor=None, locker=None):
         self.click_xpath(L.xpath_by_count(L.xpath_edit_button, self.get_table_rows_number()))
@@ -134,14 +134,14 @@ class SmartShelvesPage(AdminPortalPage):
             self.click_xpath(f"{L.get_dropdown_in_dialog(1)}/div/div[2]/div")
         self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
 
     def assign_smart_shelf_locker_planogram(self, locker, smart_shelf):
         self.get_element_by_xpath(L.xpath_table_row)
         self.open_last_page()
         self.get_element_by_xpath(L.xpath_table_row)
         locker_row = self.get_row_of_table_item_by_header(locker, "Serial Number")
-        self.wait_until_page_loaded()
+        
         self.click_xpath(L.xpath_by_count(L.xpath_table_row, locker_row)+L.get_planogram_button)
         self.get_element_by_xpath(L.xpath_configure_button)
         self.click_xpath(L.xpath_configure_button)
@@ -150,7 +150,7 @@ class SmartShelvesPage(AdminPortalPage):
         self.dialog_should_not_be_visible()
 
     def check_smart_shelf_unavailable_via_planogram(self, locker, smart_shelf, in_list=False):
-        self.wait_until_page_loaded()
+        
         self.get_element_by_xpath(L.xpath_table_row)
         locker_row = self.scan_table(scan_by=locker, column_header="Serial Number")
         self.click_xpath(L.xpath_by_count(L.xpath_table_row, locker_row)+L.get_planogram_button)

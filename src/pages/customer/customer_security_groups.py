@@ -17,7 +17,7 @@ class CustomerSecurityGroups(CustomerPortalPage):
         for checkbox in range(1, 4):
             self.select_checkbox(L.xpath_by_count(L.xpath_checkbox, checkbox))
         self.click_xpath(L.xpath_submit_button)
-        self.wait_until_page_loaded()
+        
         self.get_element_by_xpath(L.xpath_table_row)
 
     def check_security_group(self, security_group_body, row):
@@ -33,15 +33,15 @@ class CustomerSecurityGroups(CustomerPortalPage):
 
     def update_security_group(self, security_group_body, row):
         self.click_xpath(L.xpath_by_count(L.xpath_edit_button, row-2))
-        self.wait_until_page_loaded()
+        
         self.clear_xpath("//input[@name]")
         self.input_by_name("name", security_group_body["name"])
         self.click_xpath(L.xpath_submit_button)
-        self.wait_until_page_loaded()
+        
         for checkbox in range(1, 4):
             self.unselect_checkbox(L.xpath_by_count(L.xpath_checkbox, checkbox))
         self.click_xpath(f"({L.xpath_submit_button})[last()]")
-        self.wait_until_page_loaded()
+        
         self.click_xpath("//a[@href='/customer/users-and-groups#security-groups']")
 
     def delete_security_group(self, security_group_body, row):

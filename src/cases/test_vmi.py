@@ -30,7 +30,7 @@ def test_vmi_list_partial_sku_match(ui):
     setup_product.setup()
 
     vp.follow_location_url()
-    vp.wait_until_page_loaded()
+    
     vp.click_id(L.id_add_button)
     vp.input_data_xpath(product_sku, L.xpath_dialog+L.xpath_select_box+"//input")
     vp.wait_until_dropdown_list_loaded(1)#need new implementation
@@ -75,7 +75,7 @@ def test_location_crud(ui, permission_ui, permissions, delete_distributor_securi
 
     lp.log_in_distributor_portal()
     vp.follow_location_url(customer_id=response_shipto["customer_id"], shipto_id=response_shipto["shipto_id"])
-    vp.wait_until_page_loaded()
+    
     vp.create_location(location_body.copy())
     vp.check_last_location(location_body.copy())
 
@@ -208,7 +208,7 @@ def test_location_import(ui, permission_ui, permissions, delete_distributor_secu
 
     lp.log_in_distributor_portal()
     vp.follow_location_url(shipto_id=response_shipto["shipto_id"])
-    vp.wait_until_page_loaded()
+    
     vp.import_location(locations)
     vp.check_last_location(location_body.copy())
 

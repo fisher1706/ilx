@@ -152,7 +152,6 @@ def test_shipto_crud(ui, permission_ui, permissions, delete_distributor_security
     sp.update_last_shipto(edit_shipto_body.copy(), True if permissions["user"] is None else False)
     sp.should_be_disabled_xpath(L.xpath_submit_button)
     sp.driver.find_element_by_link_text('Shiptos').click()
-    sp.wait_until_page_loaded()
     sp.check_last_shipto(edit_shipto_body.copy())
     sp.delete_last_shipto(True if permissions["user"] is None else False)
 
@@ -333,7 +332,6 @@ def test_customer_setup_wizard_required_steps(ui, permission_ui, api, permission
     dcp.follow_customer_users_url(customer_id=response_customer["id"])
     cp.check_customer_portal_user(email)
     cp.sidebar_customers()
-    cp.wait_until_page_loaded()
     cp.change_rows_per_page()
     cp.delete_last_customer(customer_body["name"])
 
@@ -381,7 +379,6 @@ def test_customer_setup_wizard_all_steps(ui, api, delete_distributor_security_gr
     dcp.follow_customer_settings_url(customer_id=response_customer["id"])
     cp.check_settings_reorder_list_settings(email)
     cp.sidebar_customers()
-    cp.wait_until_page_loaded()
     cp.change_rows_per_page()
     cp.delete_last_customer(customer_body["name"])
 

@@ -353,6 +353,54 @@ def test_magic_link_customer_portal(ui, delete_customer_user):
     lp.title_should_be("SRX User Dashboard")
     lp.element(L.enter_here).click()
 
+def test_accept_new_customer_user_invitation_and_login_by_magic_link(ui, delete_customer):
+    ui.testrail_case_id = 4549
+
+    s3 = S3(ui)
+    lp = LoginPage(ui)
+
+    s3.clear_bucket(ui.data.email_data_bucket)
+    objects = s3.get_objects_in_bucket(ui.data.email_data_bucket)
+    objects_count = len(objects)
+
+    setup_customer = SetupCustomer(ui)
+    user_email = ui.data.ses_email.format(suffix=Tools.random_string_l(20))
+    setup_customer.add_option("user", user_email)
+    setup_customer.setup()
+
+    s3.wait_for_new_object(ui.data.email_data_bucket, objects_count)
+
+    last_email_key = s3.get_last_modified_object_in_bucket(ui.data.email_data_bucket).key
+    email_filename = "customer_user_invitation_accept"
+    s3.download_by_key(ui.data.email_data_bucket, last_email_key, email_filename)
+    acception_link = ProcessEmail.get_acception_link_from_email(email_filename)[0]
+    lp.follow_url(acception_link)
+    lp.element("//*[text()='Your invite was successfully accepted']").get()
+
+    #waiting for new email with the temporary password and clear bucket
+    s3.wait_for_new_object(ui.data.email_data_bucket, objects_count+1)
+    s3.clear_bucket(ui.data.email_data_bucket)
+    objects = s3.get_objects_in_bucket(ui.data.email_data_bucket)
+    objects_count = len(objects)
+
+    #enter email
+    lp.follow_auth_portal()
+    lp.input_email(user_email)
+    lp.click_on_submit_button()
+
+    #waiting for new email with the magic link
+    s3.wait_for_new_object(ui.data.email_data_bucket, objects_count)
+
+    #parse email and get temporary password
+    last_email_key = s3.get_last_modified_object_in_bucket(ui.data.email_data_bucket).key
+    email_filename = "magic_link"
+    s3.download_by_key(ui.data.email_data_bucket, last_email_key, email_filename)
+    magic_link = ProcessEmail.get_magic_link_from_email(email_filename)[0]
+    lp.follow_url(magic_link)
+    lp.element(L.button_type).click()
+    lp.title_should_be("SRX User Dashboard")
+    lp.element(L.enter_here).click()
+
 @pytest.mark.parametrize("conditions", [
     {
         "critical_min": True,

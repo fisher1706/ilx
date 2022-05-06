@@ -20,7 +20,7 @@ class UsageHistoryPage(DistributorPortalPage):
         Tools.generate_csv("usage_history.csv", usage_history)
         self.import_csv(L.id_file_upload, "usage_history.csv")
         self.get_element_by_xpath(L.xpath_successfully_imported_msg)
-        self.wait_until_page_loaded()
+        
 
     def check_last_usage_history(self, usage_history_body):
         for cell, value in usage_history_body.items():

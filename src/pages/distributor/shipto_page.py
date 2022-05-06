@@ -19,7 +19,7 @@ class ShiptoPage(DistributorPortalPage):
         self.follow_url(f"{self.url.distributor_portal}/customers/{self.data.customer_id}#shiptos")
 
     def create_shipto(self, shipto_body):
-        self.wait_until_page_loaded()
+        
         self.open_last_page()
         start_number_of_rows = self.get_table_rows_number()
         self.click_id(L.id_add_button)
@@ -29,7 +29,7 @@ class ShiptoPage(DistributorPortalPage):
         self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
         self.open_last_page()
-        self.wait_until_page_loaded()
+        
         self.elements_count_should_be(L.xpath_table_row, start_number_of_rows+1)
 
     def check_last_shipto(self, shipto_body):
@@ -51,7 +51,7 @@ class ShiptoPage(DistributorPortalPage):
         for field in shipto_body.keys():
             self.input_by_name(field, shipto_body[field])
         self.click_xpath(L.xpath_submit_button)
-        self.wait_until_page_loaded()
+        
 
     def delete_last_shipto(self, actions_pop_up=True):
         start_number_of_rows = self.get_table_rows_number()

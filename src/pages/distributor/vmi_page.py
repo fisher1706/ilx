@@ -28,7 +28,7 @@ class VmiPage(DistributorPortalPage):
             self.input_by_name(field, location_body[field])
         self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
 
     def check_last_location(self, location_body):
         self.open_last_page()
@@ -43,4 +43,4 @@ class VmiPage(DistributorPortalPage):
         self.click_id(L.id_item_action_import)
         self.import_csv(L.id_file_upload, "locations.csv")
         self.get_element_by_xpath(L.xpath_successfully_imported_msg)
-        self.wait_until_page_loaded()
+        

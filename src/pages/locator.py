@@ -22,6 +22,7 @@ class Locator():
     role_row = "//div[@role='row']"
     table_column = "//div[@role='gridcell']"
     role_cell = "//div[@role='cell']"
+    old_table = "//div[@class='rt-table' and @role='grid']"
 
     #----OTHERS----
     forgot_password = "//a[text()='Reset my password']"
@@ -131,6 +132,10 @@ class Locator():
     @staticmethod
     def get_table_item_by_index(index, column):
         return f"//div[@role='row' and @data-row-index='{index}']{Locator.role_cell}[{column}]"
+
+    @staticmethod
+    def get_table_item_by_index_outdated(index, column, page):
+        return f"//div[@role='row' and @index='{index}' and @data-page-index='{page}']{Locator.table_column}[{column}]"
 
     @staticmethod
     def get_table_item_in_dialog(row, column):

@@ -11,7 +11,7 @@ class CustomerUsersPage(CustomerPortalPage):
     }
 
     def create_customer_user(self, customer_user_body):
-        self.wait_until_page_loaded()
+        
         start_number_of_rows = self.get_table_rows_number()
         self.click_id(L.id_add_button)
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), customer_user_body.pop("role"))
@@ -20,7 +20,7 @@ class CustomerUsersPage(CustomerPortalPage):
             self.input_by_name(field, customer_user_body[field])
         self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
         self.elements_count_should_be(L.xpath_table_row, start_number_of_rows+1)
 
     def check_last_customer_user(self, customer_user_body):

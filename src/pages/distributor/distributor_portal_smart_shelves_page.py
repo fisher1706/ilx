@@ -12,11 +12,11 @@ class DistributorSmartShelvesPage(DistributorPortalPage):
     def open_smart_shelves(self):
         self.sidebar_hardware()
         self.click_tab_by_name("Smart shelves")
-        self.wait_until_page_loaded()
+        
 
     def update_smart_shelves(self, smart_shelves_body):
         self.open_last_page()
-        self.wait_until_page_loaded()
+        
         self.click_xpath(L.xpath_by_count(L.xpath_edit_button, self.get_table_rows_number()))
         self.should_be_disabled_xpath("//input[@name='serialNumber']")
         self.should_be_disabled_xpath("//input[@name='cellsQuantity']")
@@ -28,7 +28,7 @@ class DistributorSmartShelvesPage(DistributorPortalPage):
         self.select_in_dropdown(L.get_dropdown_in_dialog(2), smart_shelves_body["door_number"])
         self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        
 
     def check_last_smart_shelf(self, smart_shelves_body):
         table_cells = {
@@ -48,7 +48,7 @@ class DistributorSmartShelvesPage(DistributorPortalPage):
             self.click_xpath(L.xpath_submit_button)
             self.click_xpath(L.xpath_label_confirm)
             self.dialog_should_not_be_visible()
-            self.wait_until_page_loaded()
+            
         else:
             for cell in range(1, number_of_cells + 1):
                 self.click_xpath(f"//div[@data-door={door_number}]//div[@data-cell='{cell}']")
@@ -63,7 +63,7 @@ class DistributorSmartShelvesPage(DistributorPortalPage):
             self.click_xpath(L.xpath_submit_button)
             self.click_xpath(L.xpath_label_confirm)
             self.dialog_should_not_be_visible()
-            self.wait_until_page_loaded()
+            
         else:
             self.click_xpath(f"//div[@data-cell='{position_of_cell}']")
             self.click_xpath(self.xpath_split_cells)
@@ -76,7 +76,7 @@ class DistributorSmartShelvesPage(DistributorPortalPage):
             self.elements_count_should_be("//div[@data-cell]", number_of_cells)
             self.click_xpath(L.xpath_label_cancel)
             self.dialog_should_not_be_visible()
-            self.wait_until_page_loaded()
+            
         else:
             self.elements_count_should_be(f"//div[@data-door={door_number}]//div[@data-cell]", number_of_cells)
 
@@ -92,4 +92,4 @@ class DistributorSmartShelvesPage(DistributorPortalPage):
         self.select_in_dropdown(L.get_dropdown_in_dialog(2), door_number)
         self.click_xpath(L.xpath_submit_button)
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        

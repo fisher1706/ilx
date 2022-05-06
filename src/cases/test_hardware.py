@@ -66,7 +66,6 @@ def test_common_set_of_hubs_for_locker_and_vending(ui, delete_hardware):
     iothub_name = f"{iothub_dto['id']} ({iothub_dto['value']}) / {ui.data.distributor_name}"
 
     hp.sidebar_hardware()
-    hp.wait_until_page_loaded()
     hp.iothub_should_be_available("Locker", iothub_name)
     hp.iothub_should_be_available("Vending", iothub_name)
     hp.iothub_should_be_available("IP Camera", iothub_name)
