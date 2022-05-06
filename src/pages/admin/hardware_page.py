@@ -13,8 +13,8 @@ class HardwarePage(AdminPortalPage):
     def create_iothub(self, distributor):
         self.element(L.add_button).click()
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), "IoT Hub")
-        self.element(L.get_dropdown_in_dialog(6)).get()
-        self.select_in_dropdown(L.get_dropdown_in_dialog(6), distributor)
+        self.element(L.get_dropdown_in_dialog(7)).get()
+        self.select_in_dropdown(L.get_dropdown_in_dialog(7), distributor)
         self.element(L.submit_button).click()
         self.wait_until_progress_bar_loaded()
         self.element("//h6[text()='IoTHub provision information']").get()
@@ -41,7 +41,7 @@ class HardwarePage(AdminPortalPage):
     def update_last_iothub(self, distributor):
         self.open_last_page()
         self.element(L.get_indexed(L.table_row, self.get_table_rows_number())+L.edit_button).click()
-        self.select_in_dropdown(L.get_dropdown_in_dialog(7), distributor)
+        self.select_in_dropdown(L.get_dropdown_in_dialog(8), distributor)
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
         self.wait_until_progress_bar_loaded()

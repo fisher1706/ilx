@@ -111,4 +111,4 @@ def test_iothub_crud(ui):
     hp.check_last_hardware(serial_number=serial_number, device_type="IOTHUB", distributor=ui.data.distributor_name)
     hp.update_last_iothub(ui.data.sub_distributor_name)
     hp.check_last_hardware(serial_number=serial_number, device_type="IOTHUB", distributor=ui.data.sub_distributor_name)
-    hp.remove_last_hardware("IOTHUB")
+    hp.remove_last_hardware(serial_number)
