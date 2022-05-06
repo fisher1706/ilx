@@ -6,6 +6,7 @@ from src.api.setups.setup_locker import SetupLocker
 from src.api.setups.setup_location import SetupLocation
 from src.pages.admin.hardware_page import HardwarePage
 from src.pages.general.login_page import LoginPage
+from src.pages.locator import Locator as L
 
 @pytest.mark.smoke
 def test_smoke_get_device_list(smoke_api):
@@ -66,18 +67,19 @@ def test_common_set_of_hubs_for_locker_and_vending(ui, delete_hardware):
     iothub_name = f"{iothub_dto['id']} ({iothub_dto['value']}) / {ui.data.distributor_name}"
 
     hp.sidebar_hardware()
+    hp.open_last_page()
     hp.iothub_should_be_available("Locker", iothub_name)
     hp.iothub_should_be_available("Vending", iothub_name)
     hp.iothub_should_be_available("IP Camera", iothub_name)
 
-    hp.create_locker(ui.data.distributor_name, iothub_name) #create locker
+    hp.create_locker(iothub_name) #create locker
     hp.check_last_hardware(device_type="LOCKER", distributor=ui.data.distributor_name)
 
-    hp.iothub_should_not_be_available("Locker", iothub_name)
-    hp.iothub_should_not_be_available("Vending", iothub_name)
+    hp.iothub_should_be_available("Locker", iothub_name, inverse=True)
+    hp.iothub_should_be_available("Vending", iothub_name, inverse=True)
     hp.iothub_should_be_available("IP Camera", iothub_name)
 
-    hp.remove_last_hardware("LOCKER") #remove locker
+    hp.remove_last_hardware() #remove locker
 
     hp.iothub_should_be_available("Locker", iothub_name)
     hp.iothub_should_be_available("Vending", iothub_name)
@@ -86,11 +88,11 @@ def test_common_set_of_hubs_for_locker_and_vending(ui, delete_hardware):
     hp.create_vending(iothub_name) #create vending
     hp.check_last_hardware(device_type="VENDING", distributor=ui.data.distributor_name)
 
-    hp.iothub_should_not_be_available("Locker", iothub_name)
-    hp.iothub_should_not_be_available("Vending", iothub_name)
+    hp.iothub_should_be_available("Locker", iothub_name, inverse=True)
+    hp.iothub_should_be_available("Vending", iothub_name, inverse=True)
     hp.iothub_should_be_available("IP Camera", iothub_name)
 
-    hp.remove_last_hardware("VENDING") #remove vending
+    hp.remove_last_hardware() #remove vending
 
     hp.iothub_should_be_available("Locker", iothub_name)
     hp.iothub_should_be_available("Vending", iothub_name)

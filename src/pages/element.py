@@ -110,6 +110,14 @@ class Element():
         except Exception as e:
             Error.error(f"Element '{self.xpath}' is still present.\n{e}")
 
+    def wait_for_not_appeared(self, timeout=5):
+        try:
+            WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((By.XPATH, self.xpath)))
+        except:
+            pass
+        else:
+            Error.error(f"Element '{self.xpath}' is appeared")
+
     def wait_elements_number(self, xpath, number):
         try:
             WebDriverWait(self.driver, self.default_timeout).until(ElementsNumberToBe(xpath, number))

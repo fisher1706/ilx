@@ -2,7 +2,6 @@ import random
 from src.pages.admin.admin_portal_page import AdminPortalPage
 from src.resources.tools import Tools
 from src.pages.locator import Locator as L
-from glbl import Log, Error
 
 class HardwarePage(AdminPortalPage):
     xpath_weight_radio = "//input[@name='noWeight' and @type='radio' and @value='false']"
@@ -27,9 +26,7 @@ class HardwarePage(AdminPortalPage):
 
     #need to replace the args with dict and rempve pylint comment
     def check_last_hardware(self, serial_number=None, device_type=None, iothub=None, device_name=None, distributor=None, customer_shipto=None, distributor_user=None, customer_user=None, expiration_date=None, device_subtype=None): #pylint: disable=C0301, R0913
-        self.element(L.table_row).get()
         self.open_last_page()
-        self.element(L.table_row).get()
         self.check_last_table_item_by_header("Serial Number", serial_number)
         self.check_last_table_item_by_header("Device Type", device_type)
         self.check_last_table_item_by_header("IoT Hub", iothub)
@@ -56,47 +53,32 @@ class HardwarePage(AdminPortalPage):
             self.delete_dialog_should_be_about(serial_number)
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
+        self.wait_until_progress_bar_loaded()
 
-    def is_iothub_available_in_dialog(self, type_name, hub_text):
-        result = False
+    def iothub_should_be_available(self, type_name, hub_text, inverse=False):
         self.element(L.add_button).click()
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), type_name)
-        self.element(L.get_dropdown_in_dialog(5)).click()
-        number_of_dropdown_list_items = self.element(L.dropdown_list_item+"/div").count()
-        for index in range(1, number_of_dropdown_list_items+1):
-            dropdown_list_item_text = self.element(L.get_indexed(L.dropdown_list_item+"/div", index)).text()
-            if dropdown_list_item_text == hub_text:
-                result = True
-                break
+        self.element(L.get_dropdown_in_dialog(6)).click()
+        element = self.element(L.dropdown_list_item + f"/div[text()='{hub_text}']")
+        if inverse:
+            element.wait_for_not_appeared(3)
         else:
-            result = False
+            element.get()
         self.element(L.close_button).click()
-        return result
-
-    def iothub_should_be_available(self, type_name, hub_text):
-        if self.is_iothub_available_in_dialog(type_name, hub_text):
-            Log.info(f"IoT Hub '{hub_text}' is found")
-        else:
-            Error.error(f"IoT Hub '{hub_text}' is not found")
-
-    def iothub_should_not_be_available(self, type_name, hub_text):
-        if not self.is_iothub_available_in_dialog(type_name, hub_text):
-            Log.info(f"There is no IoT Hub '{hub_text}'")
-        else:
-            Error.error(f"There is IoT Hub '{hub_text}', but it should NOT be here")
 
     def create_locker(self, iothub_name):
         self.element(L.add_button).click()
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), "Locker")
-        self.select_in_dropdown(L.get_dropdown_in_dialog(5), iothub_name)
-        self.select_in_dropdown(L.get_dropdown_in_dialog(7), "Standard")
+        self.select_in_dropdown(L.get_dropdown_in_dialog(6), iothub_name)
+        self.select_in_dropdown(L.get_dropdown_in_dialog(8), "Standard")
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
+        self.wait_until_progress_bar_loaded()
 
     def create_vending(self, iothub_name):
         self.element(L.add_button).click()
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), "Vending")
-        self.select_in_dropdown(L.get_dropdown_in_dialog(5), iothub_name)
+        self.select_in_dropdown(L.get_dropdown_in_dialog(6), iothub_name)
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
 

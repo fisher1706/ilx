@@ -92,7 +92,6 @@ class Locator():
     button_reset = "//button[@type='reset']"
     info_button = "//button[@data-testid='info-button']"
 
-
     @staticmethod
     def get_indexed(xpath, index):
         return f"({xpath})[{index}]"
