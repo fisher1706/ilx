@@ -396,7 +396,6 @@ def test_smart_shelves_remove_locker_distributor(ui, delete_smart_shelf, delete_
     lp.log_in_admin_portal()
     ss.open_smart_shelves()
     ss.clear_fields_smart_shelves(locker=True, distributor=True)
-    ss.open_smart_shelves()
 
 @pytest.mark.regression
 def test_smart_shelves_unavailable_door(ui, delete_smart_shelf, delete_hardware):

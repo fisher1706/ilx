@@ -40,7 +40,7 @@ class HardwarePage(AdminPortalPage):
 
     def update_last_iothub(self, distributor):
         self.open_last_page()
-        self.element(L.get_indexed(L.table_row, self.get_table_rows_number())+L.edit_button).click()
+        self.element(L.last_role_row + L.edit_button).click()
         self.select_in_dropdown(L.get_dropdown_in_dialog(8), distributor)
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
@@ -48,7 +48,7 @@ class HardwarePage(AdminPortalPage):
 
     def remove_last_hardware(self, serial_number=None):
         self.open_last_page()
-        self.element(L.get_indexed(L.table_row, self.get_table_rows_number())+L.remove_button).click()
+        self.element(L.last_role_row + L.remove_button).click()
         if serial_number is not None:
             self.delete_dialog_should_be_about(serial_number)
         self.element(L.submit_button).click()
@@ -83,7 +83,7 @@ class HardwarePage(AdminPortalPage):
         self.dialog_should_not_be_visible()
 
     def configure_locker_door(self, door_number=None, serial_number=None, is_weight=False):
-        self.element(L.get_indexed(L.table_row, self.get_table_rows_number())+L.planogram_button).click()
+        self.element(L.last_role_row + L.planogram_button).click()
         self.element(L.configure_button).get()
         if door_number is None:
             count = self.element(L.configure_button).count()

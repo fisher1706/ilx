@@ -46,7 +46,7 @@ class DistributorAdminPage(AdminPortalPage):
         assert actual_count == number_of_checkboxes, f"Incorrect number of checkboxes. Now: {actual_count}. Should be: {number_of_checkboxes}"
 
     def update_last_distributor(self, distributor_body, checkbox_list):
-        self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
+        self.element(L.last_role_row + L.edit_button).click()
         for checkbox in checkbox_list:
             self.unselect_checkbox_in_dialog_by_name(checkbox)
         self.select_in_dropdown_via_input(L.get_dropdown_in_dialog(1), distributor_body.pop("country"))
@@ -59,7 +59,7 @@ class DistributorAdminPage(AdminPortalPage):
 
     def delete_last_distributor(self):
         full_name = self.get_last_table_item_text_by_header("Name")
-        self.element(L.get_indexed(L.remove_button, self.get_table_rows_number())).click()
+        self.element(L.last_role_row + L.remove_button).click()
         self.delete_dialog_should_be_about(full_name)
         self.element(L.confirm_button).click()
         self.dialog_should_not_be_visible()

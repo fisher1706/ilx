@@ -104,15 +104,16 @@ class BasePage():
 
     def last_page(self, pagination=None, wait=True):
         self.select_pagination(pagination)
-        self.element(L.get_table_item(2, 1)).get()
+        self.wait_until_progress_bar_loaded()
+        pages = self.element(L.role_table).get().get_attribute("data-page-count")
         if wait:
             try:
-                WebDriverWait(self.driver, 7).until_not(ElementToBeEnabled(L.button_last_page))
+                WebDriverWait(self.driver, 7).until(ElementToBeEnabled(L.button_last_page))
             except:
                 pass
         if self.element(L.button_last_page).is_enabled():
             self.element(L.button_last_page).click()
-            self.element(L.get_table_item(2, 1)).get()
+            self.element(L.get_table_item_by_index(0, 1, pages)).get()
 
     def select_pagination(self, number_of_elements):
         if number_of_elements is not None:

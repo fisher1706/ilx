@@ -12,6 +12,7 @@ class DistributorSmartShelvesPage(DistributorPortalPage):
     def open_smart_shelves(self):
         self.sidebar_hardware()
         self.click_tab_by_name("Smart shelves")
+        self.open_last_page()
 
     def update_smart_shelves(self, smart_shelves_body):
         self.open_last_page()

@@ -22,15 +22,18 @@ class Locator():
     role_row = "//div[@role='row']"
     table_column = "//div[@role='gridcell']"
     role_cell = "//div[@role='cell']"
-    old_table = "//div[@class='rt-table' and @role='grid']"
+    old_table = "//div[@class='rt-table' and @role='grid' and @data-page-count]"
+    role_table = "//div[@role='table' and @data-page-count]"
+    last_role_row = f"({role_row})[last()]"
 
     #----OTHERS----
     forgot_password = "//a[text()='Reset my password']"
     dialog = "//div[@role='dialog']"
     role_listbox = "//ul[@role='listbox']"
+    file_upload = "//input[@id='file-upload']"
+
 
     item_action_customer_add = "//button[@id='item-action-customer-add']"
-    file_upload = "//input[@id='file-upload']"
     upload_rfid_csv = "upload-rfid-csv"
     upload_rfid_available = "upload-rfid-available"
     intercom_container = "intercom-container"
@@ -40,7 +43,6 @@ class Locator():
     select_box = "//div[@test-id='select-box']/div"
     dropdown_list_item = select_box+"/div[2]/div/div"
     table_header_column = "//div[@role='columnheader']"
-    table = "//div[@class='rt-table']"
     checkbox = "//input[@type='checkbox']"
     confirm_button = "//button[@data-testid='confirm-button']"
     dialog_cancel_button = "//button[@data-testid='cancel-button']"
@@ -51,7 +53,6 @@ class Locator():
     successfully_uploaded_document_msg = "//span[text()='Document uploaded successfully!']"
     successfully_submitted_reorder_list = "//span[text()='Reorder list was successfully submitted']"
     button_save = "//button[@label='Save']"
-    last_role_row = f"({role_row})[last()]"
     replenishment_item = "//div[@data-testid='replenishment-item']"
     replenishment_item_sku = "//div[@data-testid='part-sku']"
     submit_reorder_list_button = "//button/span[text()='Submit']"
@@ -130,8 +131,11 @@ class Locator():
         return f"//div[@role='row' and @data-row-index='{index}']"
 
     @staticmethod
-    def get_table_item_by_index(index, column):
-        return f"//div[@role='row' and @data-row-index='{index}']{Locator.role_cell}[{column}]"
+    def get_table_item_by_index(index, column, page=None):
+        if page is None:
+            return f"(//div[@role='row' and @data-row-index='{index}']{Locator.role_cell})[{column}]"
+        else:
+            return f"(//div[@role='row' and @data-row-index='{index}' and @data-page-index='{page}']{Locator.role_cell})[{column}]"
 
     @staticmethod
     def get_table_item_by_index_outdated(index, column, page):

@@ -121,9 +121,10 @@ class Element():
         else:
             Error.error(f"Element '{self.xpath}' is appeared")
 
-    def wait_elements_number(self, number):
+    def wait_elements_number(self, number, timeout=None):
+        timeout = self.default_timeout if timeout is None else timeout
         try:
-            WebDriverWait(self.driver, self.default_timeout).until(ElementsNumberToBe(self.xpath, number))
+            WebDriverWait(self.driver, timeout).until(ElementsNumberToBe(self.xpath, number))
         except Exception as e:
             Error.error(f"Number of elements is incorrect: should be '{number}', now '{self.count()}'.\n{e}")
         else:

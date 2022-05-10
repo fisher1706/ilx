@@ -18,7 +18,6 @@ class SmartShelvesPage(AdminPortalPage):
         self.sidebar_hardware()
         self.click_tab_by_name("Smart Shelves")
         self.open_last_page()
-        self.element(L.table_row).get()
 
     def create_smart_shelves(self, smart_shelves_body):
         self.element(L.add_button).click()
