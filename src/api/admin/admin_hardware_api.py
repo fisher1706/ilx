@@ -24,6 +24,17 @@ class AdminHardwareApi(API):
         }
         return self.create_hardware(dto)
 
+    def get_hardware(self):
+        url = self.url.get_api_url_for_env("/admin-portal/admin/distributors/hardware")
+        token = self.get_admin_token()
+        response = self.send_get(url, token)
+        if response.status_code == 200:
+            Log.info(Message.entity_operation_done.format(entity="Hardware", operation="got"))
+        else:
+            Error.error(str(response.content))
+        response_json = response.json()
+        return response_json["data"]
+
     def create_locker(self, locker_type_id, iothub_id=None):
         dto = {
             "lockerType":{
@@ -78,10 +89,10 @@ class AdminHardwareApi(API):
         }
         return self.create_hardware(dto)
 
-    def delete_hardware(self, hardware_id):
+    def delete_hardware(self, hardware_id, retries=4):
         url = self.url.get_api_url_for_env(f"/admin-portal/admin/distributors/hardware/{hardware_id}")
         token = self.get_admin_token()
-        for _ in range(1, 5):
+        for _ in range(retries):
             response = self.send_delete(url, token)
             if response.status_code == 200:
                 Log.info(Message.entity_with_id_operation_done.format(entity="Hardware", id=hardware_id, operation="deleted"))
