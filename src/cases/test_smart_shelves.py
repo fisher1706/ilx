@@ -270,10 +270,8 @@ def test_shelves_assign_via_hardware_check_planogram(ui, delete_shipto, delete_h
     lpp.wait_until_progress_bar_loaded()
     lpp.check_smart_shelf_via_planogram(response_locker["smart_shelf_number"], "1")
 
-#PAUSED HERE
-#PAUSED HERE
 @pytest.mark.regression
-def test_smart_shelves_crud(ui, delete_shipto, delete_hardware): #PAUSED HERE
+def test_smart_shelves_crud(ui, delete_shipto, delete_hardware):
     ui.testrail_case_id = 1920
 
     lp = LoginPage(ui)

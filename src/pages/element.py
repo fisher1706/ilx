@@ -27,7 +27,7 @@ class Element():
             return WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((By.XPATH, self.xpath)))
         except Exception as e:
             if no_exception:
-                Log.warning(f"Cannot find element'{self.xpath}'.\n{e}")
+                Log.warning(f"Cannot find element'{self.xpath}'.")
             else:
                 Error.error(f"Cannot find element'{self.xpath}'.\n{e}")
 
@@ -121,9 +121,9 @@ class Element():
         else:
             Error.error(f"Element '{self.xpath}' is appeared")
 
-    def wait_elements_number(self, xpath, number):
+    def wait_elements_number(self, number):
         try:
-            WebDriverWait(self.driver, self.default_timeout).until(ElementsNumberToBe(xpath, number))
+            WebDriverWait(self.driver, self.default_timeout).until(ElementsNumberToBe(self.xpath, number))
         except Exception as e:
             Error.error(f"Number of elements is incorrect: should be '{number}', now '{self.count()}'.\n{e}")
         else:

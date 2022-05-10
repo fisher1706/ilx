@@ -47,13 +47,13 @@ class SmartShelvesPage(AdminPortalPage):
             self.check_last_table_item_by_header(cell, value)
 
     def update_smart_shelves(self, smart_shelves_body):
-        self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
+        self.element(L.last_role_row + L.edit_button).click()
         # input Serial Number
         self.input_by_name("serialNumber", smart_shelves_body["serialNumber"])
         # change Distributor and check if fields "Assign To" and "Door Number" become empty
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), smart_shelves_body["distributor"])
         self.element(f"{L.get_dropdown_in_dialog(3)}//input").wait_until_disabled()
-        text = self.element(L.get_dropdown_in_dialog(2)).get()
+        text = self.element(L.get_dropdown_in_dialog(2)).text()
         assert text is None or text == "", f"Element {L.get_dropdown_in_dialog(2)} contains text: {text}"
         # input Assign To and check if Door Number is editable
         self.select_in_dropdown(L.get_dropdown_in_dialog(2), smart_shelves_body["assign_to"])
@@ -67,14 +67,13 @@ class SmartShelvesPage(AdminPortalPage):
 
     def delete_smart_shelf(self, serial_number):
         self.get_last_table_item_text_by_header("Serial Number")
-        self.element(L.get_indexed(L.remove_button, self.get_table_rows_number())).click()
+        self.element(L.last_role_row + L.remove_button).click()
         self.delete_dialog_should_be_about(f"{serial_number}")
         self.element(L.confirm_button).click()
         self.dialog_should_not_be_visible()
 
     def merge_cells(self, number_of_cells):
-        self.element(L.edit_button).get()
-        self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
+        self.element(L.last_role_row + L.edit_button).click()
         for cell in range(number_of_cells):
             self.element(f"//div[@data-cell='{cell}']").click()
         self.element(self.xpath_merge_cells).click()
@@ -84,7 +83,7 @@ class SmartShelvesPage(AdminPortalPage):
         self.wait_until_progress_bar_loaded()
 
     def split_cells(self, position_of_cell):
-        self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
+        self.element(L.last_role_row + L.edit_button).click()
         self.element(f"//div[@data-cell='{position_of_cell}']").click()
         self.element(self.xpath_split_cells).click()
         self.element(L.submit_button).click()
@@ -103,7 +102,7 @@ class SmartShelvesPage(AdminPortalPage):
 
     def check_first_door_is_unavaliable(self, locker, create=None):
         if create is None:
-            self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
+            self.element(L.last_role_row + L.edit_button).click()
         elif create:
             self.element(L.add_button).click()
             # input Serial Number
@@ -126,7 +125,7 @@ class SmartShelvesPage(AdminPortalPage):
         self.wait_until_progress_bar_loaded()
 
     def clear_fields_smart_shelves(self, distributor=None, locker=None):
-        self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
+        self.element(L.last_role_row + L.edit_button).click()
         self.element_should_have_text(L.get_dropdown_in_dialog(3), "1")
         if locker is not None:
             self.element(f"{L.get_dropdown_in_dialog(2)}/div/div[2]/div").click()
@@ -149,7 +148,7 @@ class SmartShelvesPage(AdminPortalPage):
 
     def check_smart_shelf_unavailable_via_planogram(self, locker, smart_shelf, in_list=False):
         self.open_last_page()
-        self.element(L.get_indexed(L.table_row, self.get_table_rows_number())+L.planogram_button).click()
+        self.element(L.last_role_row + L.planogram_button).click()
         self.element(L.configure_button).click()
         self.element(L.get_dropdown_in_dialog(1)).click()
         self.element(f"{L.get_dropdown_in_dialog(1)}//input").enter(smart_shelf)

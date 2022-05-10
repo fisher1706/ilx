@@ -202,20 +202,12 @@ class BasePage():
                     Error.error("Either 'row' or 'last' parameter should be defined")
 
     def delete_dialog_should_be_about(self, expected_text):
-        current_text = str(self.delete_dialog_about())
-        if current_text == expected_text:
-            Log.info(f"Delete dialog about '{current_text}'")
-        else:
-            Error.error(f"Delete dialog about '{current_text}', but should be about '{expected_text}'")
-
-    def delete_dialog_about(self):
-        xpath = L.dialog+"//b"
         try:
-            text = self.element(xpath).text()
+            self.element_should_have_text(L.dialog+"//b", expected_text)
         except Exception as e:
-            Error.error(f"Element with XPATH = '{xpath}' not found.\n{e}")
+            Error.error(f"Delete dialog about '{expected_text}'.\n{e}")
         else:
-            return text
+            Log.info(f"Delete dialog about '{expected_text}'")
 
     def title_should_be(self, title):
         try:
