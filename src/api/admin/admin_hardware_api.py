@@ -102,7 +102,6 @@ class AdminHardwareApi(API):
                 Log.info(str(response.content))
             else:
                 Error.error(str(response.content))
-                break
         else:
             Error.error(str(response.content))
 

@@ -33,24 +33,24 @@ def test_issue_return_assets_label(ui, delete_shipto):
 
     lp.log_in_customer_portal()
     ap.sidebar_assets()
-    ap.check_all_assets_tab(asset, shipto_name, total, total, 0)
+    ap.check_all_assets_tab(shipto_name, total, total, 0)
     # issue 2 assets
     setup_issue_return(ui, shipto_id, asset, quantity=2, issue_product=True)
     lp.page_refresh()
     lp.wait_until_progress_bar_loaded()
-    ap.check_all_assets_tab(asset, shipto_name, int(total)-2, total, 2)
-    ap.check_checked_out_tab(asset, shipto_name, int(total)-2, total, 2)
+    ap.check_all_assets_tab(shipto_name, int(total)-2, total, 2)
+    ap.check_checked_out_tab(shipto_name, int(total)-2, total, 2)
     # return 1 asset
     setup_issue_return(ui, shipto_id, asset, quantity=1, return_product=True)
     lp.page_refresh()
     lp.wait_until_progress_bar_loaded()
-    ap.check_all_assets_tab(asset, shipto_name, int(total)-1, total, 1)
-    ap.check_checked_out_tab(asset, shipto_name, int(total)-1, total, 1)
+    ap.check_all_assets_tab(shipto_name, int(total)-1, total, 1)
+    ap.check_checked_out_tab(shipto_name, int(total)-1, total, 1)
     # return 1 asset
     setup_issue_return(ui, shipto_id, asset, quantity=1, return_product=True)
     lp.page_refresh()
     lp.wait_until_progress_bar_loaded()
-    ap.check_all_assets_tab(asset, shipto_name, total, total, 0)
+    ap.check_all_assets_tab(shipto_name, total, total, 0)
     ap.checked_out_tab_should_not_contain(asset)
 
 @pytest.mark.regression

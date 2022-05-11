@@ -32,7 +32,6 @@ class CheckoutUserApi(API):
         for index in range(count):
             if (checkout_user_body["firstName"] == checkout_users["data"][index]["firstName"] and checkout_user_body["lastName"] == checkout_users["data"][index]["lastName"]):
                 Error.error(f"There is checkout user with email '{checkout_user_body['email']}'")
-                break
         else:
             Log.info(f"There is NO checkout user with email '{checkout_user_body['email']}'")
         return count

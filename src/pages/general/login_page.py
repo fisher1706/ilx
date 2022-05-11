@@ -97,4 +97,4 @@ class LoginPage(BasePage):
         self.click_on_submit_button()
         self.title_should_be("SRX User Dashboard")
         self.follow_url(self.url.customer_portal)
-        self.element(L.button).click()
+        self.element(L.role_button).click()

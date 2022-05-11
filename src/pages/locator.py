@@ -12,6 +12,7 @@ class Locator():
     add_button = "//button[@id='item-action-add']"
     submit_button = "//button[@type='submit']"
     button_type = "//button[@type='button']"
+    role_button = "//div[@role='button']"
     select_button = "//button[@data-testid='select-button']"
     button_last_page = "//button[@aria-label='Go to last page']"
     button_tab = "//button[@role='tab']"

@@ -20,6 +20,6 @@ class CribcrawlPage(DistributorPortalPage):
 
     def import_cribcrawl(self, cribcrawls):
         Tools.generate_csv("cribcrawls.csv", cribcrawls)
-        self.import_csv(L.id_file_upload, "cribcrawls.csv")
-        self.get_element_by_xpath(L.xpath_successfully_imported_msg)
+        self.import_csv(L.file_upload, "cribcrawls.csv")
+        self.element(L.successfully_imported_msg).get()
         

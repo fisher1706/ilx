@@ -14,7 +14,7 @@ class AssetsPage(CustomerPortalPage):
     xpath_return_requested_text = "//div[text()='Asset return has been requested']"
     #xpath_empty_list = "//div[text()='List of checked out assets is empty.']"
 
-    def check_all_assets_tab(self, asset, shipto, avaliable, total, checked_out):
+    def check_all_assets_tab(self, shipto, avaliable, total, checked_out):
         self.element("//span[text()='All assets']").get()
         self.click_tab_by_name("All assets")
         self.element(self.xpath_filter).click()
@@ -24,7 +24,7 @@ class AssetsPage(CustomerPortalPage):
         self.element_should_have_text(f"{self.xpath_total}/../div[2]", f"{total}")
         self.element_should_have_text(f"{self.xpath_checked_out}/../div[2]", f"{checked_out}")
 
-    def check_checked_out_tab(self, asset, shipto, avaliable, total, checked_out):
+    def check_checked_out_tab(self, shipto, avaliable, total, checked_out):
         self.click_tab_by_name("Checked Out")
         self.element(self.xpath_filter).click()
         self.select_in_dropdown(L.select_box, shipto)

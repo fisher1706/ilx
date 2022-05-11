@@ -202,11 +202,10 @@ def test_checkout_user_import_without_group(ui):
 
     lp.log_in_customer_portal()
     cup.sidebar_users_and_groups()
-    cup.click_xpath(L.xpath_button_tab_by_name("Fobs & Passcodes"))
+    cup.element(L.get_button_tab_by_name("Fobs & Passcodes")).click()
     cup.import_checkout_user(checkout_users)
-    row = cup.scan_table(checkout_user_body["firstName"], "First Name", pagination=False)
-    cup.check_new_checkout_user(checkout_user_body.copy(), row)
-    cup.delete_new_checkout_user(row)
+    cup.check_last_checkout_user(checkout_user_body.copy())
+    cup.delete_last_checkout_user()
 
 @pytest.mark.regression
 def test_checkout_user_crud(ui):
