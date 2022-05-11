@@ -15,6 +15,7 @@ from src.api.distributor.settings_api import SettingsApi
 from src.api.distributor.activity_log_api import ActivityLogApi
 from glbl import Log, Error
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_different_multiple_po_number(ui, delete_shipto):
     ui.testrail_case_id = 105
@@ -61,6 +62,7 @@ def test_different_multiple_po_number(ui, delete_shipto):
     sa.check_po_number_by_number(shipto_1_dto["number"], po_number_body[shipto_1_dto["number"]])
     sa.check_po_number_by_number(shipto_2_dto["number"], po_number_body[shipto_2_dto["number"]])
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_general_multiple_po_number(ui, delete_shipto):
     ui.testrail_case_id = 106
@@ -190,6 +192,7 @@ def test_smoke_label_transaction_and_activity_log(smoke_api):
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_transaction_crud_and_split(ui, permission_ui, permissions, delete_distributor_security_group, delete_shipto):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -232,49 +235,6 @@ def test_transaction_crud_and_split(ui, permission_ui, permissions, delete_distr
         assert str(transactions["entities"][1]["reorderQuantity"]) == str(round_buy)
     else:
         Error.error(f"Incorrect quantity of transactions: '{transactions['entities'][0]['reorderQuantity']}' and {transactions['entities'][1]['reorderQuantity']}, when RoundBuy = '{round_buy}'")
-
-#deprecated
-def test_zero_quantity_of_new_transaction(api, delete_shipto):
-    api.testrail_case_id = 1841
-    ta = TransactionApi(api)
-    la = LocationApi(api)
-
-    setup_location = SetupLocation(api)
-    setup_location.setup_shipto.add_option("reorder_controls_settings", {"scan_to_order": True})
-    setup_location.add_option("transaction", 'ACTIVE')
-    response_location = setup_location.setup()
-
-    distributor_sku = response_location["product"]["partSku"]
-    quantity = response_location["transaction"]["reorderQuantity"]
-    round_buy = response_location["product"]["roundBuy"]
-    new_quantity = quantity + round_buy
-
-    transaction_first = ta.get_transaction(distributor_sku, shipto_id=response_location["shipto_id"], status="ACTIVE")
-    transaction_id = transaction_first["entities"][-1]["id"]
-    ta.update_replenishment_item(transaction_id, quantity, "QUOTED")
-    ta.create_active_item(response_location["shipto_id"], la.get_ordering_config_by_sku(response_location["shipto_id"], distributor_sku))
-    second_transaction = ta.get_transaction(distributor_sku, shipto_id=response_location["shipto_id"], status="ACTIVE")["entities"]
-    assert second_transaction[0]["reorderQuantity"] == 0
-
-    transaction_first = ta.get_transaction(distributor_sku, shipto_id=response_location["shipto_id"], status="QUOTED")
-    transaction_id_changed = transaction_first["entities"][-1]["id"]
-    ta.update_replenishment_item(transaction_id_changed, quantity, "ORDERED")
-    transaction_second = ta.get_transaction(distributor_sku, shipto_id=response_location["shipto_id"], status="ACTIVE")
-    transaction_id_second = transaction_second["entities"][-1]["id"]
-    ta.update_replenishment_item(transaction_id_second, new_quantity, "DELIVERED")
-    ta.create_active_item(response_location["shipto_id"], la.get_ordering_config_by_sku(response_location["shipto_id"], distributor_sku))
-    third_transaction = ta.get_transaction(distributor_sku, status="ACTIVE")["entities"]
-    assert third_transaction[0]["reorderQuantity"] == 0
-
-    transaction_first = ta.get_transaction(distributor_sku, shipto_id=response_location["shipto_id"], status="ORDERED")
-    transaction_id_changed = transaction_first["entities"][-1]["id"]
-    ta.update_replenishment_item(transaction_id_changed, quantity, "SHIPPED")
-    transaction_third = ta.get_transaction(distributor_sku, shipto_id=response_location["shipto_id"], status="ACTIVE")
-    transaction_id_third = transaction_third["entities"][-1]["id"]
-    ta.update_replenishment_item(transaction_id_third, new_quantity, "DELIVERED")
-    ta.create_active_item(response_location["shipto_id"], la.get_ordering_config_by_sku(response_location["shipto_id"], distributor_sku))
-    fourth_transaction = ta.get_transaction(distributor_sku, status="ACTIVE")["entities"]
-    assert fourth_transaction[0]["reorderQuantity"] == 0
 
 @pytest.mark.parametrize("conditions", [
     {

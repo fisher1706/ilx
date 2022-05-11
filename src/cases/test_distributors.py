@@ -3,6 +3,7 @@ from src.resources.tools import Tools
 from src.pages.general.login_page import LoginPage
 from src.pages.admin.distributor_admin_page import DistributorAdminPage
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_distributor_crud(ui):
     ui.testrail_case_id = 1917

@@ -22,6 +22,7 @@ from src.api.customer.customer_location_api import CustomerLocationApi
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_pricing_import(ui, permission_ui, permissions, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -50,6 +51,7 @@ def test_pricing_import(ui, permission_ui, permissions, delete_distributor_secur
     pp.select_customer_shipto(customer_name=ui.data.customer_name)
     pp.check_price_by_name(pricing_body.copy())
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_price_is_updated_after_disabling_cache(ui, delete_shipto):
     ui.testrail_case_id = 7608
@@ -109,6 +111,7 @@ def test_price_is_updated_after_disabling_cache(ui, delete_shipto):
 
     la.check_updated_price(name="PRICING_SKU", shipto_id=response_location["shipto_id"], expected_price=float(temporary_price))
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_price_is_not_updated(ui, delete_shipto):
     ui.testrail_case_id = 7606
@@ -168,6 +171,7 @@ def test_price_is_not_updated(ui, delete_shipto):
         assert price == price_after_update
         time.sleep(5)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_price_is_updated(ui, delete_shipto):
     ui.testrail_case_id = 7607

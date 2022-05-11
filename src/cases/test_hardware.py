@@ -34,6 +34,7 @@ def test_delete_location_by_change_doortype(api, delete_shipto, delete_hardware)
     new_location_count = len(la.get_locations(response_location["shipto_id"]))
     assert new_location_count == 0, "The number of location should be 0"
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_change_locker_doortype(ui, delete_hardware):
     ui.testrail_case_id = 1851
@@ -52,6 +53,7 @@ def test_change_locker_doortype(ui, delete_hardware):
     doors_data = hp.configure_locker_door()
     hp.check_locker_door(doors_data)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_common_set_of_hubs_for_locker_and_vending(ui, delete_hardware):
     ui.testrail_case_id = 1839
@@ -98,6 +100,7 @@ def test_common_set_of_hubs_for_locker_and_vending(ui, delete_hardware):
     hp.iothub_should_be_available("Vending", iothub_name)
     hp.iothub_should_be_available("IP Camera", iothub_name)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_iothub_crud(ui):
     ui.testrail_case_id = 32

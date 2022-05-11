@@ -25,6 +25,7 @@ from src.pages.checkout.checkout_portal_page import CheckoutPortalPage
         "testrail_case_id": 4400
     }
     ])
+@pytest.mark.ui
 @pytest.mark.regression
 def test_accept_distributor_user_invitation_and_reset_password(ui, conditions, delete_distributor_user):
     ui.testrail_case_id = conditions["testrail_case_id"]
@@ -93,6 +94,7 @@ def test_accept_distributor_user_invitation_and_reset_password(ui, conditions, d
     lp.click_on_submit_button()
     lp.log_in_distributor_portal(user_email, new_reset_password)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_accept_new_customer_user_invitation(ui, delete_customer):
     ui.testrail_case_id = 4549
@@ -140,6 +142,7 @@ def test_accept_new_customer_user_invitation(ui, delete_customer):
     cpp.sign_out()
     lp.log_in_customer_portal(user_email, new_password)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_accept_customer_user_invitation_and_reset_password(ui, delete_customer_user):
     ui.testrail_case_id = 4581
@@ -203,6 +206,7 @@ def test_accept_customer_user_invitation_and_reset_password(ui, delete_customer_
     lp.click_on_submit_button()
     lp.log_in_customer_portal(user_email, new_reset_password)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_accept_checkout_group_invitation_and_reset_password(ui, delete_checkout_group):
     ui.testrail_case_id = 4588
@@ -270,7 +274,7 @@ def test_accept_checkout_group_invitation_and_reset_password(ui, delete_checkout
     cpp.element(f"//div[text()='{user_email}']").get()
     assert "Passcode" in ui.driver.page_source
 
-@pytest.mark.regression
+@pytest.mark.ui
 def test_magic_link_distributor_portal(ui, delete_distributor_user):
     ui.testrail_case_id = 12525
 
@@ -312,7 +316,7 @@ def test_magic_link_distributor_portal(ui, delete_distributor_user):
     lp.title_should_be("SRX Distributor Portal")
     lp.element(L.enter_here).click()
 
-@pytest.mark.regression
+@pytest.mark.ui
 def test_magic_link_customer_portal(ui, delete_customer_user):
     ui.testrail_case_id = 12526
 
@@ -353,6 +357,7 @@ def test_magic_link_customer_portal(ui, delete_customer_user):
     lp.title_should_be("SRX User Dashboard")
     lp.element(L.enter_here).click()
 
+@pytest.mark.ui
 def test_accept_new_customer_user_invitation_and_login_by_magic_link(ui, delete_customer):
     ui.testrail_case_id = 4549
 

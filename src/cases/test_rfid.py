@@ -23,6 +23,7 @@ from src.api.distributor.rfid_api import RfidApi
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_rfid_label_crud(ui, permission_ui, permissions, delete_shipto, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -85,6 +86,7 @@ def test_rfid_crud_view_permission(api, permission_api, delete_distributor_secur
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_rfid_label_import_as_available(ui, permission_ui, permissions, delete_shipto, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -120,6 +122,7 @@ def test_rfid_label_import_as_available(ui, permission_ui, permissions, delete_s
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_rfid_label_import_csv(ui, permission_ui, permissions, delete_shipto, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]

@@ -3,6 +3,7 @@ from src.pages.general.login_page import LoginPage
 from src.pages.distributor.settings_page import SettingsPage
 from src.api.distributor.settings_api import SettingsApi
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_document_import(ui):
     ui.testrail_case_id = 36

@@ -46,6 +46,7 @@ def test_checkout_user_of_customer_user(api):
     third_number = chua.checkout_user_should_not_be_present(edit_customer_user_body.copy())
     assert third_number == second_number-1, "The number of checkout users after removing should be less by 1 than before"
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_customer_user_crud(ui):
     ui.testrail_case_id = 37
@@ -87,6 +88,7 @@ def test_customer_user_crud(ui):
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_distributor_user_crud(ui, permission_ui, permissions, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -143,6 +145,7 @@ def test_distributor_user_crud_view_permission(api, permission_api, delete_distr
     ua.update_distributor_user(dto=user, user_id=response_user["user_id"], expected_status_code=400) #cannot update user
     ua.delete_distributor_user(user_id=response_user["user_id"], expected_status_code=400) #cannot delete user
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_distributor_superuser_crud(ui):
     ui.testrail_case_id = 30
@@ -174,6 +177,7 @@ def test_distributor_superuser_crud(ui):
     full_name = edit_distributor_superuser_body["firstName"] + " " + edit_distributor_superuser_body["lastName"]
     dup.delete_last_distributor_user(full_name)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_checkout_user_import_without_group(ui):
     ui.testrail_case_id = 1849
@@ -202,6 +206,7 @@ def test_checkout_user_import_without_group(ui):
     cup.check_last_checkout_user(checkout_user_body.copy())
     cup.delete_last_checkout_user()
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_checkout_user_crud(ui):
     ui.testrail_case_id = 1848
@@ -236,6 +241,7 @@ def test_checkout_user_crud(ui):
     cup.check_new_checkout_user(edit_checkout_user_body.copy(), row)
     cup.delete_new_checkout_user(row)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_customer_security_group_crud(ui):
     ui.testrail_case_id = 2007
@@ -260,6 +266,7 @@ def test_customer_security_group_crud(ui):
     csg.check_security_group(edit_security_group_body)
     csg.delete_security_group(edit_security_group_body)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_checkout_group_crud(ui):
     ui.testrail_case_id = 1861
@@ -290,6 +297,7 @@ def test_checkout_group_crud(ui):
     cgp.check_new_checkout_group(edit_checkout_group_body.copy(), row)
     cgp.delete_new_checkout_group(row)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_checkout_group_assign_user(ui, delete_customer_user, delete_checkout_group):
     ui.testrail_case_id = 1890
@@ -324,6 +332,7 @@ def test_checkout_group_assign_user(ui, delete_customer_user, delete_checkout_gr
     cgp.unassign_user(1)
     cgp.get_element_by_xpath(L.xpath_no_data_found)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_checkout_group_assign_shipto(ui, delete_shipto, delete_checkout_group):
     ui.testrail_case_id = 1863
@@ -434,6 +443,8 @@ def test_smoke_create_user(smoke_api):
         "testrail_case_id": 2207
     }
     ])
+@pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_distrubutor_security_group_crud(ui, permissions, permission_ui, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]

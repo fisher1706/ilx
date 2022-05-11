@@ -17,6 +17,7 @@ from src.pages.locator import Locator as L
     # }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_warehouses_crud(ui, permission_ui, permissions, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]

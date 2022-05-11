@@ -16,6 +16,7 @@ from src.api.setups.setup_shipto import SetupShipto
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_cribcrawl_import(ui, permission_ui, permissions, delete_distributor_security_group, delete_shipto):
     ui.testrail_case_id = permissions["testrail_case_id"]

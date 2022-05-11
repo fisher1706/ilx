@@ -8,6 +8,7 @@ from src.pages.checkout.new_checkout_portal_page import NewCheckoutPortalPage
 from src.pages.locator import Locator as L
 from src.resources.tools import Tools
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_success_login_admin_portal(ui):
     ui.testrail_case_id = 9
@@ -23,10 +24,12 @@ def test_success_login_admin_portal(ui):
     app.sign_out()
     lp.it_should_be_login_page()
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_success_login_distributor_portal(ui):
     BaseAuthorization.base_success_login_distributor_portal(ui)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_invalid_login_admin_portal(ui):
     ui.testrail_case_id = 7
@@ -47,6 +50,7 @@ def test_invalid_login_admin_portal(ui):
     lp.required_email_message_should_be_present()
     lp.required_password_message_should_be_present()
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_invalid_login_new_checkout_portal(ui):
     ui.testrail_case_id = 4555
@@ -66,6 +70,7 @@ def test_invalid_login_new_checkout_portal(ui):
     lp.click_on_submit_button_checkout()
     cpp.wrong_password_error_should_be_present()
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_reset_password_admin_portal(ui):
     ui.testrail_case_id = 8
@@ -86,6 +91,7 @@ def test_reset_password_admin_portal(ui):
 def test_success_login_distributor_portal_smoke(smoke_ui):
     BaseAuthorization.base_success_login_distributor_portal(smoke_ui)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_success_login_customer_portal(ui):
     BaseAuthorization.base_success_login_customer_portal(ui)
@@ -94,6 +100,7 @@ def test_success_login_customer_portal(ui):
 def test_success_login_customer_portal_smoke(smoke_ui):
     BaseAuthorization.base_success_login_customer_portal(smoke_ui)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_success_login_checkout_portal(ui):
     BaseAuthorization.base_success_login_checkout_portal(ui)
@@ -102,6 +109,7 @@ def test_success_login_checkout_portal(ui):
 def test_success_login_checkout_portal_smoke(smoke_ui):
     BaseAuthorization.base_success_login_checkout_portal(smoke_ui)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_success_login_new_checkout_portal(ui):
     BaseAuthorization.base_success_login_new_checkout(ui)
@@ -164,6 +172,7 @@ def test_redirect_distributor(smoke_ui):
     lp.url_should_be(url.distributor_portal+"/customers")
     dpp.distributor_sidebar_should_contain_email()
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_log_out_checkout_portal(ui):
     ui.testrail_case_id = 4558
@@ -179,6 +188,7 @@ def test_log_out_checkout_portal(ui):
     cpp.log_out_checkout_portal()
     lp.url_should_be(f"{ui.session_context.url.new_checkout_portal}/auth")
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_log_in_checkout_passcode(ui):
     ui.testrail_case_id = 4556
@@ -194,6 +204,7 @@ def test_log_in_checkout_passcode(ui):
     lp.click_on_submit_button_checkout()
     lp.url_should_be(f"{ui.session_context.url.new_checkout_portal}/dashboard")
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_log_out_checkout_passcode(ui):
     ui.testrail_case_id = 4559
@@ -212,6 +223,7 @@ def test_log_out_checkout_passcode(ui):
     lp.url_should_be(f"{ui.session_context.url.new_checkout_portal}/auth")
     cpp.log_out_checkout_group()
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_invalid_log_in_passcode(ui):
     ui.testrail_case_id = 4557

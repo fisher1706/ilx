@@ -14,6 +14,7 @@ from src.api.setups.setup_shipto import SetupShipto
 from src.api.setups.setup_location import SetupLocation
 from glbl import Error
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_vmi_list_partial_sku_match(ui):
     ui.testrail_case_id = 1838
@@ -47,6 +48,7 @@ def test_vmi_list_partial_sku_match(ui):
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_location_crud(ui, permission_ui, permissions, delete_distributor_security_group, delete_customer):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -181,6 +183,7 @@ def test_location_crud_view_permission(api, permission_api, delete_distributor_s
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_location_import(ui, permission_ui, permissions, delete_distributor_security_group, delete_shipto):
     ui.testrail_case_id = permissions["testrail_case_id"]

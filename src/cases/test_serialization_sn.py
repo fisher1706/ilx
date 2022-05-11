@@ -280,6 +280,7 @@ def test_cannot_create_sn_with_lot_if_lot_turned_off_for_location(api, serialize
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_serial_number_crud(ui, permission_ui, permissions, serialized_location_preset, delete_shipto, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -362,6 +363,7 @@ def test_serial_number_crud_view_permission(api, permission_api, serialized_loca
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_serial_number_import(ui, permission_ui, permissions, serialized_location_preset, delete_shipto, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]

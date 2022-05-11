@@ -23,6 +23,7 @@ from src.pages.locator import Locator as L
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_product_crud(ui, permission_ui, permissions, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -85,6 +86,7 @@ def test_product_crud(ui, permission_ui, permissions, delete_distributor_securit
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_product_import(ui, permission_ui, permissions, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -110,6 +112,7 @@ def test_product_import(ui, permission_ui, permissions, delete_distributor_secur
     cp.last_page(10)
     cp.check_last_product(product_body.copy())
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_universal_catalog_crud(ui):
     ui.testrail_case_id = 1857
@@ -138,6 +141,7 @@ def test_universal_catalog_crud(ui):
     ucp.check_last_universal_product(edit_universal_product_body.copy())
     ucp.delete_universal_product()
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_universal_catalog_import(ui):
     ui.testrail_case_id = 1858
