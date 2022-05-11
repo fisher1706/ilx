@@ -27,16 +27,16 @@ class HardwarePage(AdminPortalPage):
     #need to replace the args with dict and rempve pylint comment
     def check_last_hardware(self, serial_number=None, device_type=None, iothub=None, device_name=None, distributor=None, customer_shipto=None, distributor_user=None, customer_user=None, expiration_date=None, device_subtype=None): #pylint: disable=C0301, R0913
         self.open_last_page()
-        self.check_last_table_item_by_header("Serial Number", serial_number)
-        self.check_last_table_item_by_header("Device Type", device_type)
-        self.check_last_table_item_by_header("IoT Hub", iothub)
-        self.check_last_table_item_by_header("Device name", device_name)
-        self.check_last_table_item_by_header("Distributor", distributor)
-        self.check_last_table_item_by_header("Customer-ShipTo", customer_shipto)
-        self.check_last_table_item_by_header("Distributor User", distributor_user)
-        self.check_last_table_item_by_header("Customer User", customer_user)
-        self.check_last_table_item_by_header("Expiration Date", expiration_date)
-        self.check_last_table_item_by_header("Device Sub-Type", device_subtype)
+        self.check_last_table_item_outdated("Serial Number", serial_number)
+        self.check_last_table_item_outdated("Device Type", device_type)
+        self.check_last_table_item_outdated("IoT Hub", iothub)
+        self.check_last_table_item_outdated("Device name", device_name)
+        self.check_last_table_item_outdated("Distributor", distributor)
+        self.check_last_table_item_outdated("Customer-ShipTo", customer_shipto)
+        self.check_last_table_item_outdated("Distributor User", distributor_user)
+        self.check_last_table_item_outdated("Customer User", customer_user)
+        self.check_last_table_item_outdated("Expiration Date", expiration_date)
+        self.check_last_table_item_outdated("Device Sub-Type", device_subtype)
 
     def update_last_iothub(self, distributor):
         self.open_last_page()

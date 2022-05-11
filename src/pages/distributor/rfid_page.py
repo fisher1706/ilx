@@ -17,8 +17,8 @@ class RfidPage(DistributorPortalPage):
         return label
 
     def check_last_rfid_label(self, label, status):
-        self.check_last_table_item_by_header("RFID", label)
-        self.check_last_table_item_by_header("State", status)
+        self.check_last_table_item_outdated("RFID", label)
+        self.check_last_table_item_outdated("State", status)
 
     def update_last_rfid_label_status(self, status):
         self.get_element_by_xpath(L.xpath_table_row)

@@ -47,7 +47,7 @@ class DistributorUsersPage(DistributorPortalPage):
             "Warehouses": splitted_warehouses
         }
         for cell, value in table_cells.items():
-            self.check_table_item(value, header=cell, last=True)
+            self.check_last_table_item(cell, value)
 
     def update_last_distributor_user(self, distributor_user_body):
         self.click_xpath(L.xpath_last_role_row+L.xpath_edit_button)
@@ -85,7 +85,7 @@ class DistributorUsersPage(DistributorPortalPage):
             "Last name": distributor_superuser_body["lastName"]
         }
         for cell, value in table_cells.items():
-            self.check_table_item(value, header=cell, last=True)
+            self.check_last_table_item(cell, value)
 
     def update_last_distributor_super_user(self, distributor_superuser_body):
         self.click_xpath(L.xpath_last_role_row+L.xpath_edit_button)

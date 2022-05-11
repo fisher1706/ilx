@@ -38,7 +38,7 @@ class CustomersPage(DistributorPortalPage):
             "Market Type": customer_body["marketType"]
         }
         for cell, value in table_cells.items():
-            self.check_table_item(value, header=cell, last=True)
+            self.check_last_table_item(cell, value)
 
     def update_last_customer(self, customer_body):
         self.click_xpath(L.xpath_last_role_row+L.xpath_customer_info_button)
@@ -90,7 +90,7 @@ class CustomersPage(DistributorPortalPage):
             "Email": expected_email
         }
         for cell, value in table_cells.items():
-            self.check_table_item(value, header=cell, last=True)
+            self.check_last_table_item(cell, value)
 
     def check_settings_reorder_list_settings(self, expected_email):
         

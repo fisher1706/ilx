@@ -41,8 +41,8 @@ def test_distributor_crud(ui):
 
     lp.log_in_admin_portal()
     dp.sidebar_distributors()
-    number_of_rows = dp.create_distributor(distributor_body.copy(), checkbox_list=checkbox_list)
-    dp.check_last_distributor(distributor_body.copy(), state_short_code="MB", number_of_checkboxes=len(checkbox_list), row=number_of_rows)
+    dp.create_distributor(distributor_body.copy(), checkbox_list=checkbox_list)
+    dp.check_last_distributor(distributor_body.copy(), state_short_code="MB", number_of_checkboxes=len(checkbox_list))
     dp.update_last_distributor(edit_distributor_body.copy(), checkbox_list=edit_checkbox_list)
-    dp.check_last_distributor(edit_distributor_body.copy(), "AK", number_of_checkboxes=len(edit_checkbox_list), row=number_of_rows)
+    dp.check_last_distributor(edit_distributor_body.copy(), "AK", number_of_checkboxes=len(edit_checkbox_list))
     dp.delete_last_distributor()

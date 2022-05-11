@@ -86,7 +86,6 @@ class CheckoutGroupsPage(CustomerPortalPage):
             Error.error(f"There is no shipto '{user_email}'")
         self.element(L.button_save).click()
         self.dialog_should_not_be_visible()
-        
 
     def check_assigned_user(self, user_body, row):
         table_cells = {
@@ -98,8 +97,8 @@ class CheckoutGroupsPage(CustomerPortalPage):
             self.check_table_item_by_header(row, cell, value)
 
     def unassign_user(self, row):
-        full_name = self.get_last_table_item_text_by_header("First Name")
-        full_name += " " + self.get_last_table_item_text_by_header("Last Name")
+        full_name = self.get_last_table_item_text_by_header_outdated("First Name")
+        full_name += " " + self.get_last_table_item_text_by_header_outdated("Last Name")
         self.element(L.get_indexed(L.table_row, row)+L.remove_button).click()
         self.delete_dialog_should_be_about(full_name)
         self.element(L.submit_button).click()

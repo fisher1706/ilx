@@ -36,7 +36,7 @@ class DistributorSmartShelvesPage(DistributorPortalPage):
             "Qnty of Cells": "4"
         }
         for cell, value in table_cells.items():
-            self.check_last_table_item_by_header(cell, value)
+            self.check_last_table_item_outdated(cell, value)
 
     def merge_cells(self, number_of_cells, is_planogram=False, door_number=None):
         if not is_planogram:
@@ -70,7 +70,7 @@ class DistributorSmartShelvesPage(DistributorPortalPage):
 
     def check_cells_number(self, number_of_cells, is_planogram=False, door_number=None):
         if not is_planogram:
-            self.check_last_table_item_by_header("Qnty of Cells", "4")
+            self.check_last_table_item_outdated("Qnty of Cells", "4")
             self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
             self.element("//div[@data-cell]").wait_elements_number(number_of_cells)
             self.element(L.label_cancel).click()

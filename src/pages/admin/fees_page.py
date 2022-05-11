@@ -17,7 +17,7 @@ class FeesPage(AdminPortalPage):
     def check_fee_price(self, fee_price):
         self.page_refresh()
         for row, field in enumerate(fee_price.keys()):
-            self.check_table_item_by_header(row+1, "Price", f"${fee_price[field]}.00")
+            self.check_table_item_outdated(row+1, "Price", f"${fee_price[field]}.00")
 
     def undo(self, fee_price):
         for _ in fee_price.keys():

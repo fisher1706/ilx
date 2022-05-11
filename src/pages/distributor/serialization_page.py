@@ -31,7 +31,7 @@ class SerializationPage(DistributorPortalPage):
             "DoM (Date of Manufacture)": serial_number_body["dateManufacture"],
         }
         for cell, value in table_cells.items():
-            self.check_last_table_item_by_header(cell, value)
+            self.check_last_table_item_outdated(cell, value)
 
     def update_last_serial_number(self, serial_number_body):
         self.click_xpath(L.xpath_by_count(L.xpath_edit_button, self.get_table_rows_number()))

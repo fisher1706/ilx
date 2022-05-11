@@ -34,7 +34,7 @@ class CheckoutUsersPage(CustomerPortalPage):
             "Phone": checkout_user_body["phone"]
         }
         for cell, value in table_cells.items():
-            self.check_last_table_item_by_header(cell, value)
+            self.check_last_table_item_outdated(cell, value)
 
     def update_last_checkout_user(self, checkout_user_body, first_group=False):
         self.element(L.last_role_row).click()
@@ -45,8 +45,8 @@ class CheckoutUsersPage(CustomerPortalPage):
         self.element(L.submit_button).click()
 
     def delete_last_checkout_user(self):
-        full_name = self.get_last_table_item_text_by_header("First Name")
-        full_name += " " + self.get_last_table_item_text_by_header("Last Name")
+        full_name = self.get_last_table_item_text_by_header_outdated("First Name")
+        full_name += " " + self.get_last_table_item_text_by_header_outdated("Last Name")
         self.element(L.last_role_row+L.remove_button).click()
         self.delete_dialog_should_be_about(full_name)
         self.element(L.submit_button).click()

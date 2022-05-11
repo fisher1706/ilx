@@ -39,7 +39,7 @@ class WarehousesPage(DistributorPortalPage):
             "Invoice email": warehouse_body["invoiceEmail"]
         }
         for cell, value in table_cells.items():
-            self.check_table_item(value, header=cell, last=True)
+            self.check_last_table_item(cell, value)
 
     def update_last_warehouse(self, warehouse_body):
         self.click_xpath(L.xpath_last_role_row+L.xpath_edit_button)

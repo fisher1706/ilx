@@ -24,4 +24,4 @@ class UsageHistoryPage(DistributorPortalPage):
 
     def check_last_usage_history(self, usage_history_body):
         for cell, value in usage_history_body.items():
-            self.check_table_item(value, header=cell, last=True)
+            self.check_last_table_item(cell, value)

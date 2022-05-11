@@ -36,7 +36,7 @@ class VmiPage(DistributorPortalPage):
             "Distributor SKU": location_body["sku"],
         }
         for cell, value in table_cells.items():
-            self.check_last_table_item_by_header(cell, value)
+            self.check_last_table_item_outdated(cell, value)
 
     def import_location(self, locations):
         Tools.generate_csv("locations.csv", locations)

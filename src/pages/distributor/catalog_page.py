@@ -54,7 +54,7 @@ class CatalogPage(DistributorPortalPage):
             "Package Conversion": product_body["packageConversion"],
         }
         for cell, value in table_cells.items():
-            self.check_table_item(value, header=cell, last=True)
+            self.check_last_table_item(cell, value)
 
     def update_last_product(self, product_body):
         self.element(L.last_role_row+L.edit_button).click()

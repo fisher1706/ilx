@@ -69,14 +69,9 @@ def test_customer_user_crud(ui):
 
     lp.log_in_customer_portal()
     cup.sidebar_users_and_groups()
-    cup.click_xpath(L.xpath_button_tab_by_name("Users"))
     cup.create_customer_user(customer_user_body.copy())
     cup.check_last_customer_user(customer_user_body.copy())
-    cup.click_xpath(L.xpath_reload_button)
-    cup.last_page(wait=False)
     cup.update_last_customer_user(edit_customer_user_body.copy())
-    cup.click_xpath(L.xpath_reload_button)
-    cup.last_page(wait=False)
     cup.sidebar_users_and_groups()
     cup.check_last_customer_user(edit_customer_user_body.copy())
     cup.delete_last_customer_user()
@@ -260,12 +255,10 @@ def test_customer_security_group_crud(ui):
     lp.log_in_customer_portal()
     csg.open_security_groups()
     csg.create_security_group(security_group_body)
-    row = csg.get_row_of_table_item_by_column(security_group_body["name"], 1)
-    csg.check_security_group(security_group_body, row)
-    csg.update_security_group(edit_security_group_body, row)
-    csg.element_should_have_text(L.xpath_table_item(row, 1), edit_security_group_body["name"])
-    csg.check_security_group(edit_security_group_body, row)
-    csg.delete_security_group(edit_security_group_body, row)
+    csg.check_security_group(security_group_body)
+    csg.update_security_group(edit_security_group_body)
+    csg.check_security_group(edit_security_group_body)
+    csg.delete_security_group(edit_security_group_body)
 
 @pytest.mark.regression
 def test_checkout_group_crud(ui):

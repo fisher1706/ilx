@@ -128,6 +128,10 @@ class Locator():
         return f"(({Locator.role_row})[last()]{Locator.role_cell})[{column}]"
 
     @staticmethod
+    def get_last_table_item_outdated(column):
+        return f"(({Locator.role_row})[last()]{Locator.table_column})[{column}]"
+
+    @staticmethod
     def get_row_by_index(index):
         return f"//div[@role='row' and @data-row-index='{index}']"
 

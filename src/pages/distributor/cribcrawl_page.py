@@ -16,7 +16,7 @@ class CribcrawlPage(DistributorPortalPage):
             "Distributor SKU": cribcrawl_body["sku"],
         }
         for cell, value in table_cells.items():
-            self.check_last_table_item_by_header(cell, value)
+            self.check_last_table_item_outdated(cell, value)
 
     def import_cribcrawl(self, cribcrawls):
         Tools.generate_csv("cribcrawls.csv", cribcrawls)

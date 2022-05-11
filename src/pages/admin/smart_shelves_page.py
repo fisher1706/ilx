@@ -43,7 +43,7 @@ class SmartShelvesPage(AdminPortalPage):
             "Qnty of Cells": "4"
         }
         for cell, value in table_cells.items():
-            self.check_last_table_item_by_header(cell, value)
+            self.check_last_table_item_outdated(cell, value)
 
     def update_smart_shelves(self, smart_shelves_body):
         self.element(L.last_role_row + L.edit_button).click()
@@ -65,7 +65,7 @@ class SmartShelvesPage(AdminPortalPage):
         self.wait_until_progress_bar_loaded()
 
     def delete_smart_shelf(self, serial_number):
-        self.get_last_table_item_text_by_header("Serial Number")
+        self.get_last_table_item_text_by_header_outdated("Serial Number")
         self.element(L.last_role_row + L.remove_button).click()
         self.delete_dialog_should_be_about(f"{serial_number}")
         self.element(L.confirm_button).click()
@@ -92,7 +92,7 @@ class SmartShelvesPage(AdminPortalPage):
 
     def check_cells_number(self, number_of_cells):
         self.element(L.table_row).get()
-        self.check_last_table_item_by_header("Qnty of Cells", "4")
+        self.check_last_table_item_outdated("Qnty of Cells", "4")
         self.element(L.get_indexed(L.edit_button, self.get_table_rows_number())).click()
         self.element("//div[@data-cell]").wait_elements_number(number_of_cells)
         self.element(L.label_cancel).click()

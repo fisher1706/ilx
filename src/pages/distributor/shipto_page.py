@@ -41,7 +41,7 @@ class ShiptoPage(DistributorPortalPage):
             "PO Numbers": shipto_body["poNumber"]
         }
         for cell, value in table_cells.items():
-            self.check_last_table_item_by_header(cell, value)
+            self.check_last_table_item_outdated(cell, value)
 
     def update_last_shipto(self, shipto_body, actions_pop_up=True):
         if actions_pop_up:
@@ -55,7 +55,7 @@ class ShiptoPage(DistributorPortalPage):
 
     def delete_last_shipto(self, actions_pop_up=True):
         start_number_of_rows = self.get_table_rows_number()
-        name = self.get_last_table_item_text_by_header("Shipto Number")
+        name = self.get_last_table_item_text_by_header_outdated("Shipto Number")
         if actions_pop_up:
             self.click_xpath(L.xpath_by_count(L.xpath_actions_button, self.get_table_rows_number()))
         self.click_xpath(L.xpath_by_count(L.xpath_remove_button, self.get_table_rows_number()))

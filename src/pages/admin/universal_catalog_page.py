@@ -26,7 +26,7 @@ class UniversalCatalogPage(AdminPortalPage):
             "Manufacturer SKU": product_body["manufacturerPartNumber"],
         }
         for cell, value in table_cells.items():
-            self.check_last_table_item_by_header(cell, value)
+            self.check_last_table_item_outdated(cell, value)
 
     def update_universal_product(self, product_body):
         self.element(L.last_role_row + L.edit_button).click()

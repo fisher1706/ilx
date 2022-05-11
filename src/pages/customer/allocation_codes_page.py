@@ -42,7 +42,7 @@ class AllocationCodesPage(CustomerPortalPage):
             "Values": allocation_code_body["values"],
         }
         for cell, value in table_cells.items():
-            self.check_table_item(expected_text=value, header=cell, last=True)
+            self.check_last_table_item(cell, value)
         
         if allocation_code_body["isRequired"] == "true":
             self.get_element_by_xpath("(//div[@role='row'])[last()]//div[@role='cell'][4]//*[name()='svg']")
