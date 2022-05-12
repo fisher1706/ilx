@@ -117,8 +117,6 @@ def test_distributor_user_crud(ui, permission_ui, permissions, delete_distributo
     dup.create_distributor_user(distributor_user_body.copy())
     dup.check_last_distributor_user(distributor_user_body.copy())
     dup.update_last_distributor_user(edit_distributor_user_body.copy())
-    dup.click_xpath(L.xpath_reload_button)
-    dup.last_page(wait=False)
     dup.check_last_distributor_user(edit_distributor_user_body.copy())
     full_name = edit_distributor_user_body["firstName"] + " " + edit_distributor_user_body["lastName"]
     dup.delete_last_distributor_user(full_name)
@@ -171,8 +169,6 @@ def test_distributor_superuser_crud(ui):
     dup.create_distributor_super_user(distributor_superuser_body.copy())
     dup.check_last_distributor_super_user(distributor_superuser_body.copy())
     dup.update_last_distributor_super_user(edit_distributor_superuser_body.copy())
-    dup.click_xpath(L.xpath_reload_button)
-    dup.last_page(wait=False)
     dup.check_last_distributor_super_user(edit_distributor_superuser_body.copy())
     full_name = edit_distributor_superuser_body["firstName"] + " " + edit_distributor_superuser_body["lastName"]
     dup.delete_last_distributor_user(full_name)

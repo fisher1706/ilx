@@ -1,7 +1,5 @@
-import re
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
 from src.pages.locator import Locator as L
-from src.api.distributor.user_api import UserApi
 
 class DistributorUsersPage(DistributorPortalPage):
     distributor_user_body = {
@@ -21,62 +19,54 @@ class DistributorUsersPage(DistributorPortalPage):
     }
 
     def create_distributor_user(self, distributor_user_body):
-        ua = UserApi(self.context)
-        start_number_of_rows = ua.get_distributor_user(full=True)["totalElements"]
-        self.click_id(L.id_add_button)
+        self.element(L.add_button).click()
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), distributor_user_body.pop("role"))
         self.select_in_dropdown(L.get_dropdown_in_dialog(2), distributor_user_body.pop("position"))
         for checkbox in distributor_user_body.pop("warehouses"):
             self.select_checkbox_in_dialog_by_name(checkbox)
         for field in distributor_user_body.keys():
             self.input_by_name(field, distributor_user_body[field])
-        self.click_xpath(L.xpath_submit_button)
+        self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
         self.last_page(10)
-        self.get_element_by_xpath(L.get_row_by_index(start_number_of_rows%10))
+        self.check_last_table_item("Email", distributor_user_body["email"])
 
     def check_last_distributor_user(self, distributor_user_body):
-        splitted_warehouses = []
-        for element in distributor_user_body.pop("warehouses"):
-            splitted_warehouses.append((re.split(r' \(', element))[0])
         table_cells = {
             "Email": distributor_user_body["email"],
             "First name": distributor_user_body["firstName"],
             "Last name": distributor_user_body["lastName"],
             "Role": distributor_user_body["role"],
-            "Warehouses": splitted_warehouses
         }
         for cell, value in table_cells.items():
             self.check_last_table_item(cell, value)
 
     def update_last_distributor_user(self, distributor_user_body):
-        self.click_xpath(L.xpath_last_role_row+L.xpath_edit_button)
+        self.element(L.last_role_row+L.edit_button).click()
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), distributor_user_body.pop("role"))
         for checkbox in distributor_user_body.pop("warehouses"):
             self.select_checkbox_in_dialog_by_name(checkbox)
         for field in distributor_user_body.keys():
             self.input_by_name(field, distributor_user_body[field])
-        self.click_xpath(L.xpath_submit_button)
+        self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
 
     def delete_last_distributor_user(self, value):
-        self.click_xpath(L.xpath_last_role_row+L.xpath_remove_button)
+        self.element(L.last_role_row+L.remove_button).click()
         self.delete_dialog_should_be_about(value)
-        self.click_xpath(L.xpath_confirm_button)
+        self.element(L.confirm_button).click()
         self.dialog_should_not_be_visible()
 
     def create_distributor_super_user(self, distributor_superuser_body):
-        ua = UserApi(self.context)
-        start_number_of_rows = ua.get_distributor_user(full=True)["totalElements"]
-        self.click_id(L.id_add_button)
+        self.element(L.add_button).click()
         self.select_in_dropdown(L.get_dropdown_in_dialog(1), distributor_superuser_body.pop("role"))
         self.select_in_dropdown(L.get_dropdown_in_dialog(2), distributor_superuser_body.pop("position"))
         for field in distributor_superuser_body.keys():
             self.input_by_name(field, distributor_superuser_body[field])
-        self.click_xpath(L.xpath_submit_button)
+        self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
         self.last_page(10)
-        self.get_element_by_xpath(L.get_row_by_index(start_number_of_rows%10))
+        self.check_last_table_item("Email", distributor_superuser_body["email"])
 
     def check_last_distributor_super_user(self, distributor_superuser_body):
         table_cells = {
@@ -88,8 +78,8 @@ class DistributorUsersPage(DistributorPortalPage):
             self.check_last_table_item(cell, value)
 
     def update_last_distributor_super_user(self, distributor_superuser_body):
-        self.click_xpath(L.xpath_last_role_row+L.xpath_edit_button)
+        self.element(L.last_role_row+L.edit_button).click()
         for field in distributor_superuser_body.keys():
             self.input_by_name(field, distributor_superuser_body[field])
-        self.click_xpath(L.xpath_submit_button)
+        self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()

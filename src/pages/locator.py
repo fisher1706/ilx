@@ -17,6 +17,9 @@ class Locator():
     button_last_page = "//button[@aria-label='Go to last page']"
     button_tab = "//button[@role='tab']"
     action_button = "//button[@data-testid='action-button']"
+    item_action_customer_add = "//button[@id='item-action-customer-add']"
+    filter_button = f"{button_type}//*[text()='Filter']"
+    filter_input = "//div[@data-type='filter']//input"
 
     #----TABLE----
     table_row = "//div[@role='rowgroup']"
@@ -34,7 +37,6 @@ class Locator():
     file_upload = "//input[@id='file-upload']"
 
 
-    item_action_customer_add = "//button[@id='item-action-customer-add']"
     upload_rfid_csv = "upload-rfid-csv"
     upload_rfid_available = "upload-rfid-available"
     intercom_container = "intercom-container"
@@ -84,7 +86,7 @@ class Locator():
     role_menu = "//ul[@role='menu']"
     role_menuitem = "//li[@role='menuitem']"
     check_mark = "//span[text()='✓']"
-    next = "//button/span[text()='Next']"
+    
     complete_button = "//button/span[text()='Complete']"
     sign_out = "//div[text()='Sign Out']"
     reset_password = "//div[text()='Reset password']"
@@ -165,6 +167,9 @@ class Locator():
     @staticmethod
     def get_select_pagination(value):
         return f"{Locator.role_listbox}/li[@data-value='{value}']"
+
+    def get_menuitem_with_text(text):
+        return f"//li[@role='menuitem' and text()='{text}']"
 
     def __setattr__(self, key, value):
         if hasattr(key):

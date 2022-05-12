@@ -49,6 +49,7 @@ def test_pricing_import(ui, permission_ui, permissions, delete_distributor_secur
     pp.select_customer_shipto(customer_name=ui.data.customer_name)
     pp.import_pricing(pricing)
     pp.select_customer_shipto(customer_name=ui.data.customer_name)
+    pp.apply_text_filter("by Distributor SKU", pricing_body["Distributor SKU"])
     pp.check_price_by_name(pricing_body.copy())
 
 @pytest.mark.ui

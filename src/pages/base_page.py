@@ -409,3 +409,8 @@ class BasePage():
             self.select_in_dropdown_via_input(L.get_dropdown_in_dialog(1), shipto)
         if sku is not None:
             self.select_in_dropdown(L.get_dropdown_in_dialog(2), sku)
+
+    def apply_text_filter(self, name, value):
+        self.element(L.filter_button).click()
+        self.element(L.get_menuitem_with_text(name)).click()
+        self.element(L.filter_input).enter(value)
