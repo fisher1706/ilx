@@ -28,7 +28,7 @@ class BasePage():
                 Log.info(f"URL '{url}' is followed")
         else:
             Log.info(f"URL '{url}' is followed")
-            self.wait_for_complete_ready_state()
+            WebDriverWait(self.driver, 15).until(lambda x: x.execute_script("return document.readyState === 'complete'"))
 
     def url_should_be(self, url):
         try:
@@ -79,11 +79,6 @@ class BasePage():
                 else:
                     Error.error(f"There is no ShipTo '{shipto}'")
             self.element(f"{L.dialog}{L.submit_button}//span[text()='Save']").click()
-
-    def wait_for_complete_ready_state(self, incomplete_before=False):
-        if incomplete_before:
-            WebDriverWait(self.driver, 15).until_not(lambda x: x.execute_script("return document.readyState === 'complete'"))
-        WebDriverWait(self.driver, 15).until(lambda x: x.execute_script("return document.readyState === 'complete'"))
 
     def wait_until_progress_bar_loaded(self, get_timeout=1):
         try:
