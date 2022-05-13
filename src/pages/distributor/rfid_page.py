@@ -37,4 +37,3 @@ class RfidPage(DistributorPortalPage):
         Tools.generate_csv("rfids.csv", rfids)
         self.import_csv(L.upload_rfid_csv, "rfids.csv")
         self.element(L.successfully_imported_msg).get()
-        

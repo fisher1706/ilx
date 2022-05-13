@@ -120,8 +120,7 @@ class Locator():
     def get_table_item_by_index(index, column, page=None):
         if page is None:
             return f"(//div[@role='row' and @data-row-index='{index}']{Locator.role_cell})[{column}]"
-        else:
-            return f"(//div[@role='row' and @data-row-index='{index}' and @data-page-index='{page}']{Locator.role_cell})[{column}]"
+        return f"(//div[@role='row' and @data-row-index='{index}' and @data-page-index='{page}']{Locator.role_cell})[{column}]"
 
     @staticmethod
     def get_table_item_by_index_outdated(index, column, page):
@@ -147,6 +146,7 @@ class Locator():
     def get_select_pagination(value):
         return f"{Locator.role_listbox}/li[@data-value='{value}']"
 
+    @staticmethod
     def get_menuitem_with_text(text):
         return f"//li[@role='menuitem' and text()='{text}']"
 

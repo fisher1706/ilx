@@ -49,7 +49,7 @@ class Element():
         except Exception as e:
             Error.error(f"Element '{self.xpath}' is not clickable.\n{e}")
 
-        while(retries):
+        while retries:
             try:
                 selenium_element.click()
             except Exception as e:

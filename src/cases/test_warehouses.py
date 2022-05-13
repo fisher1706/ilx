@@ -4,7 +4,6 @@ from src.resources.permissions import Permissions
 from src.pages.general.login_page import LoginPage
 from src.pages.distributor.warehouses_page import WarehousesPage
 from src.api.distributor.warehouse_api import WarehouseApi
-from src.pages.locator import Locator as L
 
 @pytest.mark.parametrize("permissions", [
     {

@@ -54,7 +54,7 @@ class CustomerUserApi(API):
             Error.error(str(response.content))
         response_json = response.json()
         return response_json["data"]["entities"]
-    
+
     def get_allocation_codes(self):
         url = self.url.get_api_url_for_env("/customer-portal/customer/allocation-codes")
         token = self.get_customer_token()

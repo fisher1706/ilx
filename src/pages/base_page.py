@@ -137,12 +137,8 @@ class BasePage():
         for index, element in enumerate(elements):
             if element.text() == header:
                 return index+1
-        else:
+        else: #pylint: disable=W0120
             Error.error(f"Header '{header}' is not found")
-
-    # def get_table_item_text_by_indexes(self, row, column):
-    #     xpath = L.get_table_item_outdated(row, column)
-    #     return self.element(xpath).text()
 
     def check_last_table_item_outdated(self, header, expected_text):
         column = self.get_header_column(header)
@@ -167,59 +163,6 @@ class BasePage():
     def get_last_table_item_text_by_header(self, header):
         column = self.get_header_column(header)
         return self.element(L.get_last_table_item(column)).text()
-
-    # def get_table_item_text_by_header(self, header, row):
-    #     column = self.get_header_column(header)
-    #     if column:
-    #         return self.get_table_item_text_by_indexes(row, column)
-    #     Error.error(f"There is no header '{header}'")
-
-    # def check_table_item_by_header(self, row, header, expected_text):
-    #     if expected_text is not None:
-    #         column = self.get_header_column(header)
-    #         current_text = None
-    #         if column:
-    #             current_text = self.get_table_item_text_by_indexes(row, column)
-    #         else:
-    #             Error.error(f"There is no header '{header}'")
-    #         if isinstance(expected_text, list):
-    #             correctness = True
-    #             for element in expected_text:
-    #                 if element is not None:
-    #                     if element not in current_text:
-    #                         Error.error(f"{row} element in '{header}' column is incorrect")
-    #             if correctness:
-    #                 Log.info(f"{row} element in '{header}' column is correct")
-    #         else:
-    #             self.element_should_have_text(L.get_table_item_outdated(row, column), expected_text)
-
-    # def check_table_item(self, expected_text, cell=None, header=None, row=None, last=None):
-    #     if expected_text is not None:
-    #         if (cell is None and header is None) or (cell is not None and header is not None):
-    #             Error.error("Either 'cell' or 'header' parameter should be defined")
-    #         column = cell if header is None else self.get_header_column(header)
-
-    #         if isinstance(expected_text, list):
-    #             if last is not None:
-    #                 current_text = self.element(L.get_last_table_item(column)).text()
-    #             elif row is not None:
-    #                 current_text = self.element(L.get_last_table_item(row, column)).text()
-    #             else:
-    #                 Error.error("Either 'row' or 'last' parameter should be defined")
-    #             correctness = True
-    #             for element in expected_text:
-    #                 if element is not None:
-    #                     if element not in current_text:
-    #                         Error.error(f"{row} element in '{header}' column is incorrect")
-    #             if correctness:
-    #                 Log.info(f"{row} element in '{header}' column is correct")
-    #         else:
-    #             if last is not None:
-    #                 self.element_should_have_text(L.get_last_table_item(column), expected_text)
-    #             elif row is not None:
-    #                 self.element_should_have_text(L.get_table_item(row, column), expected_text)
-    #             else:
-    #                 Error.error("Either 'row' or 'last' parameter should be defined")
 
     def delete_dialog_should_be_about(self, expected_text):
         try:
@@ -290,34 +233,6 @@ class BasePage():
                 Error.error(f"Checkbox with XPATH = '{xpath}' should be unchecked")
         else:
             Error.error("Incorrect checkbox condition")
-
-    # def scan_table(self, scan_by, column_header, body=None, pagination=True):
-    #     column = self.get_header_column(column_header)
-    #     if pagination:
-    #         pagination_buttons = self.element(L.pagination_bottom+"//button").get_list()
-    #     if column:
-    #         is_break = False
-    #         while True:
-    #             for row in range(1, self.get_table_rows_number()+1):
-    #                 cell_value = self.get_table_item_text_by_indexes(row, column)
-    #                 if cell_value == scan_by:
-    #                     Log.info(f"Text '{scan_by}' is found in the table")
-    #                     if body is None:
-    #                         return row
-    #                     for cell in body.keys():
-    #                         self.check_table_item_by_header(row, cell, body[cell])
-    #                     return row
-    #             if is_break:
-    #                 break
-    #             if pagination:
-    #                 if (len(pagination_buttons) > 3 and pagination_buttons[-2].is_enabled()):
-    #                     pagination_buttons[-1].click()
-    #                 else:
-    #                     Error.error(f"There is no value '{scan_by}' in the '{column}' column")
-    #             else:
-    #                 Error.error(f"There is no value '{scan_by}' in the '{column}' column")
-    #     else:
-    #         Error.error(f"There is no header '{column_header}'")
 
     def dialog_should_not_be_visible(self):
         self.element(L.dialog).wait_until_disappeared()

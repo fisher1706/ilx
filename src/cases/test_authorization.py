@@ -3,7 +3,6 @@ from src.pages.general.login_page import LoginPage
 from src.pages.admin.admin_portal_page import AdminPortalPage
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
 from src.pages.customer.customer_portal_page import CustomerPortalPage
-from src.pages.checkout.checkout_portal_page import CheckoutPortalPage
 from src.pages.checkout.new_checkout_portal_page import NewCheckoutPortalPage
 from src.pages.locator import Locator as L
 from src.resources.tools import Tools

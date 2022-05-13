@@ -31,7 +31,6 @@ def test_vmi_list_partial_sku_match(ui):
     setup_product.setup()
 
     vp.follow_location_url()
-    
     vp.element(L.add_button).click()
     vp.element(L.dialog+L.select_box+"//input").enter(product_sku)
     vp.element_should_have_text(L.dropdown_list_item, f"DSKU: {product_sku}")

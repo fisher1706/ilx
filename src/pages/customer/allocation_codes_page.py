@@ -64,7 +64,7 @@ class AllocationCodesPage(CustomerPortalPage):
     def associate_subsite_with_allocation_code(self, subsite_name, subsite_number):
         self.element(L.last_role_row + L.info_button).click()
         row = self.get_associate_subsite_row(subsite_name, subsite_number)
-        self.select_checkbox(self.get_element_xpath_in_associate_table(row, 3) + L.xpath_checkbox)
+        self.select_checkbox(self.get_element_xpath_in_associate_table(row, 3) + L.checkbox)
         self.element(L.get_indexed(L.submit_button, 2)).click()
         self.element("//a[@href='/customer/allocation-codes']").click()
 

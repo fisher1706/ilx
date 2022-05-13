@@ -29,7 +29,7 @@ class ElementsNumberToBe():
             return True
         return False
 
-class TextToBeEmpty(): 
+class TextToBeEmpty():
     def __init__(self, xpath):
         self.xpath = xpath
 

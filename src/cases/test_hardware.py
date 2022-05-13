@@ -6,7 +6,6 @@ from src.api.setups.setup_locker import SetupLocker
 from src.api.setups.setup_location import SetupLocation
 from src.pages.admin.hardware_page import HardwarePage
 from src.pages.general.login_page import LoginPage
-from src.pages.locator import Locator as L
 
 @pytest.mark.smoke
 def test_smoke_get_device_list(smoke_api):

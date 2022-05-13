@@ -18,6 +18,7 @@ disable=
     R0903, #too-few-public-methods
     W1203, #logging-fstring-interpolation
     E0401, #import-error
+    W0703, #broad-except
 
 ignore=
     utilities,
@@ -80,7 +81,8 @@ good-names=
     LOCATION_MIN,
     LOCATION_MAX,
     LOCATION_PACKAGE_CONVERSION,
-    ROUND_BUY
+    ROUND_BUY,
+    e
 
 bad-names=
     var,

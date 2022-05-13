@@ -272,7 +272,7 @@ def test_shelves_assign_via_hardware_check_planogram(ui, delete_shipto, delete_h
     ssp.assign_smart_shelf_to_locker(response_locker["smart_shelf_number"], locker, "1")
     lpp.follow_locker_planogram_url(customer_id=locker_body["customerUser"], shipto_id=response_shipto["shipto_id"])
     lpp.wait_until_progress_bar_loaded()
-    lpp.check_smart_shelf_via_planogram(response_locker["smart_shelf_number"], "1")
+    lpp.check_smart_shelf_via_planogram(response_locker["smart_shelf_number"])
 
 @pytest.mark.ui
 @pytest.mark.regression

@@ -230,16 +230,16 @@ def test_allocation_code_crud(ui, delete_site, delete_subsite, delete_supplier):
     setup_organization.add_option("supplier")
     setup_organization.add_option("shipto")
     response_organization = setup_organization.setup()
-    
+
     setup_organization.add_option("site", False)
     setup_organization.add_option("subsite", False)
     setup_organization.add_option("shipto", False)
     response_second_supplier = setup_organization.setup()
-    
+
     setup_organization.setup_customer_shipto.add_option("subsite_id", response_organization['subsite_id'])
     setup_organization.setup_customer_shipto.add_option("supplier_id", response_second_supplier['supplier_id'])
     response_second_customer_shipto = setup_organization.setup_customer_shipto.setup()
-    
+
     subsite_name = response_organization['subsite']['name']
     subsite_number = response_organization['subsite']['number']
     shipto_name_1 = response_organization['shipto']['name']

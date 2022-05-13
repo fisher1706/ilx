@@ -315,7 +315,7 @@ def test_checkout_group_assign_user(ui, delete_customer_user, delete_checkout_gr
 
     cgp.click_tab_by_name("Checkout Groups")
     cgp.element(L.last_role_row + L.associated_users).click()
-    cgp.unassign_user(1)
+    cgp.unassign_user()
     cgp.element(L.no_data_found).get()
 
 @pytest.mark.ui
@@ -332,11 +332,11 @@ def test_checkout_group_assign_shipto(ui, delete_shipto, delete_checkout_group):
     lp.log_in_customer_portal()
     cgp.sidebar_users_and_groups()
     cgp.click_tab_by_name("Checkout Groups")
-    
+
     cgp.element(L.last_role_row + L.associated_shiptos).click()
     cgp.assign_shipto(response_shipto["shipto"]["number"])
     cgp.check_assigned_shipto(response_shipto["shipto"], 1)
-    cgp.unassign_shipto(1)
+    cgp.unassign_shipto()
     cgp.element(L.no_data_found).get()
 
 @pytest.mark.parametrize("case", [
