@@ -6,7 +6,7 @@ class NewCheckoutPortalPage(BasePage):
         self.input_by_name("passcode", passcode)
 
     def log_out_checkout_portal(self):
-        self.element("//ion-item[@class='menu-item item md item-lines-none item-fill-none in-list ion-activatable ion-focusable hydrated']").click()
+        self.element("//ion-list/ion-menu-toggle[last()]/ion-item").click()
 
     def log_out_checkout_group(self):
         self.element("//*[@class='sc-ion-buttons-md-h sc-ion-buttons-md-s md hydrated']")

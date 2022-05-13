@@ -57,8 +57,6 @@ def test_warehouses_crud(ui, permission_ui, permissions, delete_distributor_secu
     wp.create_warehouse(warehouse_body.copy())
     wp.check_last_warehouse(warehouse_body.copy())
     wp.update_last_warehouse(edit_warehouse_body.copy())
-    wp.click_xpath(L.xpath_reload_button)
-    wp.last_page(wait=False)
     wp.check_last_warehouse(edit_warehouse_body.copy())
     wp.delete_last_warehouse(edit_warehouse_body["name"])
 

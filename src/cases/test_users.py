@@ -197,7 +197,7 @@ def test_checkout_user_import_without_group(ui):
 
     lp.log_in_customer_portal()
     cup.sidebar_users_and_groups()
-    cup.element(L.get_button_tab_by_name("Fobs & Passcodes")).click()
+    cup.click_tab_by_name("Fobs & Passcodes")
     cup.import_checkout_user(checkout_users)
     cup.check_last_checkout_user(checkout_user_body.copy())
     cup.delete_last_checkout_user()
@@ -226,16 +226,14 @@ def test_checkout_user_crud(ui):
 
     lp.log_in_customer_portal()
     cup.sidebar_users_and_groups()
-    cup.click_xpath(L.xpath_button_tab_by_name("Fobs & Passcodes"))
+    cup.click_tab_by_name("Fobs & Passcodes")
     cup.create_checkout_user(checkout_user_body.copy())
-    row = cup.scan_table(checkout_user_body["firstName"], "First Name", pagination=False)
-    cup.check_new_checkout_user(checkout_user_body.copy(), row)
-    cup.update_new_checkout_user(edit_checkout_user_body.copy(), row, first_group=True)
+    cup.check_last_checkout_user(checkout_user_body.copy())
+    cup.update_last_checkout_user(edit_checkout_user_body.copy(), first_group=True)
     cup.sidebar_users_and_groups()
-    cup.click_xpath(L.xpath_button_tab_by_name("Fobs & Passcodes"))
-    row = cup.scan_table(edit_checkout_user_body["firstName"], "First Name", pagination=False)
-    cup.check_new_checkout_user(edit_checkout_user_body.copy(), row)
-    cup.delete_new_checkout_user(row)
+    cup.click_tab_by_name("Fobs & Passcodes")
+    cup.check_last_checkout_user(edit_checkout_user_body.copy())
+    cup.delete_last_checkout_user()
 
 @pytest.mark.ui
 @pytest.mark.regression
@@ -281,17 +279,14 @@ def test_checkout_group_crud(ui):
 
     lp.log_in_customer_portal()
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(L.xpath_button_tab_by_name("Checkout Groups"))
+    cgp.click_tab_by_name("Checkout Groups")
     cgp.create_checkout_group(checkout_group_body.copy())
-    row = cgp.scan_table(checkout_group_body["name"], "Checkout Group Name", pagination=False)
-    cgp.check_new_checkout_group(checkout_group_body.copy(), row)
-    cgp.update_new_checkout_group(edit_checkout_group_body.copy(), row)
+    cgp.check_new_checkout_group(checkout_group_body.copy())
+    cgp.update_new_checkout_group(edit_checkout_group_body.copy())
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(L.xpath_button_tab_by_name("Checkout Groups"))
-    
-    row = cgp.scan_table(edit_checkout_group_body["name"], "Checkout Group Name", pagination=False)
-    cgp.check_new_checkout_group(edit_checkout_group_body.copy(), row)
-    cgp.delete_new_checkout_group(row)
+    cgp.click_tab_by_name("Checkout Groups")
+    cgp.check_new_checkout_group(edit_checkout_group_body.copy())
+    cgp.delete_new_checkout_group()
 
 @pytest.mark.ui
 @pytest.mark.regression
@@ -308,25 +303,20 @@ def test_checkout_group_assign_user(ui, delete_customer_user, delete_checkout_gr
 
     lp.log_in_customer_portal()
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(L.xpath_button_tab_by_name("Checkout Groups"))
-    
-    row = cgp.scan_table(response_checkout_group["group"]["name"], "Checkout Group Name", pagination=False)
-    cgp.click_xpath(L.xpath_by_count(L.xpath_associated_users, row))
+    cgp.click_tab_by_name("Checkout Groups")
+
+    cgp.element(L.last_role_row + L.associated_users).click()
     cgp.assign_user(response_customer_user["user"]["email"])
-    cgp.check_assigned_user(response_customer_user["user"], 1)
+    cgp.check_assigned_user(response_customer_user["user"])
 
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(L.xpath_button_tab_by_name("Fobs & Passcodes"))
-    
-    row = cgp.scan_table(response_customer_user["user"]["email"], "Email", pagination=False)
-    cgp.check_table_item_by_header(row, "Checkout Group", response_checkout_group["group"]["name"])
+    cgp.click_tab_by_name("Fobs & Passcodes")
+    cgp.check_last_table_item_outdated("Checkout Group", response_checkout_group["group"]["name"])
 
-    cgp.click_xpath(L.xpath_button_tab_by_name("Checkout Groups"))
-    
-    row = cgp.scan_table(response_checkout_group["group"]["name"], "Checkout Group Name", pagination=False)
-    cgp.click_xpath(L.xpath_by_count(L.xpath_associated_users, row))
+    cgp.click_tab_by_name("Checkout Groups")
+    cgp.element(L.last_role_row + L.associated_users).click()
     cgp.unassign_user(1)
-    cgp.get_element_by_xpath(L.xpath_no_data_found)
+    cgp.element(L.no_data_found).get()
 
 @pytest.mark.ui
 @pytest.mark.regression
@@ -336,19 +326,18 @@ def test_checkout_group_assign_shipto(ui, delete_shipto, delete_checkout_group):
     lp = LoginPage(ui)
     cgp = CheckoutGroupsPage(ui)
 
-    response_checkout_group = SetupCheckoutGroup(ui).setup()
+    SetupCheckoutGroup(ui).setup()
     response_shipto = SetupShipto(ui).setup()
 
     lp.log_in_customer_portal()
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(L.xpath_button_tab_by_name("Checkout Groups"))
+    cgp.click_tab_by_name("Checkout Groups")
     
-    row = cgp.scan_table(response_checkout_group["group"]["name"], "Checkout Group Name", pagination=False)
-    cgp.click_xpath(L.xpath_by_count(L.xpath_associated_shiptos, row))
+    cgp.element(L.last_role_row + L.associated_shiptos).click()
     cgp.assign_shipto(response_shipto["shipto"]["number"])
     cgp.check_assigned_shipto(response_shipto["shipto"], 1)
     cgp.unassign_shipto(1)
-    cgp.get_element_by_xpath(L.xpath_no_data_found)
+    cgp.element(L.no_data_found).get()
 
 @pytest.mark.parametrize("case", [
     {

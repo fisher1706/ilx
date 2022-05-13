@@ -14,6 +14,7 @@ def test_document_import(ui):
     lp.log_in_distributor_portal()
     sp.follow_url(f"{ui.session_context.url.distributor_portal}/profile#pricing")
     sp.import_document()
+    sp.check_last_table_item_outdated("Document Name", "doc")
     sp.delete_last_document()
 
 @pytest.mark.smoke

@@ -71,8 +71,6 @@ def test_product_crud(ui, permission_ui, permissions, delete_distributor_securit
     cp.create_product(product_body.copy())
     cp.check_last_product(product_body.copy())
     cp.update_last_product(edit_product_body.copy())
-    cp.element(L.reload_button).click()
-    cp.last_page(wait=False)
     cp.check_last_product(edit_product_body.copy())
 
 @pytest.mark.parametrize("permissions", [

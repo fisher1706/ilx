@@ -18,7 +18,6 @@ class CustomerSecurityGroups(CustomerPortalPage):
             self.select_checkbox(L.get_indexed(L.checkbox, checkbox))
         self.element(L.submit_button).click()
         self.wait_until_progress_bar_loaded()
-        self.element(L.table_row).get()
 
     def check_security_group(self, security_group_body):
         self.element_should_have_text(L.get_last_table_item_outdated(1), security_group_body["name"])
@@ -35,7 +34,6 @@ class CustomerSecurityGroups(CustomerPortalPage):
     def update_security_group(self, security_group_body):
         self.element(L.last_role_row+L.edit_button).click()
         self.wait_until_progress_bar_loaded()
-        self.element("//input[@name]").clear()
         self.input_by_name("name", security_group_body["name"])
         self.element(L.submit_button).click()
         self.wait_until_progress_bar_loaded()

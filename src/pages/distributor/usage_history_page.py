@@ -8,7 +8,7 @@ class UsageHistoryPage(DistributorPortalPage):
         "Customer Number": None,
         "ShipTo Number": None,
         "ShipTo Name": None,
-        "Part SKU": None,
+        "Distributor SKU": None,
         "Quantity": None,
         "Date": None,
     }
@@ -18,9 +18,8 @@ class UsageHistoryPage(DistributorPortalPage):
 
     def import_usage_history(self, usage_history):
         Tools.generate_csv("usage_history.csv", usage_history)
-        self.import_csv(L.id_file_upload, "usage_history.csv")
-        self.get_element_by_xpath(L.xpath_successfully_imported_msg)
-        
+        self.import_csv(L.file_upload, "usage_history.csv")
+        self.element(L.successfully_imported_msg).get()
 
     def check_last_usage_history(self, usage_history_body):
         for cell, value in usage_history_body.items():

@@ -5,15 +5,18 @@ from glbl import Log, Error
 class ReorderListPage(CustomerPortalPage):
     xpath_po_dialog_row = "//table/tbody/tr"
     xpath_po_dialog_column = "//td"
+    xpath_replenishment_item = "//div[@data-testid='replenishment-item']"
+    xpath_replenishment_item_sku = "//div[@data-testid='part-sku']"
+    xpath_submit_reorder_list_button = "//button/span[text()='Submit']"
 
     def unselect_all(self):
         self.unselect_checkbox(L.get_indexed(L.checkbox, 1))
 
     def select_by_sku(self, expected_sku):
-        replenishment_items_count = self.element(L.replenishment_item).count()
+        replenishment_items_count = self.element(self.xpath_replenishment_item).count()
         for index in range(1, replenishment_items_count+1):
-            item_xpath = L.get_indexed(L.replenishment_item, index)
-            sku_xpath = item_xpath+L.replenishment_item_sku
+            item_xpath = L.get_indexed(self.xpath_replenishment_item, index)
+            sku_xpath = item_xpath+self.xpath_replenishment_item_sku
             actual_sku = self.element(sku_xpath).text()
             if actual_sku == expected_sku:
                 self.select_checkbox(item_xpath+L.checkbox)
@@ -29,8 +32,8 @@ class ReorderListPage(CustomerPortalPage):
         return self.element(item_xpath).text()
 
     def check_po_number_in_dialog(self, po_number_body):
-        self.element(L.submit_reorder_list_button).click()
-        rows_count = self.get_element_count(self.xpath_po_dialog_row)
+        self.element(self.xpath_submit_reorder_list_button).click()
+        rows_count = self.element(self.xpath_po_dialog_row).count()
         for shipto in po_number_body.keys():
             self.element(f"{L.dialog}//td[text()='{shipto}']").get()
             for index in range(1, rows_count+1):
@@ -47,7 +50,7 @@ class ReorderListPage(CustomerPortalPage):
         self.dialog_should_not_be_visible()
 
     def submit_replenishment_list_different_po(self, po_number_body):
-        self.element(L.submit_reorder_list_button).click()
+        self.element(self.xpath_submit_reorder_list_button).click()
         self.set_slider(L.dialog+L.checkbox, "false")
         for shipto in po_number_body.keys():
             self.element(f"{L.dialog}//td[text()='{shipto}']").get()
@@ -62,7 +65,7 @@ class ReorderListPage(CustomerPortalPage):
         self.element(L.successfully_submitted_reorder_list).get()
 
     def submit_replenishment_list_general_po(self, po_number):
-        self.element(L.submit_reorder_list_button).click()
+        self.element(self.xpath_submit_reorder_list_button).click()
         self.set_slider(L.dialog+L.checkbox, "true")
         self.element(L.get_indexed(L.dialog+L.type_text, 1)).enter(po_number)
         self.element(L.submit_button).click()

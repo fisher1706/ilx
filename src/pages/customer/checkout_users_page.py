@@ -13,7 +13,6 @@ class CheckoutUsersPage(CustomerPortalPage):
     }
 
     def create_checkout_user(self, checkout_user_body, first_group=False):
-        start_number_of_rows = self.get_table_rows_number()
         self.element(L.add_button).click()
         for field in checkout_user_body.keys():
             self.input_by_name(field, checkout_user_body[field])
@@ -21,7 +20,6 @@ class CheckoutUsersPage(CustomerPortalPage):
             self.select_checkbox(L.checkbox)
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
-        self.element(L.table_row).wait_elements_number(start_number_of_rows+1)
 
     def check_last_checkout_user(self, checkout_user_body):
         table_cells = {

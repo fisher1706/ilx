@@ -46,7 +46,6 @@ class DistributorSecurityGroups(DistributorPortalPage):
         self.element(f"({L.save_button})[last()]").click()
         self.check_reset_permissions()
         self.element("//a[@href='/distributor/users-groups#security-groups']").click()
-        self.element(L.reload_button).click()
         self.last_page(10)
         self.check_last_table_item("Group name", distributor_security_group_body["name"])
 

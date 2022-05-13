@@ -65,7 +65,9 @@ class Element():
 
     def enter(self, text, hide_log=None):
         selenium_element = self.get()
-        self.clear()
+        length = len(selenium_element.get_attribute("value"))
+        for _ in range(length):
+            selenium_element.send_keys(Keys.BACKSPACE)
         try:
             selenium_element.send_keys(text)
         except Exception as e:
@@ -74,12 +76,6 @@ class Element():
             if hide_log:
                 text = "***"
             Log.info(f"Data '{text}' entered into element '{self.xpath}'")
-
-    def clear(self):
-        selenium_element = self.get()
-        length = len(selenium_element.get_attribute("value"))
-        for _ in range(length):
-            selenium_element.send_keys(Keys.BACKSPACE)
 
     def text(self):
         selenium_element = self.get()

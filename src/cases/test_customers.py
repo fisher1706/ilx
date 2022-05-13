@@ -148,14 +148,14 @@ def test_shipto_crud(ui, permission_ui, permissions, delete_distributor_security
 
     lp.log_in_distributor_portal()
     sp.follow_shipto_url()
-    sp.get_element_by_xpath(L.xpath_table_item(1, 1))
     sp.create_shipto(shipto_body.copy())
     sp.check_last_shipto(shipto_body.copy())
-    sp.update_last_shipto(edit_shipto_body.copy(), True if permissions["user"] is None else False)
-    sp.should_be_disabled_xpath(L.xpath_submit_button)
-    sp.driver.find_element_by_link_text('Shiptos').click()
+    sp.update_last_shipto(edit_shipto_body.copy(), False)
+    sp.element(L.submit_button).wait_until_disabled()
+    sp.follow_breadcrumb("Shiptos")
+    sp.last_page(10)
     sp.check_last_shipto(edit_shipto_body.copy())
-    sp.delete_last_shipto(True if permissions["user"] is None else False)
+    sp.delete_last_shipto(False)
 
 @pytest.mark.acl
 @pytest.mark.regression
@@ -212,9 +212,8 @@ def test_usage_history_import(ui, permission_ui, permissions, delete_distributor
     ]
     lp.log_in_distributor_portal()
     uhp.follow_usage_history_url()
-    uhp.select_pagination(10)
     uhp.import_usage_history(usage_history)
-    uhp.last_page(wait=False)
+    uhp.last_page(10)
     uhp.check_last_usage_history(usage_history_body.copy())
 
 @pytest.mark.ui

@@ -29,7 +29,6 @@ class DistributorUsersPage(DistributorPortalPage):
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
         self.last_page(10)
-        self.check_last_table_item("Email", distributor_user_body["email"])
 
     def check_last_distributor_user(self, distributor_user_body):
         table_cells = {
@@ -66,7 +65,6 @@ class DistributorUsersPage(DistributorPortalPage):
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
         self.last_page(10)
-        self.check_last_table_item("Email", distributor_superuser_body["email"])
 
     def check_last_distributor_super_user(self, distributor_superuser_body):
         table_cells = {

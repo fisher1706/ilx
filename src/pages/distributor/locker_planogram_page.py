@@ -3,6 +3,7 @@ from src.pages.locator import Locator as L
 from glbl import Log, Error
 
 class LockerPlanogramPage(DistributorPortalPage):
+    xpath_assign_product_planogram = "//button[@type='button']/span[text()='ASSIGN PRODUCT']"
     def follow_locker_planogram_url(self, customer_id=None, shipto_id=None):
         if customer_id is None:
             customer_id = self.data.customer_id
@@ -14,7 +15,7 @@ class LockerPlanogramPage(DistributorPortalPage):
 
     def create_location_via_planogram(self, door, cell, sku, min_value, max_value):
         self.element(L.get_planogram(door, cell)).click()
-        self.element(L.assign_product_planogram).click()
+        self.element(self.xpath_assign_product_planogram).click()
         self.input_by_name("min", min_value)
         self.input_by_name("max", max_value)
         self.element(f"{L.dialog}{L.select_box}//input").enter(sku)
@@ -24,8 +25,7 @@ class LockerPlanogramPage(DistributorPortalPage):
 
     def open_locker_planogram(self, locker, shipto):
         self.element(L.table_row).get()
-        locker_row = self.scan_table(scan_by=locker, column_header="Serial Number", pagination=False)
-        self.element(L.get_indexed(L.table_row, locker_row)+L.planogram_button).click()
+        self.element(L.last_role_row + L.planogram_button).click()
         self.wait_until_progress_bar_loaded()
         #check device
         text = self.element(L.get_dropdown_in_dialog(1)).text()
@@ -46,7 +46,7 @@ class LockerPlanogramPage(DistributorPortalPage):
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
 
-    def check_smart_shelf_via_planogram(self, smart_shelf, door_number):
+    def check_smart_shelf_via_planogram(self, smart_shelf):
         self.element(L.configure_button).click()
         self.element(L.get_dropdown_in_dialog(2)).get()
         self.wait_until_dropdown_not_empty(L.get_dropdown_in_dialog(2))

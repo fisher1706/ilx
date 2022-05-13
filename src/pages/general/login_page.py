@@ -23,10 +23,10 @@ class LoginPage(BasePage):
         self.element(L.password).enter(password, hide_log=True)
 
     def clear_email(self):
-        self.element(L.email).clear()
+        self.element(L.email).enter("")
 
     def clear_password(self):
-        self.element(L.password).clear()
+        self.element(L.password).enter("")
 
     def click_on_submit_button(self):
         self.element(L.submit_button).click()

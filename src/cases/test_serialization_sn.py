@@ -318,16 +318,16 @@ def test_serial_number_crud(ui, permission_ui, permissions, serialized_location_
     sp.add_serial_number(serial_number_body)
     serial_number_body["status"] = "ASSIGNED"
     sp.check_last_serial_number(serial_number_body)
-    assert sp.get_element_text(ohi_path) == "0"
+    sp.element_should_have_text(ohi_path, "0")
     sp.update_last_serial_number(edit_serial_number_body)
     edit_serial_number_body["status"] = "ASSIGNED"
     sp.check_last_serial_number(edit_serial_number_body)
     sp.update_last_serial_number_status("AVAILABLE")
     edit_serial_number_body["status"] = "AVAILABLE"
     sp.check_last_serial_number(edit_serial_number_body)
-    assert sp.get_element_text(ohi_path) == "1"
+    sp.element_should_have_text(ohi_path, "1")
     sp.delete_last_serial_number(edit_serial_number_body["number"])
-    assert sp.get_element_text(ohi_path) == "0"
+    sp.element_should_have_text(ohi_path, "0")
 
 @pytest.mark.acl
 @pytest.mark.regression

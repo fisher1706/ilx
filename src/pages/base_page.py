@@ -164,6 +164,10 @@ class BasePage():
         column = self.get_header_column(header)
         return self.element(L.get_last_table_item_outdated(column)).text()
 
+    def get_last_table_item_text_by_header(self, header):
+        column = self.get_header_column(header)
+        return self.element(L.get_last_table_item(column)).text()
+
     # def get_table_item_text_by_header(self, header, row):
     #     column = self.get_header_column(header)
     #     if column:
@@ -350,17 +354,6 @@ class BasePage():
             if scan_by == self.element(prefix_path+L.get_table_item_outdated(row, column)).text():
                 return index+1
 
-    def check_found_dropdown_list_item(self, item_xpath, expected_text):
-        item_text = self.element(item_xpath).text()
-        number = self.element(item_xpath).count()
-        if number == 1:
-            if item_text == expected_text:
-                Log.info("Dropdown list element has been found")
-            else:
-                Error.error(f"The text of dropdown list element is '{item_text}'")
-        else:
-            Error.error(f"The number of dropdown list elements = '{number}'")
-
     def select_in_dropdown_via_input(self, xpath, name, span=None):
         if name is not None:
             self.element(xpath).click()
@@ -371,7 +364,7 @@ class BasePage():
             else:
                 self.element(f"{xpath}/..//div[text()='{name}' and @tabindex='-1']").click()
 
-    def input_inline_xpath(self, data, xpath):
+    def input_inline(self, data, xpath):
         if data is not None:
             self.element(xpath).click()
             self.element(xpath).click()
@@ -414,3 +407,6 @@ class BasePage():
         self.element(L.filter_button).click()
         self.element(L.get_menuitem_with_text(name)).click()
         self.element(L.filter_input).enter(value)
+
+    def follow_breadcrumb(self, text):
+        self.element(f"//a[@href]/div[text()='{text}']").click()

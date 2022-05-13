@@ -22,4 +22,4 @@ class CribcrawlPage(DistributorPortalPage):
         Tools.generate_csv("cribcrawls.csv", cribcrawls)
         self.import_csv(L.file_upload, "cribcrawls.csv")
         self.element(L.successfully_imported_msg).get()
-        
+        self.wait_until_progress_bar_loaded()

@@ -7,21 +7,18 @@ class CheckoutGroupsPage(CustomerPortalPage):
         "name": None,
         "email": None
     }
-    id_associate = "item-action-associate"
+    id_associate = "//button[@id='item-action-associate']"
 
     def create_checkout_group(self, checkout_group_body):
-        
-        start_number_of_rows = self.get_table_rows_number()
         self.element(L.add_button).click()
         for field in checkout_group_body.keys():
             self.input_by_name(field, checkout_group_body[field])
         self.element(L.get_dropdown_in_dialog(1)).click()
-        self.element(L.dropdown_list_item+"/div").click()
+        self.element(L.dropdown_list_item+"/div[2]").click()
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
-        self.element(L.table_row).wait_elements_number(start_number_of_rows+1)
 
-    def check_new_checkout_group(self, checkout_group_body, row, owner=None, shipto=None):
+    def check_new_checkout_group(self, checkout_group_body, owner=None, shipto=None):
         table_cells = {
             "Checkout Group Name": checkout_group_body["name"],
             "Checkout Group Email": checkout_group_body["email"],
@@ -29,19 +26,19 @@ class CheckoutGroupsPage(CustomerPortalPage):
             "Associated Shipto": shipto
         }
         for cell, value in table_cells.items():
-            self.check_table_item_by_header(row, cell, value)
+            self.check_last_table_item_outdated(cell, value)
 
-    def update_new_checkout_group(self, checkout_group_body, row):
-        self.element(L.get_indexed(L.table_row, row)).click()
+    def update_new_checkout_group(self, checkout_group_body):
+        self.element(L.last_role_row).click()
         self.element(L.get_dropdown_in_dialog(1)).click()
         self.element(L.dropdown_list_item+"/div[last()]").click()
         for field in checkout_group_body.keys():
             self.input_by_name(field, checkout_group_body[field])
         self.element(L.submit_button).click()
 
-    def delete_new_checkout_group(self, row):
-        full_name = self.get_table_item_text_by_header("Checkout Group Name", row)
-        self.element(L.get_indexed(L.table_row, row)+L.remove_button).click()
+    def delete_new_checkout_group(self):
+        full_name = self.get_last_table_item_text_by_header_outdated("Checkout Group Name")
+        self.element(L.last_role_row + L.remove_button).click()
         self.delete_dialog_should_be_about(full_name)
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
@@ -66,11 +63,11 @@ class CheckoutGroupsPage(CustomerPortalPage):
             "Supplier": self.data.distributor_name
         }
         for cell, value in table_cells.items():
-            self.check_table_item_by_header(row, cell, value)
+            self.check_last_table_item_outdated(cell, value)
 
-    def unassign_shipto(self, row):
-        shipto_number = self.get_table_item_text_by_header("Shipto Number", row)
-        self.element(L.get_indexed(L.table_row, row)+L.remove_button).click()
+    def unassign_shipto(self):
+        shipto_number = self.get_last_table_item_text_by_header_outdated("Shipto Number")
+        self.element(L.last_role_row + L.remove_button).click()
         self.delete_dialog_should_be_about(shipto_number)
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
@@ -87,19 +84,19 @@ class CheckoutGroupsPage(CustomerPortalPage):
         self.element(L.button_save).click()
         self.dialog_should_not_be_visible()
 
-    def check_assigned_user(self, user_body, row):
+    def check_assigned_user(self, user_body):
         table_cells = {
             "First Name": user_body["firstName"],
             "Last Name": user_body["lastName"],
             "Email": user_body["email"]
         }
         for cell, value in table_cells.items():
-            self.check_table_item_by_header(row, cell, value)
+            self.check_last_table_item_outdated(cell, value)
 
-    def unassign_user(self, row):
+    def unassign_user(self):
         full_name = self.get_last_table_item_text_by_header_outdated("First Name")
         full_name += " " + self.get_last_table_item_text_by_header_outdated("Last Name")
-        self.element(L.get_indexed(L.table_row, row)+L.remove_button).click()
+        self.element(L.last_role_row + L.remove_button).click()
         self.delete_dialog_should_be_about(full_name)
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()

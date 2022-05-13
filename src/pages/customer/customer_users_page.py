@@ -18,7 +18,6 @@ class CustomerUsersPage(CustomerPortalPage):
             self.input_by_name(field, customer_user_body[field])
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
-        self.wait_until_progress_bar_loaded()
 
     def check_last_customer_user(self, customer_user_body):
         self.open_last_page()

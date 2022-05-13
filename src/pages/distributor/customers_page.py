@@ -25,7 +25,6 @@ class CustomersPage(DistributorPortalPage):
         self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
         self.last_page(10)
-        self.check_last_table_item("Name", customer_body["name"])
 
     def check_last_customer(self, customer_body):
         table_cells = {

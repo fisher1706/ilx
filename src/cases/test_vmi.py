@@ -32,10 +32,9 @@ def test_vmi_list_partial_sku_match(ui):
 
     vp.follow_location_url()
     
-    vp.click_id(L.id_add_button)
-    vp.input_data_xpath(product_sku, L.xpath_dialog+L.xpath_select_box+"//input")
-    vp.wait_until_dropdown_list_loaded(1)#need new implementation
-    vp.check_found_dropdown_list_item(L.xpath_dropdown_list_item, f"DSKU: {product_sku}")
+    vp.element(L.add_button).click()
+    vp.element(L.dialog+L.select_box+"//input").enter(product_sku)
+    vp.element_should_have_text(L.dropdown_list_item, f"DSKU: {product_sku}")
 
 @pytest.mark.parametrize("permissions", [
     {
@@ -77,7 +76,6 @@ def test_location_crud(ui, permission_ui, permissions, delete_distributor_securi
 
     lp.log_in_distributor_portal()
     vp.follow_location_url(customer_id=response_shipto["customer_id"], shipto_id=response_shipto["shipto_id"])
-    
     vp.create_location(location_body.copy())
     vp.check_last_location(location_body.copy())
 
@@ -211,7 +209,6 @@ def test_location_import(ui, permission_ui, permissions, delete_distributor_secu
 
     lp.log_in_distributor_portal()
     vp.follow_location_url(shipto_id=response_shipto["shipto_id"])
-    
     vp.import_location(locations)
     vp.check_last_location(location_body.copy())
 

@@ -35,7 +35,6 @@ class HardwarePage(AdminPortalPage):
         self.check_last_table_item_outdated("Customer-ShipTo", customer_shipto)
         self.check_last_table_item_outdated("Distributor User", distributor_user)
         self.check_last_table_item_outdated("Customer User", customer_user)
-        self.check_last_table_item_outdated("Expiration Date", expiration_date)
         self.check_last_table_item_outdated("Device Sub-Type", device_subtype)
 
     def update_last_iothub(self, distributor):

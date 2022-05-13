@@ -6,6 +6,9 @@ class Locator():
     password = "//input[@name='password']"
     new_password = "//input[@id='newPassword']"
     confirm_password = "//input[@id='confirmPassword']"
+    select_box = "//div[@test-id='select-box']/div"
+    dropdown_list_item = select_box+"/div[2]/div/div"
+    type_text = "//input[@type='text']"
 
     #----BUTTONS----
     enter_here = "//button[@id='redirectButton']"
@@ -20,56 +23,15 @@ class Locator():
     item_action_customer_add = "//button[@id='item-action-customer-add']"
     filter_button = f"{button_type}//*[text()='Filter']"
     filter_input = "//div[@data-type='filter']//input"
-
-    #----TABLE----
-    table_row = "//div[@role='rowgroup']"
-    role_row = "//div[@role='row']"
-    table_column = "//div[@role='gridcell']"
-    role_cell = "//div[@role='cell']"
-    old_table = "//div[@class='rt-table' and @role='grid' and @data-page-count]"
-    role_table = "//div[@role='table' and @data-page-count]"
-    last_role_row = f"({role_row})[last()]"
-
-    #----OTHERS----
-    forgot_password = "//a[text()='Reset my password']"
-    dialog = "//div[@role='dialog']"
-    role_listbox = "//ul[@role='listbox']"
-    file_upload = "//input[@id='file-upload']"
-
-
-    upload_rfid_csv = "upload-rfid-csv"
-    upload_rfid_available = "upload-rfid-available"
-    intercom_container = "intercom-container"
-    drop_down_button = "dropDownButton"
-    item_action_import = "item-action-import"
-    forgot_password = "//a[text()='Reset my password']"
-    select_box = "//div[@test-id='select-box']/div"
-    dropdown_list_item = select_box+"/div[2]/div/div"
-    table_header_column = "//div[@role='columnheader']"
-    checkbox = "//input[@type='checkbox']"
+    drop_down_button = "//button[@id='dropDownButton']"
     confirm_button = "//button[@data-testid='confirm-button']"
-    dialog_cancel_button = "//button[@data-testid='cancel-button']"
-    pagination_bottom = "//div[@class='pagination-bottom']"
-    pagination_navigation = "//nav[@aria-label='pagination navigation']"
     continue_import = "//button/span[text()='Continue import']"
-    successfully_imported_msg = "//span[@id='client-snackbar']//strong[text()='Successfully imported']"
-    successfully_uploaded_document_msg = "//span[text()='Document uploaded successfully!']"
-    successfully_submitted_reorder_list = "//span[text()='Reorder list was successfully submitted']"
     button_save = "//button[@label='Save']"
-    replenishment_item = "//div[@data-testid='replenishment-item']"
-    replenishment_item_sku = "//div[@data-testid='part-sku']"
-    submit_reorder_list_button = "//button/span[text()='Submit']"
     save_button = "//button/span[text()='Save']"
     cancel_button = "//button[@label='Cancel']"
-    type_text = "//input[@type='text']"
-    assign_product_planogram = "//button[@type='button']/span[text()='ASSIGN PRODUCT']"
-    no_data_found = "//div[text()='No data found']"
     close_button = "//button[@data-testid='close-button']"
-    role_presentation = "//div[@role='presentation']"
     label_confirm = "//button[@label='Confirm']"
     label_cancel = "//button[@label='Cancel']"
-    progress_bar = "//div[@role='progressbar']"
-    issue_button = "//span[text()='Issue']/../button"
     ping_to_return = "//span[text()='Request to return']/../../button"
     edit_button = "//button[@data-testid='edit-button']"
     remove_button = "//button[@data-testid='remove-button']"
@@ -83,27 +45,48 @@ class Locator():
     view_button = "//button[@data-testid='view-button']"
     edit_status_button = "//button[@data-testid='edit-status-button']"
     split_button = "//button[@data-testid='split-button']"
+    complete_button = "//button/span[text()='Complete']"
+    sign_out = "//div[text()='Sign Out']"
+    actions_button = "//button[@data-testid='sticky-last-more-button']"
+    button_reset = "//button[@type='reset']"
+    info_button = "//button[@data-testid='info-button']"
+
+    #----TABLE----
+    table_row = "//div[@role='rowgroup']"
+    role_row = "//div[@role='row']"
+    table_column = "//div[@role='gridcell']"
+    role_cell = "//div[@role='cell']"
+    old_table = "//div[@class='rt-table' and @role='grid' and @data-page-count]"
+    role_table = "//div[@role='table' and @data-page-count]"
+    last_role_row = f"({role_row})[last()]"
+    table_header_column = "//div[@role='columnheader']"
+
+    #----OTHERS----
+    forgot_password = "//a[text()='Reset my password']"
+    reset_password = "//div[text()='Reset password']"
+    dialog = "//div[@role='dialog']"
+    role_listbox = "//ul[@role='listbox']"
+    file_upload = "//input[@id='file-upload']"
+    upload_rfid_csv = "//input[@id='upload-rfid-csv']"
+    upload_rfid_available = "//input[@id='upload-rfid-available']"
+    item_action_import = "//button[@id='item-action-import']"
+    forgot_password = "//a[text()='Reset my password']"
+    checkbox = "//input[@type='checkbox']"
+    pagination_bottom = "//div[@class='pagination-bottom']"
+    pagination_navigation = "//nav[@aria-label='pagination navigation']"
+    successfully_imported_msg = "//span[@id='client-snackbar']//strong[text()='Successfully imported']"
+    successfully_uploaded_document_msg = "//span[text()='Document uploaded successfully!']"
+    successfully_submitted_reorder_list = "//span[text()='Reorder list was successfully submitted']"
+    no_data_found = "//div[text()='No data found']"
+    progress_bar = "//div[@role='progressbar']"
     role_menu = "//ul[@role='menu']"
     role_menuitem = "//li[@role='menuitem']"
     check_mark = "//span[text()='✓']"
-    
-    complete_button = "//button/span[text()='Complete']"
-    sign_out = "//div[text()='Sign Out']"
-    reset_password = "//div[text()='Reset password']"
-    actions_button = "//button[@data-testid='sticky-last-more-button']"
     listbox = "//div[@aria-haspopup='listbox']/.."
-    reload_button = "//button[@data-testid='reload-button']"
-    button_reset = "//button[@type='reset']"
-    info_button = "//button[@data-testid='info-button']"
-    next_button = "//button[@data-testid='next-button']"
 
     @staticmethod
     def get_indexed(xpath, index):
         return f"({xpath})[{index}]"
-
-    @staticmethod
-    def get_checkbox_in_dialog(index):
-        return Locator.get_indexed(Locator.dialog+Locator.checkbox, index)
 
     @staticmethod
     def get_dropdown_in_dialog(index):
@@ -132,10 +115,6 @@ class Locator():
     @staticmethod
     def get_last_table_item_outdated(column):
         return f"(({Locator.role_row})[last()]{Locator.table_column})[{column}]"
-
-    @staticmethod
-    def get_row_by_index(index):
-        return f"//div[@role='row' and @data-row-index='{index}']"
 
     @staticmethod
     def get_table_item_by_index(index, column, page=None):
