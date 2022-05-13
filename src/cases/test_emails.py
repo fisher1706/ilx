@@ -3,7 +3,7 @@ from src.api.distributor.settings_api import SettingsApi
 from src.api.distributor.location_api import LocationApi
 from src.resources.tools import Tools
 from src.resources.process_email import ProcessEmail
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from src.aws.s3 import S3
 from src.api.setups.setup_distributor_user import SetupDistributorUser
 from src.api.setups.setup_customer import SetupCustomer
@@ -25,6 +25,7 @@ from src.pages.checkout.checkout_portal_page import CheckoutPortalPage
         "testrail_case_id": 4400
     }
     ])
+@pytest.mark.ui
 @pytest.mark.regression
 def test_accept_distributor_user_invitation_and_reset_password(ui, conditions, delete_distributor_user):
     ui.testrail_case_id = conditions["testrail_case_id"]
@@ -59,8 +60,8 @@ def test_accept_distributor_user_invitation_and_reset_password(ui, conditions, d
     lp.input_email(user_email)
     lp.input_password(temporary_password)
     lp.click_on_submit_button()
-    lp.input_data_id(new_password, Locator.id_new_password)
-    lp.input_data_id(new_password, Locator.id_confirm_password)
+    lp.element(L.new_password).enter(new_password)
+    lp.element(L.confirm_password).enter(new_password)
     lp.click_on_submit_button()
     lp.title_should_be("SRX Distributor Portal")
     lp.follow_url(lp.url.distributor_portal)
@@ -73,7 +74,7 @@ def test_accept_distributor_user_invitation_and_reset_password(ui, conditions, d
     lp.open_forgot_password_page()
     lp.input_email(user_email)
     lp.click_on_submit_button()
-    lp.get_element_by_xpath("//h2[text()='Please check your inbox']")
+    lp.element("//h2[text()='Please check your inbox']").get()
 
     #waiting for email with reset password confirmation
     s3.wait_for_new_object(ui.data.email_data_bucket, objects_count+1)
@@ -88,12 +89,12 @@ def test_accept_distributor_user_invitation_and_reset_password(ui, conditions, d
     #set a new password
     new_reset_password = Tools.random_string_l()
 
-    lp.input_data_id(new_reset_password, Locator.id_new_password)
-    lp.input_data_id(new_reset_password, Locator.id_confirm_password)
+    lp.element(L.new_password).enter(new_reset_password)
+    lp.element(L.confirm_password).enter(new_reset_password)
     lp.click_on_submit_button()
     lp.log_in_distributor_portal(user_email, new_reset_password)
 
-
+@pytest.mark.ui
 @pytest.mark.regression
 def test_accept_new_customer_user_invitation(ui, delete_customer):
     ui.testrail_case_id = 4549
@@ -118,7 +119,7 @@ def test_accept_new_customer_user_invitation(ui, delete_customer):
     s3.download_by_key(ui.data.email_data_bucket, last_email_key, email_filename)
     acception_link = ProcessEmail.get_acception_link_from_email(email_filename)[0]
     lp.follow_url(acception_link)
-    lp.get_element_by_xpath("//h3[text()='Your invite was successfully accepted']")
+    lp.element("//h3[text()='Your invite was successfully accepted']").get()
 
     s3.wait_for_new_object(ui.data.email_data_bucket, objects_count+1)
 
@@ -132,8 +133,8 @@ def test_accept_new_customer_user_invitation(ui, delete_customer):
     lp.input_email(user_email)
     lp.input_password(temporary_password)
     lp.click_on_submit_button()
-    lp.input_data_id(new_password, Locator.id_new_password)
-    lp.input_data_id(new_password, Locator.id_confirm_password)
+    lp.element(L.new_password).enter(new_password)
+    lp.element(L.confirm_password).enter(new_password)
     lp.click_on_submit_button()
     lp.title_should_be("SRX User Dashboard")
     lp.follow_url(lp.url.customer_portal)
@@ -141,6 +142,7 @@ def test_accept_new_customer_user_invitation(ui, delete_customer):
     cpp.sign_out()
     lp.log_in_customer_portal(user_email, new_password)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_accept_customer_user_invitation_and_reset_password(ui, delete_customer_user):
     ui.testrail_case_id = 4581
@@ -170,8 +172,8 @@ def test_accept_customer_user_invitation_and_reset_password(ui, delete_customer_
     lp.input_email(user_email)
     lp.input_password(temporary_password)
     lp.click_on_submit_button()
-    lp.input_data_id(new_password, Locator.id_new_password)
-    lp.input_data_id(new_password, Locator.id_confirm_password)
+    lp.element(L.new_password).enter(new_password)
+    lp.element(L.confirm_password).enter(new_password)
     lp.click_on_submit_button()
     lp.title_should_be("SRX User Dashboard")
     lp.follow_url(lp.url.customer_portal)
@@ -184,7 +186,7 @@ def test_accept_customer_user_invitation_and_reset_password(ui, delete_customer_
     lp.open_forgot_password_page()
     lp.input_email(user_email)
     lp.click_on_submit_button()
-    lp.get_element_by_xpath("//h2[text()='Please check your inbox']")
+    lp.element("//h2[text()='Please check your inbox']").get()
 
     #waiting for email with reset password confirmation
     s3.wait_for_new_object(ui.data.email_data_bucket, objects_count+1)
@@ -199,11 +201,12 @@ def test_accept_customer_user_invitation_and_reset_password(ui, delete_customer_
     #set a new password
     new_reset_password = Tools.random_string_l()
 
-    lp.input_data_id(new_reset_password, Locator.id_new_password)
-    lp.input_data_id(new_reset_password, Locator.id_confirm_password)
+    lp.element(L.new_password).enter(new_reset_password)
+    lp.element(L.confirm_password).enter(new_reset_password)
     lp.click_on_submit_button()
     lp.log_in_customer_portal(user_email, new_reset_password)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_accept_checkout_group_invitation_and_reset_password(ui, delete_checkout_group):
     ui.testrail_case_id = 4588
@@ -233,21 +236,21 @@ def test_accept_checkout_group_invitation_and_reset_password(ui, delete_checkout
     cpp.input_email_checkout_portal(user_email)
     cpp.input_password_checkout_portal(temporary_password)
     cpp.sign_in_checkout_portal()
-    cpp.input_data_id(new_password, "mat-input-2")
-    cpp.input_data_id(new_password, "mat-input-3")
-    cpp.click_xpath(Locator.xpath_button_type)
+    cpp.element("//*[@id='mat-input-2']").enter(new_password)
+    cpp.element("//*[@id='mat-input-3']").enter(new_password)
+    cpp.element(L.button_type).click()
     cpp.input_email_checkout_portal(user_email)
     cpp.input_password_checkout_portal(new_password)
     cpp.sign_in_checkout_portal()
-    cpp.get_element_by_xpath(f"//div[text()='{user_email}']")
+    cpp.element(f"//div[text()='{user_email}']").get()
     assert "Passcode" in ui.driver.page_source
 
-    #sigh out and reset password
-    lp.click_xpath("//img")
-    lp.click_xpath(Locator.xpath_sign_out)
-    lp.click_xpath(Locator.xpath_reset_password)
+    #sign out and reset password
+    lp.element("//img").click()
+    lp.element(L.sign_out).click()
+    lp.element(L.reset_password).click()
     lp.input_by_name("login", user_email)
-    lp.click_xpath(Locator.xpath_button_type)
+    lp.element(L.button_type).click()
 
     #waiting for email with reset password confirmation
     s3.wait_for_new_object(ui.data.email_data_bucket, objects_count+1)
@@ -262,15 +265,146 @@ def test_accept_checkout_group_invitation_and_reset_password(ui, delete_checkout
     #set a new password
     new_reset_password = Tools.random_string_l()
 
-    cpp.input_data_id(new_reset_password, "mat-input-0")
-    cpp.input_data_id(new_reset_password, "mat-input-1")
-    cpp.click_xpath(Locator.xpath_button_type)
+    cpp.element("//*[@id='mat-input-0']").enter(new_reset_password)
+    cpp.element("//*[@id='mat-input-1']").enter(new_reset_password)
+    cpp.element(L.button_type).click()
     cpp.input_email_checkout_portal(user_email)
     cpp.input_password_checkout_portal(new_reset_password)
     cpp.sign_in_checkout_portal()
-    cpp.get_element_by_xpath(f"//div[text()='{user_email}']")
+    cpp.element(f"//div[text()='{user_email}']").get()
     assert "Passcode" in ui.driver.page_source
 
+@pytest.mark.ui
+def test_magic_link_distributor_portal(ui, delete_distributor_user):
+    ui.testrail_case_id = 12525
+
+    s3 = S3(ui)
+    lp = LoginPage(ui)
+
+    s3.clear_bucket(ui.data.email_data_bucket)
+    objects = s3.get_objects_in_bucket(ui.data.email_data_bucket)
+    objects_count = len(objects)
+
+    #create new user
+    setup_user = SetupDistributorUser(ui)
+    user_email = ui.data.ses_email.format(suffix=Tools.random_string_l(16))
+    setup_user.add_option("email", user_email)
+    setup_user.add_option("group", "SUPER")
+    setup_user.setup()
+
+    #waiting for new email with the temporary password and clear bucket
+    s3.wait_for_new_object(ui.data.email_data_bucket, objects_count)
+    s3.clear_bucket(ui.data.email_data_bucket)
+    objects = s3.get_objects_in_bucket(ui.data.email_data_bucket)
+    objects_count = len(objects)
+
+    #enter email
+    lp.follow_auth_portal()
+    lp.input_email(user_email)
+    lp.click_on_submit_button()
+
+    #waiting for new email with the magic link
+    s3.wait_for_new_object(ui.data.email_data_bucket, objects_count)
+
+    #parse email and get temporary password
+    last_email_key = s3.get_last_modified_object_in_bucket(ui.data.email_data_bucket).key
+    email_filename = "magic_link"
+    s3.download_by_key(ui.data.email_data_bucket, last_email_key, email_filename)
+    magic_link = ProcessEmail.get_magic_link_from_email(email_filename)[0]
+    lp.follow_url(magic_link)
+    lp.element(L.button_type).click()
+    lp.title_should_be("SRX Distributor Portal")
+    lp.element(L.enter_here).click()
+
+@pytest.mark.ui
+def test_magic_link_customer_portal(ui, delete_customer_user):
+    ui.testrail_case_id = 12526
+
+    s3 = S3(ui)
+    lp = LoginPage(ui)
+
+    s3.clear_bucket(ui.data.email_data_bucket)
+    objects = s3.get_objects_in_bucket(ui.data.email_data_bucket)
+    objects_count = len(objects)
+
+    #create new user
+    setup_user = SetupCustomerUserAsCustomer(ui)
+    user_email = ui.data.ses_email.format(suffix=Tools.random_string_l(15))
+    setup_user.add_option("email", user_email)
+    setup_user.setup()
+
+    #waiting for new email with the temporary password and clear bucket
+    s3.wait_for_new_object(ui.data.email_data_bucket, objects_count)
+    s3.clear_bucket(ui.data.email_data_bucket)
+    objects = s3.get_objects_in_bucket(ui.data.email_data_bucket)
+    objects_count = len(objects)
+
+    #enter email
+    lp.follow_auth_portal()
+    lp.input_email(user_email)
+    lp.click_on_submit_button()
+
+    #waiting for new email with the magic link
+    s3.wait_for_new_object(ui.data.email_data_bucket, objects_count)
+
+    #parse email and get temporary password
+    last_email_key = s3.get_last_modified_object_in_bucket(ui.data.email_data_bucket).key
+    email_filename = "magic_link"
+    s3.download_by_key(ui.data.email_data_bucket, last_email_key, email_filename)
+    magic_link = ProcessEmail.get_magic_link_from_email(email_filename)[0]
+    lp.follow_url(magic_link)
+    lp.element(L.button_type).click()
+    lp.title_should_be("SRX User Dashboard")
+    lp.element(L.enter_here).click()
+
+@pytest.mark.ui
+def test_accept_new_customer_user_invitation_and_login_by_magic_link(ui, delete_customer):
+    ui.testrail_case_id = 4549
+
+    s3 = S3(ui)
+    lp = LoginPage(ui)
+
+    s3.clear_bucket(ui.data.email_data_bucket)
+    objects = s3.get_objects_in_bucket(ui.data.email_data_bucket)
+    objects_count = len(objects)
+
+    setup_customer = SetupCustomer(ui)
+    user_email = ui.data.ses_email.format(suffix=Tools.random_string_l(20))
+    setup_customer.add_option("user", user_email)
+    setup_customer.setup()
+
+    s3.wait_for_new_object(ui.data.email_data_bucket, objects_count)
+
+    last_email_key = s3.get_last_modified_object_in_bucket(ui.data.email_data_bucket).key
+    email_filename = "customer_user_invitation_accept"
+    s3.download_by_key(ui.data.email_data_bucket, last_email_key, email_filename)
+    acception_link = ProcessEmail.get_acception_link_from_email(email_filename)[0]
+    lp.follow_url(acception_link)
+    lp.element("//*[text()='Your invite was successfully accepted']").get()
+
+    #waiting for new email with the temporary password and clear bucket
+    s3.wait_for_new_object(ui.data.email_data_bucket, objects_count+1)
+    s3.clear_bucket(ui.data.email_data_bucket)
+    objects = s3.get_objects_in_bucket(ui.data.email_data_bucket)
+    objects_count = len(objects)
+
+    #enter email
+    lp.follow_auth_portal()
+    lp.input_email(user_email)
+    lp.click_on_submit_button()
+
+    #waiting for new email with the magic link
+    s3.wait_for_new_object(ui.data.email_data_bucket, objects_count)
+
+    #parse email and get temporary password
+    last_email_key = s3.get_last_modified_object_in_bucket(ui.data.email_data_bucket).key
+    email_filename = "magic_link"
+    s3.download_by_key(ui.data.email_data_bucket, last_email_key, email_filename)
+    magic_link = ProcessEmail.get_magic_link_from_email(email_filename)[0]
+    lp.follow_url(magic_link)
+    lp.element(L.button_type).click()
+    lp.title_should_be("SRX User Dashboard")
+    lp.element(L.enter_here).click()
 
 @pytest.mark.parametrize("conditions", [
     {

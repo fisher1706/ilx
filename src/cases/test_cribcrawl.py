@@ -16,6 +16,7 @@ from src.api.setups.setup_shipto import SetupShipto
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_cribcrawl_import(ui, permission_ui, permissions, delete_distributor_security_group, delete_shipto):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -37,6 +38,5 @@ def test_cribcrawl_import(ui, permission_ui, permissions, delete_distributor_sec
 
     lp.log_in_distributor_portal()
     cp.follow_cribcrawl_url(shipto_id=response_shipto["shipto_id"])
-    cp.wait_until_page_loaded()
     cp.import_cribcrawl(cribcrawls)
     cp.check_last_cribcrawl(cribcrawl_body.copy())

@@ -3,6 +3,7 @@ from src.api.distributor.shipto_api import ShiptoApi
 from src.api.distributor.customer_api import CustomerApi
 from src.api.setups.setup_customer import SetupCustomer
 from src.api.distributor.location_api import LocationApi
+from src.api.admin.admin_hardware_api import AdminHardwareApi
 
 def test_bulk_delete_shiptos(api):
     sa = ShiptoApi(api)
@@ -10,8 +11,9 @@ def test_bulk_delete_shiptos(api):
     shiptos = sa.get_shipto_by_number(None)["data"]["entities"]
 
     for shipto in shiptos:
-        if shipto["id"] > 61733:
+        if shipto["id"] > 101235:
             try:
+                print(shipto["id"])
                 sa.delete_shipto(shipto["id"])
             except:
                 print("FAIL")
@@ -57,3 +59,20 @@ def test_bulk_create_transactions(api):
         data.append(new_data)
         count+=1
     mta.bulk_create(shipto_id=shipto_id, dto=data, customer_id=customer_id)
+
+def test_bulk_delete_hardware(api):
+    aha = AdminHardwareApi(api)
+    hardware_list = aha.get_hardware()["entities"]
+    for hardware in hardware_list:
+        if hardware["type"] in ("VENDING", "LOCKER", "STORAGE", "CAMERA"):
+            try:
+                aha.delete_hardware(hardware["id"])
+            except Exception as e:
+                print(e)
+
+    for hardware in hardware_list:
+        if hardware["type"] == "IOTHUB":
+            try:
+                aha.delete_hardware(hardware["id"])
+            except Exception as e:
+                print(e)

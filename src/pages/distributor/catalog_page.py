@@ -1,7 +1,6 @@
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
 from src.resources.tools import Tools
-from src.resources.locator import Locator
-from src.api.distributor.product_api import ProductApi
+from src.pages.locator import Locator as L
 
 class CatalogPage(DistributorPortalPage):
     product_body = {
@@ -33,17 +32,14 @@ class CatalogPage(DistributorPortalPage):
     }
 
     def create_product(self, product_body):
-        pa = ProductApi(self.context)
-        start_number_of_rows = pa.get_products_total_elements()
-        self.click_id(Locator.id_add_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), product_body.pop("lifecycleStatus"))
+        self.element(L.add_button).click()
+        self.select_in_dropdown(L.get_dropdown_in_dialog(1), product_body.pop("lifecycleStatus"))
         for field in product_body.keys():
             self.input_by_name(field, product_body[field])
-        self.click_xpath(Locator.xpath_submit_button)
+        self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
+        self.wait_until_progress_bar_loaded()
         self.last_page(10)
-        self.get_element_by_xpath(Locator.xpath_get_row_by_index(start_number_of_rows%10))
 
     def check_last_product(self, product_body):
         table_cells = {
@@ -54,19 +50,18 @@ class CatalogPage(DistributorPortalPage):
             "Package Conversion": product_body["packageConversion"],
         }
         for cell, value in table_cells.items():
-            self.check_table_item(value, header=cell, last=True)
+            self.check_last_table_item(cell, value)
 
     def update_last_product(self, product_body):
-        self.click_xpath(Locator.xpath_last_role_row+Locator.xpath_edit_button)
-        self.select_in_dropdown(Locator.xpath_dropdown_in_dialog(1), product_body.pop("lifecycleStatus"))
+        self.element(L.last_role_row+L.edit_button).click()
+        self.select_in_dropdown(L.get_dropdown_in_dialog(1), product_body.pop("lifecycleStatus"))
         for field in product_body.keys():
             self.input_by_name(field, product_body[field])
-        self.click_xpath(Locator.xpath_submit_button)
+        self.element(L.submit_button).click()
         self.dialog_should_not_be_visible()
-        self.wait_until_page_loaded()
 
     def import_product(self, products):
         Tools.generate_csv("products.csv", products)
-        self.import_csv(Locator.id_file_upload, "products.csv")
-        self.get_element_by_xpath(Locator.xpath_successfully_imported_msg)
-        self.wait_until_page_loaded()
+        self.import_csv(L.file_upload, "products.csv")
+        self.element(L.successfully_imported_msg).get()
+        self.wait_until_progress_bar_loaded()

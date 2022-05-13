@@ -28,6 +28,8 @@ class Data():
         self.customer_user_id = "2801"
         self.passcode = "AUTOTEST"
         self.customer_user_passcode = "PSCD"
+        self.email_data_bucket = "srx-email-testing-0641q-qa"
+        self.ses_email = "automation_testing_email+{suffix}@mail.qa.storeroomlogix.com"
 
     def staging_environment(self):
         self.distributor_name = "QA-distributor"

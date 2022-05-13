@@ -1,5 +1,5 @@
 from src.pages.customer.customer_portal_page import CustomerPortalPage
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from glbl import Log
 
 class AssetsPage(CustomerPortalPage):
@@ -14,21 +14,21 @@ class AssetsPage(CustomerPortalPage):
     xpath_return_requested_text = "//div[text()='Asset return has been requested']"
     #xpath_empty_list = "//div[text()='List of checked out assets is empty.']"
 
-    def check_all_assets_tab(self, asset, shipto, avaliable, total, checked_out):
-        self.get_element_by_xpath("//span[text()='All assets']")
+    def check_all_assets_tab(self, shipto, avaliable, total, checked_out):
+        self.element("//span[text()='All assets']").get()
         self.click_tab_by_name("All assets")
-        self.click_xpath(self.xpath_filter)
-        self.select_in_dropdown(Locator.xpath_select_box, shipto)
-        self.click_xpath(self.xpath_apply)
+        self.element(self.xpath_filter).click()
+        self.select_in_dropdown(L.select_box, shipto)
+        self.element(self.xpath_apply).click()
         self.element_should_have_text(f"{self.xpath_available}/../div[2]", f"{avaliable}")
         self.element_should_have_text(f"{self.xpath_total}/../div[2]", f"{total}")
         self.element_should_have_text(f"{self.xpath_checked_out}/../div[2]", f"{checked_out}")
 
-    def check_checked_out_tab(self, asset, shipto, avaliable, total, checked_out):
+    def check_checked_out_tab(self, shipto, avaliable, total, checked_out):
         self.click_tab_by_name("Checked Out")
-        self.click_xpath(self.xpath_filter)
-        self.select_in_dropdown(Locator.xpath_select_box, shipto)
-        self.click_xpath(self.xpath_apply)
+        self.element(self.xpath_filter).click()
+        self.select_in_dropdown(L.select_box, shipto)
+        self.element(self.xpath_apply).click()
         if checked_out == 1:
             self.element_should_have_text(f"{self.xpath_checked_out}/../div[2]", "1 item")
         else:
@@ -39,17 +39,17 @@ class AssetsPage(CustomerPortalPage):
 
     def checked_out_tab_should_not_contain(self, asset):
         self.click_tab_by_name("Checked Out")
-        elements = self.get_element_count(self.xpath_asset_card)
+        elements = self.element(self.xpath_asset_card).count()
         if elements == 0:
             Log.info("Checked out list is empty")
         else:
-            self.click_xpath(self.xpath_filter)
-            self.input_data_xpath(asset, self.xpath_sku_input)
-            self.click_xpath(self.xpath_apply)
-            self.elements_count_should_be(self.xpath_asset_card, 0, time=5)
+            self.element(self.xpath_filter).click()
+            self.element(self.xpath_sku_input).enter(asset)
+            self.element(self.xpath_apply).click()
+            self.element(self.xpath_asset_card).wait_elements_number(0)
 
     def ping_to_return_last_asset(self):
         self.click_tab_by_name("Checked Out")
-        self.click_xpath(f"{Locator.xpath_ping_to_return}")
+        self.element(f"{L.ping_to_return}").click()
         self.wait_until_progress_bar_loaded()
-        self.elements_count_should_be(f"({self.xpath_asset_card})[1]{self.xpath_return_requested_text}", 1)
+        self.element(f"({self.xpath_asset_card})[1]{self.xpath_return_requested_text}").wait_elements_number(1)

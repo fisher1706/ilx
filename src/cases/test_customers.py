@@ -1,7 +1,7 @@
 import random
 import pytest
 from src.resources.tools import Tools
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.permissions import Permissions
 from src.pages.general.login_page import LoginPage
 from src.pages.distributor.customers_page import CustomersPage
@@ -26,6 +26,7 @@ from src.api.setups.setup_organization import SetupOrganization
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_customer_crud(ui, permission_ui, permissions, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -113,6 +114,7 @@ def test_customer_crud_view_permission(api, permission_api, delete_distributor_s
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_shipto_crud(ui, permission_ui, permissions, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -146,15 +148,14 @@ def test_shipto_crud(ui, permission_ui, permissions, delete_distributor_security
 
     lp.log_in_distributor_portal()
     sp.follow_shipto_url()
-    sp.get_element_by_xpath(Locator.xpath_table_item(1, 1))
     sp.create_shipto(shipto_body.copy())
     sp.check_last_shipto(shipto_body.copy())
-    sp.update_last_shipto(edit_shipto_body.copy(), True if permissions["user"] is None else False)
-    sp.should_be_disabled_xpath(Locator.xpath_submit_button)
-    sp.driver.find_element_by_link_text('Shiptos').click()
-    sp.wait_until_page_loaded()
+    sp.update_last_shipto(edit_shipto_body.copy(), False)
+    sp.element(L.submit_button).wait_until_disabled()
+    sp.follow_breadcrumb("Shiptos")
+    sp.last_page(10)
     sp.check_last_shipto(edit_shipto_body.copy())
-    sp.delete_last_shipto(True if permissions["user"] is None else False)
+    sp.delete_last_shipto(False)
 
 @pytest.mark.acl
 @pytest.mark.regression
@@ -187,6 +188,7 @@ def test_shipto_crud_view_permission(api, permission_api, delete_distributor_sec
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_usage_history_import(ui, permission_ui, permissions, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -210,11 +212,11 @@ def test_usage_history_import(ui, permission_ui, permissions, delete_distributor
     ]
     lp.log_in_distributor_portal()
     uhp.follow_usage_history_url()
-    uhp.select_pagination(10)
     uhp.import_usage_history(usage_history)
-    uhp.last_page(wait=False)
+    uhp.last_page(10)
     uhp.check_last_usage_history(usage_history_body.copy())
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_allocation_code_crud(ui, delete_site, delete_subsite, delete_supplier):
     ui.testrail_case_id = 42
@@ -228,16 +230,16 @@ def test_allocation_code_crud(ui, delete_site, delete_subsite, delete_supplier):
     setup_organization.add_option("supplier")
     setup_organization.add_option("shipto")
     response_organization = setup_organization.setup()
-    
+
     setup_organization.add_option("site", False)
     setup_organization.add_option("subsite", False)
     setup_organization.add_option("shipto", False)
     response_second_supplier = setup_organization.setup()
-    
+
     setup_organization.setup_customer_shipto.add_option("subsite_id", response_organization['subsite_id'])
     setup_organization.setup_customer_shipto.add_option("supplier_id", response_second_supplier['supplier_id'])
     response_second_customer_shipto = setup_organization.setup_customer_shipto.setup()
-    
+
     subsite_name = response_organization['subsite']['name']
     subsite_number = response_organization['subsite']['number']
     shipto_name_1 = response_organization['shipto']['name']
@@ -303,14 +305,15 @@ def test_allocation_code_crud(ui, delete_site, delete_subsite, delete_supplier):
     #     # "testrail_case_id": 3791
     # }
     ])
+@pytest.mark.ui
 @pytest.mark.regression
-def test_customer_setup_wizard_required_steps(ui, permission_ui, api, permissions, delete_distributor_security_group):
+def test_customer_setup_wizard_required_steps(ui, permission_ui, permissions, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
     context = Permissions.set_configured_user(ui, permissions["user"], permission_context=permission_ui)
 
     lp = LoginPage(context)
     cp = CustomersPage(context)
-    ca = CustomerApi(api)
+    ca = CustomerApi(ui)
     dcp = DistributorCustomerUsersPage(context)
     customer_body = cp.customer_body.copy()
 
@@ -327,16 +330,14 @@ def test_customer_setup_wizard_required_steps(ui, permission_ui, api, permission
     cp.add_customer_info(customer_body.copy())
     cp.add_customer_portal_user(email)
     cp.click_complete()
-    cp.change_rows_per_page()
     cp.check_last_customer(customer_body.copy())
     response_customer = ca.get_customers(name=customer_body["name"])[-1]
     dcp.follow_customer_users_url(customer_id=response_customer["id"])
     cp.check_customer_portal_user(email)
     cp.sidebar_customers()
-    cp.wait_until_page_loaded()
-    cp.change_rows_per_page()
     cp.delete_last_customer(customer_body["name"])
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_customer_setup_wizard_view_permission(ui, permission_ui, delete_distributor_security_group):
     ui.testrail_case_id = 3792
@@ -348,13 +349,14 @@ def test_customer_setup_wizard_view_permission(ui, permission_ui, delete_distrib
     lp.log_in_distributor_portal()
     cp.check_customer_setup_wizard_button()
 
+@pytest.mark.ui
 @pytest.mark.regression
-def test_customer_setup_wizard_all_steps(ui, api, delete_distributor_security_group):
+def test_customer_setup_wizard_all_steps(ui, delete_distributor_security_group):
     ui.testrail_case_id = 3793
 
     lp = LoginPage(ui)
     cp = CustomersPage(ui)
-    ca = CustomerApi(api)
+    ca = CustomerApi(ui)
     dcp = DistributorCustomerUsersPage(ui)
     customer_body = cp.customer_body.copy()
 
@@ -373,7 +375,6 @@ def test_customer_setup_wizard_all_steps(ui, api, delete_distributor_security_gr
     cp.click_next()
     cp.click_next()
     cp.change_automation_settings(email)
-    cp.change_rows_per_page()
     cp.check_last_customer(customer_body.copy())
     response_customer = ca.get_customers(name=customer_body["name"])[-1]
     dcp.follow_customer_users_url(customer_id=response_customer["id"])
@@ -381,8 +382,6 @@ def test_customer_setup_wizard_all_steps(ui, api, delete_distributor_security_gr
     dcp.follow_customer_settings_url(customer_id=response_customer["id"])
     cp.check_settings_reorder_list_settings(email)
     cp.sidebar_customers()
-    cp.wait_until_page_loaded()
-    cp.change_rows_per_page()
     cp.delete_last_customer(customer_body["name"])
 
 @pytest.mark.regression

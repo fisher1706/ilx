@@ -1,5 +1,5 @@
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.tools import Tools
 
 class CribcrawlPage(DistributorPortalPage):
@@ -16,10 +16,10 @@ class CribcrawlPage(DistributorPortalPage):
             "Distributor SKU": cribcrawl_body["sku"],
         }
         for cell, value in table_cells.items():
-            self.check_last_table_item_by_header(cell, value)
+            self.check_last_table_item_outdated(cell, value)
 
     def import_cribcrawl(self, cribcrawls):
         Tools.generate_csv("cribcrawls.csv", cribcrawls)
-        self.import_csv(Locator.id_file_upload, "cribcrawls.csv")
-        self.get_element_by_xpath(Locator.xpath_successfully_imported_msg)
-        self.wait_until_page_loaded()
+        self.import_csv(L.file_upload, "cribcrawls.csv")
+        self.element(L.successfully_imported_msg).get()
+        self.wait_until_progress_bar_loaded()

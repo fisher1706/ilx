@@ -3,6 +3,7 @@ import pytest
 from src.pages.general.login_page import LoginPage
 from src.pages.admin.fees_page import FeesPage
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_shipto_fee_levels(ui):
     ui.testrail_case_id = 1919

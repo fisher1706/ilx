@@ -4,7 +4,6 @@ from src.resources.permissions import Permissions
 from src.pages.general.login_page import LoginPage
 from src.pages.distributor.warehouses_page import WarehousesPage
 from src.api.distributor.warehouse_api import WarehouseApi
-from src.resources.locator import Locator
 
 @pytest.mark.parametrize("permissions", [
     {
@@ -17,6 +16,7 @@ from src.resources.locator import Locator
     # }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_warehouses_crud(ui, permission_ui, permissions, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -56,8 +56,6 @@ def test_warehouses_crud(ui, permission_ui, permissions, delete_distributor_secu
     wp.create_warehouse(warehouse_body.copy())
     wp.check_last_warehouse(warehouse_body.copy())
     wp.update_last_warehouse(edit_warehouse_body.copy())
-    wp.click_xpath(Locator.xpath_reload_button)
-    wp.last_page(wait=False)
     wp.check_last_warehouse(edit_warehouse_body.copy())
     wp.delete_last_warehouse(edit_warehouse_body["name"])
 
