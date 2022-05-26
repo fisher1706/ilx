@@ -2,28 +2,15 @@ from contextlib import closing
 import psycopg2
 from psycopg2.extras import DictCursor
 from datetime import datetime
-import string
-import random
 import uuid
+from common import *
 
-def now():
-    return f"{datetime.now().date()} {datetime.now().time()}"
-
-def random_string(length=10):
-        letters = string.ascii_uppercase
-        random_string = ''.join(random.choice(letters) for _ in range(length))
-        return random_string
-
-def value_template(entity):
-    values_template = str()
-    for _ in entity.keys():
-        values_template += "%s,"
-    return values_template[:-1]
-
-NUMBER_OF_PRODUCTS = 1000
+db_keys = get_db_keys()
+NUMBER_OF_PRODUCTS = db_keys["number_of_products"]
+DISTRIBUTOR_ID = db_keys["distributor_id"]
 
 with closing(psycopg2.connect(dbname='srx_qa', user='srx_qa',
-                        password='b3c6326ad2ec8457', host='localhost', port='5434')) as conn:
+                        password=db_keys["qa_passsword"], host='localhost', port='5434')) as conn:
     with conn.cursor(cursor_factory=DictCursor) as cursor:
         uuids = list()
         ######################################################
@@ -56,7 +43,7 @@ with closing(psycopg2.connect(dbname='srx_qa', user='srx_qa',
                 "part_sku": f"LOAD-{datetime.now().date()}-{random_string()}",
                 "round_buy": "1",
                 "short_description": random_string(),
-                "distributor_id": "1462",
+                "distributor_id": DISTRIBUTOR_ID,
                 "lifecycle_status": "ACTIVE",
                 "is_asset_flag": False,
                 "lot": False,
