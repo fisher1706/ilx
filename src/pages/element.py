@@ -23,13 +23,20 @@ class Element():
 
     def get(self, timeout=None, no_exception=False):
         timeout = self.default_timeout if timeout is None else timeout
-        try:
-            return WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((By.XPATH, self.xpath)))
-        except Exception as e:
-            if no_exception:
-                Log.warning(f"Cannot find element'{self.xpath}'.")
-            else:
-                Error.error(f"Cannot find element'{self.xpath}'.\n{e}")
+        for i in range(2):
+            try:
+                return WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((By.XPATH, self.xpath)))
+            except Exception as e:
+                page_error = "We encountered an internal error. Please try again."
+                if page_error in self.driver.page_source:
+                    if i == 0:
+                        self.driver.refresh()
+                        Log.warning(f"The error '{page_error}' has occured. I will refresh the page and try one more time.")
+                        continue
+                if no_exception:
+                    Log.warning(f"Cannot find element'{self.xpath}'.")
+                else:
+                    Error.error(f"Cannot find element'{self.xpath}'.\n{e}")
 
     def get_list(self):
         count = self.count()
