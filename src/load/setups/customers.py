@@ -15,10 +15,9 @@ def test_customer_setup(load_api):
     shiptos = list()
     ###########################
     total_customers = 2
-    shiptos_per_customer = 2
-    locations_per_shipto = 100
-    create_location_step = 50
-    start_customer = 7
+    shiptos_per_customer = 0
+    locations_per_shipto = 0
+    create_location_step = 0
     ###########################
 
     warehouses = wa.get_warehouses()["entities"]
@@ -29,7 +28,7 @@ def test_customer_setup(load_api):
     for index_customer in range(total_customers):
         setup_customer = SetupCustomer(load_api)
         setup_customer.add_option("warehouse_id", warehouses[index_customer]["id"])
-        customer_name_number = f"{start_customer + index_customer}"
+        customer_name_number = f"{Tools.random_string_l()} {index_customer}"
         if index_customer%5 == 0:
             setup_customer.add_option("clc")
             customer_name_number += " + CLC"
