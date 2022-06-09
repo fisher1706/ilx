@@ -8,9 +8,8 @@ from common import *
 db_keys = get_db_keys()
 NUMBER_OF_PRODUCTS = db_keys["number_of_products"]
 DISTRIBUTOR_ID = db_keys["distributor_id"]
-
-with closing(psycopg2.connect(dbname='srx_qa', user='srx_qa',
-                        password=db_keys["qa_passsword"], host='localhost', port='5434')) as conn:
+with closing(psycopg2.connect(dbname='srx_dev', user='srx_dev',
+                        password=db_keys["load_password"], host='localhost', port='5434')) as conn:
     with conn.cursor(cursor_factory=DictCursor) as cursor:
         uuids = list()
         ######################################################
@@ -59,3 +58,4 @@ with closing(psycopg2.connect(dbname='srx_qa', user='srx_qa',
         cursor.execute(execute_value)
         ######################################################
         conn.commit()
+        
