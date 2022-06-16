@@ -22,3 +22,9 @@ def value_template(entity):
     for _ in entity.keys():
         values_template += "%s,"
     return values_template[:-1]
+
+def get_list(list_of_lists):
+    simple_list = list()
+    for list_in_list in list_of_lists:
+        simple_list.append(list_in_list[0])
+    return simple_list
