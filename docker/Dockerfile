@@ -7,7 +7,7 @@ RUN apt install -y ./google-chrome-stable_current_amd64.deb
 RUN cd /usr/local/bin && ln -s /usr/bin/python3 python
 RUN pip3 install selenium requests boto3 warrant pytest mail-parser beautifulsoup4 lxml pydantic pysftp pyyaml
 RUN cd /
-RUN wget https://chromedriver.storage.googleapis.com/100.0.4896.60/chromedriver_linux64.zip
+RUN wget https://chromedriver.storage.googleapis.com/103.0.5060.53/chromedriver_linux64.zip
 RUN unzip chromedriver_linux64.zip
 RUN mv chromedriver /usr/local/bin
 RUN wget -O "awscliv2.zip" "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"

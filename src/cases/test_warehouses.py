@@ -4,7 +4,6 @@ from src.resources.permissions import Permissions
 from src.pages.general.login_page import LoginPage
 from src.pages.distributor.warehouses_page import WarehousesPage
 from src.api.distributor.warehouse_api import WarehouseApi
-from src.resources.locator import Locator
 
 @pytest.mark.parametrize("permissions", [
     {
@@ -17,6 +16,7 @@ from src.resources.locator import Locator
     # }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_warehouses_crud(ui, permission_ui, permissions, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -35,7 +35,7 @@ def test_warehouses_crud(ui, permission_ui, permissions, delete_distributor_secu
     warehouse_body["address.line1"] = "test_address 1"
     warehouse_body["address.city"] = "test city"
     warehouse_body["state"] = "Georgia"
-    warehouse_body["timezone"] = "America/Adak (-10:00)"
+    warehouse_body["timezone"] = "America/Adak (-09:00)"
     warehouse_body["contactEmail"] = Tools.random_email()
     warehouse_body["invoiceEmail"] = Tools.random_email()
     #-------------------
@@ -46,7 +46,7 @@ def test_warehouses_crud(ui, permission_ui, permissions, delete_distributor_secu
     edit_warehouse_body["address.line2"] = "edit test_address 1"
     edit_warehouse_body["address.city"] = "edit test city"
     edit_warehouse_body["state"] = "Colorado"
-    edit_warehouse_body["timezone"] = "America/Atka (-10:00)"
+    edit_warehouse_body["timezone"] = "America/Atka (-09:00)"
     edit_warehouse_body["contactEmail"] = Tools.random_email()
     edit_warehouse_body["invoiceEmail"] = Tools.random_email()
     #-------------------
@@ -56,8 +56,6 @@ def test_warehouses_crud(ui, permission_ui, permissions, delete_distributor_secu
     wp.create_warehouse(warehouse_body.copy())
     wp.check_last_warehouse(warehouse_body.copy())
     wp.update_last_warehouse(edit_warehouse_body.copy())
-    wp.click_xpath(Locator.xpath_reload_button)
-    wp.last_page(wait=False)
     wp.check_last_warehouse(edit_warehouse_body.copy())
     wp.delete_last_warehouse(edit_warehouse_body["name"])
 

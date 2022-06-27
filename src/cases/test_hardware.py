@@ -33,6 +33,7 @@ def test_delete_location_by_change_doortype(api, delete_shipto, delete_hardware)
     new_location_count = len(la.get_locations(response_location["shipto_id"]))
     assert new_location_count == 0, "The number of location should be 0"
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_change_locker_doortype(ui, delete_hardware):
     ui.testrail_case_id = 1851
@@ -51,6 +52,7 @@ def test_change_locker_doortype(ui, delete_hardware):
     doors_data = hp.configure_locker_door()
     hp.check_locker_door(doors_data)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_common_set_of_hubs_for_locker_and_vending(ui, delete_hardware):
     ui.testrail_case_id = 1839
@@ -66,19 +68,19 @@ def test_common_set_of_hubs_for_locker_and_vending(ui, delete_hardware):
     iothub_name = f"{iothub_dto['id']} ({iothub_dto['value']}) / {ui.data.distributor_name}"
 
     hp.sidebar_hardware()
-    hp.wait_until_page_loaded()
+    hp.open_last_page()
     hp.iothub_should_be_available("Locker", iothub_name)
     hp.iothub_should_be_available("Vending", iothub_name)
     hp.iothub_should_be_available("IP Camera", iothub_name)
 
-    hp.create_locker(ui.data.distributor_name, iothub_name) #create locker
+    hp.create_locker(iothub_name) #create locker
     hp.check_last_hardware(device_type="LOCKER", distributor=ui.data.distributor_name)
 
-    hp.iothub_should_not_be_available("Locker", iothub_name)
-    hp.iothub_should_not_be_available("Vending", iothub_name)
+    hp.iothub_should_be_available("Locker", iothub_name, inverse=True)
+    hp.iothub_should_be_available("Vending", iothub_name, inverse=True)
     hp.iothub_should_be_available("IP Camera", iothub_name)
 
-    hp.remove_last_hardware("LOCKER") #remove locker
+    hp.remove_last_hardware() #remove locker
 
     hp.iothub_should_be_available("Locker", iothub_name)
     hp.iothub_should_be_available("Vending", iothub_name)
@@ -87,16 +89,17 @@ def test_common_set_of_hubs_for_locker_and_vending(ui, delete_hardware):
     hp.create_vending(iothub_name) #create vending
     hp.check_last_hardware(device_type="VENDING", distributor=ui.data.distributor_name)
 
-    hp.iothub_should_not_be_available("Locker", iothub_name)
-    hp.iothub_should_not_be_available("Vending", iothub_name)
+    hp.iothub_should_be_available("Locker", iothub_name, inverse=True)
+    hp.iothub_should_be_available("Vending", iothub_name, inverse=True)
     hp.iothub_should_be_available("IP Camera", iothub_name)
 
-    hp.remove_last_hardware("VENDING") #remove vending
+    hp.remove_last_hardware() #remove vending
 
     hp.iothub_should_be_available("Locker", iothub_name)
     hp.iothub_should_be_available("Vending", iothub_name)
     hp.iothub_should_be_available("IP Camera", iothub_name)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_iothub_crud(ui):
     ui.testrail_case_id = 32
@@ -110,4 +113,4 @@ def test_iothub_crud(ui):
     hp.check_last_hardware(serial_number=serial_number, device_type="IOTHUB", distributor=ui.data.distributor_name)
     hp.update_last_iothub(ui.data.sub_distributor_name)
     hp.check_last_hardware(serial_number=serial_number, device_type="IOTHUB", distributor=ui.data.sub_distributor_name)
-    hp.remove_last_hardware("IOTHUB")
+    hp.remove_last_hardware(serial_number)

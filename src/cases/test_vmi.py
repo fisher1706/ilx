@@ -1,7 +1,7 @@
 import copy
 import pytest
 from src.resources.tools import Tools
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.permissions import Permissions
 from src.pages.general.login_page import LoginPage
 from src.pages.distributor.vmi_page import VmiPage
@@ -12,7 +12,9 @@ from src.api.customer.customer_vmi_list_api import CustomerVmiListApi
 from src.api.setups.setup_product import SetupProduct
 from src.api.setups.setup_shipto import SetupShipto
 from src.api.setups.setup_location import SetupLocation
+from glbl import Error
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_vmi_list_partial_sku_match(ui):
     ui.testrail_case_id = 1838
@@ -29,11 +31,9 @@ def test_vmi_list_partial_sku_match(ui):
     setup_product.setup()
 
     vp.follow_location_url()
-    vp.wait_until_page_loaded()
-    vp.click_id(Locator.id_add_button)
-    vp.input_data_xpath(product_sku, Locator.xpath_dialog+Locator.xpath_select_box+"//input")
-    vp.wait_until_dropdown_list_loaded(1)
-    vp.check_found_dropdown_list_item(Locator.xpath_dropdown_list_item, f"DSKU: {product_sku}")
+    vp.element(L.add_button).click()
+    vp.element(L.dialog+L.select_box+"//input").enter(product_sku)
+    vp.element_should_have_text(L.dropdown_list_item, f"DSKU: {product_sku}")
 
 @pytest.mark.parametrize("permissions", [
     {
@@ -46,6 +46,7 @@ def test_vmi_list_partial_sku_match(ui):
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_location_crud(ui, permission_ui, permissions, delete_distributor_security_group, delete_customer):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -74,7 +75,6 @@ def test_location_crud(ui, permission_ui, permissions, delete_distributor_securi
 
     lp.log_in_distributor_portal()
     vp.follow_location_url(customer_id=response_shipto["customer_id"], shipto_id=response_shipto["shipto_id"])
-    vp.wait_until_page_loaded()
     vp.create_location(location_body.copy())
     vp.check_last_location(location_body.copy())
 
@@ -180,6 +180,7 @@ def test_location_crud_view_permission(api, permission_api, delete_distributor_s
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_location_import(ui, permission_ui, permissions, delete_distributor_security_group, delete_shipto):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -207,7 +208,6 @@ def test_location_import(ui, permission_ui, permissions, delete_distributor_secu
 
     lp.log_in_distributor_portal()
     vp.follow_location_url(shipto_id=response_shipto["shipto_id"])
-    vp.wait_until_page_loaded()
     vp.import_location(locations)
     vp.check_last_location(location_body.copy())
 
@@ -307,7 +307,7 @@ def test_vmi_list_edit_min_max_customer_portal(api, conditions, delete_shipto):
         assert updated_location["orderingConfig"]["currentInventoryControls"]["min"] == response_location["location"]["orderingConfig"]["currentInventoryControls"]["min"]
         assert updated_location["orderingConfig"]["currentInventoryControls"]["min"] == response_location["location"]["orderingConfig"]["currentInventoryControls"]["min"]
     else:
-        api.logger.error("Unexpected result")
+        Error.error("Unexpected result")
 
 @pytest.mark.parametrize("conditions", [
     {

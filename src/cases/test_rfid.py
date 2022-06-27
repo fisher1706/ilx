@@ -1,6 +1,6 @@
 
 import pytest
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.tools import Tools
 from src.resources.permissions import Permissions
 from src.pages.general.login_page import LoginPage
@@ -23,6 +23,7 @@ from src.api.distributor.rfid_api import RfidApi
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_rfid_label_crud(ui, permission_ui, permissions, delete_shipto, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -44,7 +45,7 @@ def test_rfid_label_crud(ui, permission_ui, permissions, delete_shipto, delete_d
     rfid_label = rp.add_rfid_label()
     rp.check_last_rfid_label(rfid_label, "ASSIGNED")
     rp.update_last_rfid_label_status("ISSUED")
-    rp.should_be_disabled_xpath(Locator.xpath_by_count(Locator.xpath_unassign_button, rp.get_table_rows_number()))
+    rp.element(L.last_role_row + L.unassign_button).wait_until_disabled()
     new_status = "AVAILABLE"
     rp.page_refresh()
     rp.select_shipto_sku(shipto_text, product_sku)
@@ -85,6 +86,7 @@ def test_rfid_crud_view_permission(api, permission_api, delete_distributor_secur
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_rfid_label_import_as_available(ui, permission_ui, permissions, delete_shipto, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -120,6 +122,7 @@ def test_rfid_label_import_as_available(ui, permission_ui, permissions, delete_s
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_rfid_label_import_csv(ui, permission_ui, permissions, delete_shipto, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]

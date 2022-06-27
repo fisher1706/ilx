@@ -6,6 +6,7 @@ from src.api.setups.setup_shipto import SetupShipto
 from src.api.setups.setup_locker import SetupLocker
 from src.api.setups.setup_product import SetupProduct
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_create_noweight_locker_location_via_planogram(ui, delete_shipto, delete_hardware):
     ui.testrail_case_id = 1856
@@ -34,6 +35,7 @@ def test_create_noweight_locker_location_via_planogram(ui, delete_shipto, delete
     assert len(locations) == 1, "There should be 1 location with SKU = '{product_sku}'"
     assert locations[0]["orderingConfig"]["lockerWithNoWeights"], "Locations should be with NoWeight flag"
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_locker_planogram(ui, delete_shipto, delete_hardware):
     ui.testrail_case_id = 1961

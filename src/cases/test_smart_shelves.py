@@ -77,6 +77,7 @@ def test_smart_shelves_delete_check_locker(api, delete_hardware):
     locker_conf = ha.get_locker_configuration(locker_id)
     assert (locker_conf[0]["smartShelfHardware"] is None), f"First locker should not have smart shelf with ID {response_locker['smart_shelf_id']}"
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_planogram_assign_smart_shelf(ui, delete_shipto, delete_hardware, delete_smart_shelf):
     ui.testrail_case_id = 1965
@@ -101,9 +102,9 @@ def test_planogram_assign_smart_shelf(ui, delete_shipto, delete_hardware, delete
 
     lp.log_in_distributor_portal()
     lpp.follow_locker_planogram_url(customer_id=locker_body["customerUser"], shipto_id=response_shipto["shipto_id"])
-    lpp.wait_until_progress_bar_loaded()
     lpp.assign_smart_shelf_to_locker_door(response_locker["smart_shelf_number"])
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_planogram_merge_split_cells(ui, delete_shipto, delete_hardware, delete_smart_shelf):
     ui.testrail_case_id = 1970
@@ -130,6 +131,7 @@ def test_planogram_merge_split_cells(ui, delete_shipto, delete_hardware, delete_
     ssp.split_cells(1, is_planogram=True, door_number=1)
     ssp.check_cells_number(4, is_planogram=True, door_number=1)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_planogram_without_weights_assign_smart_shelf(ui, delete_shipto, delete_hardware, delete_smart_shelf):
     ui.testrail_case_id = 1968
@@ -161,8 +163,10 @@ def test_planogram_without_weights_assign_smart_shelf(ui, delete_shipto, delete_
     lpp.wait_until_progress_bar_loaded()
     lpp.check_first_door_is_unavaliable_planogram()
 
+#REWORK TO API
+#REWORK TO API
 @pytest.mark.regression
-def test_smart_shelf_move_locker_to_another_distributor(ui, delete_hardware, delete_smart_shelf):
+def test_smart_shelf_move_locker_to_another_distributor(ui, delete_hardware, delete_smart_shelf): #REWORK TO API
     ui.testrail_case_id = 1969
 
     lp = LoginPage(ui)
@@ -202,8 +206,10 @@ def test_smart_shelf_move_locker_to_another_distributor(ui, delete_hardware, del
     ss.sidebar_hardware()
     ss.check_smart_shelf_unavailable_via_planogram(locker, response_locker_2["smart_shelf_number"])
 
+#REWORK TO API
+#REWORK TO API
 @pytest.mark.regression
-def test_smart_shelves_assign_to_several_lockers(ui, delete_hardware, delete_smart_shelf):
+def test_smart_shelves_assign_to_several_lockers(ui, delete_hardware, delete_smart_shelf): #REWORK TO API
     ui.testrail_case_id = 1927
 
     lp = LoginPage(ui)
@@ -236,6 +242,7 @@ def test_smart_shelves_assign_to_several_lockers(ui, delete_hardware, delete_sma
     hp.sidebar_hardware()
     ss.check_smart_shelf_unavailable_via_planogram(locker_second, smart_shelf_number)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_shelves_assign_via_hardware_check_planogram(ui, delete_shipto, delete_hardware, delete_smart_shelf):
     ui.testrail_case_id = 1966
@@ -265,8 +272,9 @@ def test_shelves_assign_via_hardware_check_planogram(ui, delete_shipto, delete_h
     ssp.assign_smart_shelf_to_locker(response_locker["smart_shelf_number"], locker, "1")
     lpp.follow_locker_planogram_url(customer_id=locker_body["customerUser"], shipto_id=response_shipto["shipto_id"])
     lpp.wait_until_progress_bar_loaded()
-    lpp.check_smart_shelf_via_planogram(response_locker["smart_shelf_number"], "1")
+    lpp.check_smart_shelf_via_planogram(response_locker["smart_shelf_number"])
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_smart_shelves_crud(ui, delete_shipto, delete_hardware):
     ui.testrail_case_id = 1920
@@ -310,6 +318,7 @@ def test_smart_shelves_crud(ui, delete_shipto, delete_hardware):
     sh.check_last_smart_shelf(edit_smart_shelves_body)
     sh.delete_smart_shelf(edit_serial_number)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_smart_shelves_edit_dist_portal(ui, delete_smart_shelf, delete_hardware):
     ui.testrail_case_id = 1960
@@ -340,6 +349,7 @@ def test_smart_shelves_edit_dist_portal(ui, delete_smart_shelf, delete_hardware)
     dss.update_smart_shelves(smart_shelves_body)
     dss.check_last_smart_shelf(smart_shelves_body)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_smart_shelves_merge_cells(ui, delete_smart_shelf, delete_hardware):
     ui.testrail_case_id = 1921
@@ -359,6 +369,7 @@ def test_smart_shelves_merge_cells(ui, delete_smart_shelf, delete_hardware):
     ss.split_cells(0)
     ss.check_cells_number(4)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_smart_shelves_merge_cells_distributor(ui, delete_smart_shelf, delete_hardware):
     ui.testrail_case_id = 1959
@@ -378,6 +389,7 @@ def test_smart_shelves_merge_cells_distributor(ui, delete_smart_shelf, delete_ha
     dss.split_cells(0)
     dss.check_cells_number(4)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_smart_shelves_remove_locker_distributor(ui, delete_smart_shelf, delete_hardware):
     ui.testrail_case_id = 1926
@@ -393,8 +405,8 @@ def test_smart_shelves_remove_locker_distributor(ui, delete_smart_shelf, delete_
     lp.log_in_admin_portal()
     ss.open_smart_shelves()
     ss.clear_fields_smart_shelves(locker=True, distributor=True)
-    ss.open_smart_shelves()
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_smart_shelves_unavailable_door(ui, delete_smart_shelf, delete_hardware):
     ui.testrail_case_id = 1925
@@ -414,6 +426,7 @@ def test_smart_shelves_unavailable_door(ui, delete_smart_shelf, delete_hardware)
     ss.open_smart_shelves()
     ss.check_first_door_is_unavaliable(locker, create=True)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_smart_shelves_without_weights(ui, delete_smart_shelf, delete_hardware):
     ui.testrail_case_id = 1922

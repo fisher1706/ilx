@@ -1,11 +1,11 @@
 import pytest
 from src.resources.tools import Tools
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.permissions import Permissions
 from src.api.admin.admin_user_api import AdminUserApi
+from src.api.distributor.user_api import UserApi
 from src.api.customer.customer_user_api import CustomerUserApi
 from src.api.customer.checkout_user_api import CheckoutUserApi
-from src.api.distributor.user_api import UserApi
 from src.api.setups.setup_customer_user_as_customer import SetupCustomerUserAsCustomer
 from src.api.setups.setup_checkout_group import SetupCheckoutGroup
 from src.api.setups.setup_shipto import SetupShipto
@@ -46,6 +46,7 @@ def test_checkout_user_of_customer_user(api):
     third_number = chua.checkout_user_should_not_be_present(edit_customer_user_body.copy())
     assert third_number == second_number-1, "The number of checkout users after removing should be less by 1 than before"
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_customer_user_crud(ui):
     ui.testrail_case_id = 37
@@ -69,12 +70,10 @@ def test_customer_user_crud(ui):
 
     lp.log_in_customer_portal()
     cup.sidebar_users_and_groups()
-    cup.click_xpath(Locator.xpath_button_tab_by_name("Users"))
     cup.create_customer_user(customer_user_body.copy())
     cup.check_last_customer_user(customer_user_body.copy())
     cup.update_last_customer_user(edit_customer_user_body.copy())
     cup.sidebar_users_and_groups()
-    cup.wait_until_page_loaded()
     cup.check_last_customer_user(edit_customer_user_body.copy())
     cup.delete_last_customer_user()
 
@@ -89,6 +88,7 @@ def test_customer_user_crud(ui):
     }
     ])
 @pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_distributor_user_crud(ui, permission_ui, permissions, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
@@ -117,8 +117,6 @@ def test_distributor_user_crud(ui, permission_ui, permissions, delete_distributo
     dup.create_distributor_user(distributor_user_body.copy())
     dup.check_last_distributor_user(distributor_user_body.copy())
     dup.update_last_distributor_user(edit_distributor_user_body.copy())
-    dup.click_xpath(Locator.xpath_reload_button)
-    dup.last_page(wait=False)
     dup.check_last_distributor_user(edit_distributor_user_body.copy())
     full_name = edit_distributor_user_body["firstName"] + " " + edit_distributor_user_body["lastName"]
     dup.delete_last_distributor_user(full_name)
@@ -145,6 +143,7 @@ def test_distributor_user_crud_view_permission(api, permission_api, delete_distr
     ua.update_distributor_user(dto=user, user_id=response_user["user_id"], expected_status_code=400) #cannot update user
     ua.delete_distributor_user(user_id=response_user["user_id"], expected_status_code=400) #cannot delete user
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_distributor_superuser_crud(ui):
     ui.testrail_case_id = 30
@@ -170,12 +169,11 @@ def test_distributor_superuser_crud(ui):
     dup.create_distributor_super_user(distributor_superuser_body.copy())
     dup.check_last_distributor_super_user(distributor_superuser_body.copy())
     dup.update_last_distributor_super_user(edit_distributor_superuser_body.copy())
-    dup.click_xpath(Locator.xpath_reload_button)
-    dup.last_page(wait=False)
     dup.check_last_distributor_super_user(edit_distributor_superuser_body.copy())
     full_name = edit_distributor_superuser_body["firstName"] + " " + edit_distributor_superuser_body["lastName"]
     dup.delete_last_distributor_user(full_name)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_checkout_user_import_without_group(ui):
     ui.testrail_case_id = 1849
@@ -199,12 +197,12 @@ def test_checkout_user_import_without_group(ui):
 
     lp.log_in_customer_portal()
     cup.sidebar_users_and_groups()
-    cup.click_xpath(Locator.xpath_button_tab_by_name("Fobs & Passcodes"))
+    cup.click_tab_by_name("Fobs & Passcodes")
     cup.import_checkout_user(checkout_users)
-    row = cup.scan_table(checkout_user_body["firstName"], "First Name", pagination=False)
-    cup.check_new_checkout_user(checkout_user_body.copy(), row)
-    cup.delete_new_checkout_user(row)
+    cup.check_last_checkout_user(checkout_user_body.copy())
+    cup.delete_last_checkout_user()
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_checkout_user_crud(ui):
     ui.testrail_case_id = 1848
@@ -228,18 +226,16 @@ def test_checkout_user_crud(ui):
 
     lp.log_in_customer_portal()
     cup.sidebar_users_and_groups()
-    cup.click_xpath(Locator.xpath_button_tab_by_name("Fobs & Passcodes"))
+    cup.click_tab_by_name("Fobs & Passcodes")
     cup.create_checkout_user(checkout_user_body.copy())
-    row = cup.scan_table(checkout_user_body["firstName"], "First Name", pagination=False)
-    cup.check_new_checkout_user(checkout_user_body.copy(), row)
-    cup.update_new_checkout_user(edit_checkout_user_body.copy(), row, first_group=True)
+    cup.check_last_checkout_user(checkout_user_body.copy())
+    cup.update_last_checkout_user(edit_checkout_user_body.copy(), first_group=True)
     cup.sidebar_users_and_groups()
-    cup.click_xpath(Locator.xpath_button_tab_by_name("Fobs & Passcodes"))
-    cup.wait_until_page_loaded()
-    row = cup.scan_table(edit_checkout_user_body["firstName"], "First Name", pagination=False)
-    cup.check_new_checkout_user(edit_checkout_user_body.copy(), row)
-    cup.delete_new_checkout_user(row)
+    cup.click_tab_by_name("Fobs & Passcodes")
+    cup.check_last_checkout_user(edit_checkout_user_body.copy())
+    cup.delete_last_checkout_user()
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_customer_security_group_crud(ui):
     ui.testrail_case_id = 2007
@@ -259,13 +255,12 @@ def test_customer_security_group_crud(ui):
     lp.log_in_customer_portal()
     csg.open_security_groups()
     csg.create_security_group(security_group_body)
-    row = csg.get_row_of_table_item_by_column(security_group_body["name"], 1)
-    csg.check_security_group(security_group_body, row)
-    csg.update_security_group(edit_security_group_body, row)
-    csg.element_should_have_text(Locator.xpath_table_item(row, 1), edit_security_group_body["name"])
-    csg.check_security_group(edit_security_group_body, row)
-    csg.delete_security_group(edit_security_group_body, row)
+    csg.check_security_group(security_group_body)
+    csg.update_security_group(edit_security_group_body)
+    csg.check_security_group(edit_security_group_body)
+    csg.delete_security_group(edit_security_group_body)
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_checkout_group_crud(ui):
     ui.testrail_case_id = 1861
@@ -284,18 +279,16 @@ def test_checkout_group_crud(ui):
 
     lp.log_in_customer_portal()
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(Locator.xpath_button_tab_by_name("Checkout Groups"))
+    cgp.click_tab_by_name("Checkout Groups")
     cgp.create_checkout_group(checkout_group_body.copy())
-    row = cgp.scan_table(checkout_group_body["name"], "Checkout Group Name", pagination=False)
-    cgp.check_new_checkout_group(checkout_group_body.copy(), row)
-    cgp.update_new_checkout_group(edit_checkout_group_body.copy(), row)
+    cgp.check_new_checkout_group(checkout_group_body.copy())
+    cgp.update_new_checkout_group(edit_checkout_group_body.copy())
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(Locator.xpath_button_tab_by_name("Checkout Groups"))
-    cgp.wait_until_page_loaded()
-    row = cgp.scan_table(edit_checkout_group_body["name"], "Checkout Group Name", pagination=False)
-    cgp.check_new_checkout_group(edit_checkout_group_body.copy(), row)
-    cgp.delete_new_checkout_group(row)
+    cgp.click_tab_by_name("Checkout Groups")
+    cgp.check_new_checkout_group(edit_checkout_group_body.copy())
+    cgp.delete_new_checkout_group()
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_checkout_group_assign_user(ui, delete_customer_user, delete_checkout_group):
     ui.testrail_case_id = 1890
@@ -310,26 +303,22 @@ def test_checkout_group_assign_user(ui, delete_customer_user, delete_checkout_gr
 
     lp.log_in_customer_portal()
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(Locator.xpath_button_tab_by_name("Checkout Groups"))
-    cgp.wait_until_page_loaded()
-    row = cgp.scan_table(response_checkout_group["group"]["name"], "Checkout Group Name", pagination=False)
-    cgp.click_xpath(Locator.xpath_by_count(Locator.xpath_associated_users, row))
+    cgp.click_tab_by_name("Checkout Groups")
+
+    cgp.element(L.last_role_row + L.associated_users).click()
     cgp.assign_user(response_customer_user["user"]["email"])
-    cgp.check_assigned_user(response_customer_user["user"], 1)
+    cgp.check_assigned_user(response_customer_user["user"])
 
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(Locator.xpath_button_tab_by_name("Fobs & Passcodes"))
-    cgp.wait_until_page_loaded()
-    row = cgp.scan_table(response_customer_user["user"]["email"], "Email", pagination=False)
-    cgp.check_table_item_by_header(row, "Checkout Group", response_checkout_group["group"]["name"])
+    cgp.click_tab_by_name("Fobs & Passcodes")
+    cgp.check_last_table_item_outdated("Checkout Group", response_checkout_group["group"]["name"])
 
-    cgp.click_xpath(Locator.xpath_button_tab_by_name("Checkout Groups"))
-    cgp.wait_until_page_loaded()
-    row = cgp.scan_table(response_checkout_group["group"]["name"], "Checkout Group Name", pagination=False)
-    cgp.click_xpath(Locator.xpath_by_count(Locator.xpath_associated_users, row))
-    cgp.unassign_user(1)
-    cgp.get_element_by_xpath(Locator.xpath_no_data_found)
+    cgp.click_tab_by_name("Checkout Groups")
+    cgp.element(L.last_role_row + L.associated_users).click()
+    cgp.unassign_user()
+    cgp.element(L.no_data_found).get()
 
+@pytest.mark.ui
 @pytest.mark.regression
 def test_checkout_group_assign_shipto(ui, delete_shipto, delete_checkout_group):
     ui.testrail_case_id = 1863
@@ -337,19 +326,18 @@ def test_checkout_group_assign_shipto(ui, delete_shipto, delete_checkout_group):
     lp = LoginPage(ui)
     cgp = CheckoutGroupsPage(ui)
 
-    response_checkout_group = SetupCheckoutGroup(ui).setup()
+    SetupCheckoutGroup(ui).setup()
     response_shipto = SetupShipto(ui).setup()
 
     lp.log_in_customer_portal()
     cgp.sidebar_users_and_groups()
-    cgp.click_xpath(Locator.xpath_button_tab_by_name("Checkout Groups"))
-    cgp.wait_until_page_loaded()
-    row = cgp.scan_table(response_checkout_group["group"]["name"], "Checkout Group Name", pagination=False)
-    cgp.click_xpath(Locator.xpath_by_count(Locator.xpath_associated_shiptos, row))
+    cgp.click_tab_by_name("Checkout Groups")
+
+    cgp.element(L.last_role_row + L.associated_shiptos).click()
     cgp.assign_shipto(response_shipto["shipto"]["number"])
     cgp.check_assigned_shipto(response_shipto["shipto"], 1)
-    cgp.unassign_shipto(1)
-    cgp.get_element_by_xpath(Locator.xpath_no_data_found)
+    cgp.unassign_shipto()
+    cgp.element(L.no_data_found).get()
 
 @pytest.mark.parametrize("case", [
     {
@@ -440,12 +428,15 @@ def test_smoke_create_user(smoke_api):
         "testrail_case_id": 2207
     }
     ])
+@pytest.mark.acl
+@pytest.mark.ui
 @pytest.mark.regression
 def test_distrubutor_security_group_crud(ui, permissions, permission_ui, delete_distributor_security_group):
     ui.testrail_case_id = permissions["testrail_case_id"]
     context = Permissions.set_configured_user(ui, permissions["user"], permission_context=permission_ui)
     lp = LoginPage(context)
     dsg = DistributorSecurityGroups(context)
+
     distributor_security_group_body = dsg.distributor_security_group_body.copy()
     edit_security_group_body = dsg.distributor_security_group_body.copy()
 
@@ -458,9 +449,7 @@ def test_distrubutor_security_group_crud(ui, permissions, permission_ui, delete_
     lp.log_in_distributor_portal()
     dsg.open_security_groups()
     dsg.create_security_group(distributor_security_group_body)
-    row = dsg.get_row_of_table_item_by_column(distributor_security_group_body["name"], 1)
-    dsg.check_security_group(distributor_security_group_body, row)
-    dsg.update_security_group(edit_security_group_body, row)
-    dsg.element_should_have_text(Locator.xpath_table_item(row, 1), edit_security_group_body["name"])
-    dsg.check_security_group(edit_security_group_body, row)
-    dsg.delete_security_group(edit_security_group_body, row)
+    dsg.check_security_group(distributor_security_group_body)
+    dsg.update_security_group(edit_security_group_body)
+    dsg.check_security_group(edit_security_group_body)
+    dsg.delete_security_group(edit_security_group_body)

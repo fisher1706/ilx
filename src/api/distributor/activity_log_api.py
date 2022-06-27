@@ -2,6 +2,7 @@ import time
 from src.api.api import API
 from src.resources.tools import Tools
 from src.resources.messages import Message
+from glbl import Log, Error
 
 class ActivityLogApi(API):
     def get_activity_log(self, size=50, shiptos=None, wait=None):
@@ -15,9 +16,9 @@ class ActivityLogApi(API):
             dto["query"]["bool"]["must"] = [{"match_all":{}}, {"terms":{"eventContent.shipToId":shiptos}}]
         response = self.send_post(url, token, dto)
         if response.status_code == 200:
-            self.logger.info(Message.entity_operation_done.format(entity="Activity Log", operation="got"))
+            Log.info(Message.entity_operation_done.format(entity="Activity Log", operation="got"))
         else:
-            self.logger.error(str(response.content))
+            Error.error(str(response.content))
         response_json = response.json()
         return response_json["data"]
 

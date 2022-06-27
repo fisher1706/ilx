@@ -1,5 +1,5 @@
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.tools import Tools
 
 class UsageHistoryPage(DistributorPortalPage):
@@ -8,7 +8,7 @@ class UsageHistoryPage(DistributorPortalPage):
         "Customer Number": None,
         "ShipTo Number": None,
         "ShipTo Name": None,
-        "Part SKU": None,
+        "Distributor SKU": None,
         "Quantity": None,
         "Date": None,
     }
@@ -18,10 +18,9 @@ class UsageHistoryPage(DistributorPortalPage):
 
     def import_usage_history(self, usage_history):
         Tools.generate_csv("usage_history.csv", usage_history)
-        self.import_csv(Locator.id_file_upload, "usage_history.csv")
-        self.get_element_by_xpath(Locator.xpath_successfully_imported_msg)
-        self.wait_until_page_loaded()
+        self.import_csv(L.file_upload, "usage_history.csv")
+        self.element(L.successfully_imported_msg).get()
 
     def check_last_usage_history(self, usage_history_body):
         for cell, value in usage_history_body.items():
-            self.check_table_item(value, header=cell, last=True)
+            self.check_last_table_item(cell, value)

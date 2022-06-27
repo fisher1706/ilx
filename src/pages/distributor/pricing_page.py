@@ -1,5 +1,5 @@
 from src.pages.distributor.distributor_portal_page import DistributorPortalPage
-from src.resources.locator import Locator
+from src.pages.locator import Locator as L
 from src.resources.tools import Tools
 
 class PricingPage(DistributorPortalPage):
@@ -12,9 +12,9 @@ class PricingPage(DistributorPortalPage):
 
     def import_pricing(self, pricing):
         Tools.generate_csv("pricing.csv", pricing)
-        self.import_csv(Locator.id_file_upload, "pricing.csv")
-        self.get_element_by_xpath(Locator.xpath_successfully_imported_msg)
-        self.wait_until_page_loaded()
+        self.import_csv(L.file_upload, "pricing.csv")
+        self.element(L.successfully_imported_msg).get()
 
     def check_price_by_name(self, pricing_body):
-        self.scan_table(pricing_body["Distributor SKU"], "Distributor SKU", pricing_body)
+        for cell, value in pricing_body.items():
+            self.check_last_table_item(cell, value)
