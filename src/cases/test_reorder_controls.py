@@ -80,6 +80,8 @@ def test_create_transaction_as_issued_by_ohi_update(api, conditions, delete_ship
     setup_location = SetupLocation(api)
     setup_location.setup_shipto.add_option("reorder_controls_settings", {"enable_reorder_control": True, "track_ohi":True, "reorder_controls": "ISSUED"})
     setup_location.setup_product.add_option("issue_quantity", 1)
+    setup_location.add_option("ohi",0)
+
     response_location = setup_location.setup()
 
     #update OHi
@@ -120,6 +122,8 @@ def test_close_transaction_by_ohi_update(api, conditions, delete_shipto):
     setup_location = SetupLocation(api)
     setup_location.setup_shipto.add_option("reorder_controls_settings", {"enable_reorder_control": True, "track_ohi": True, "reorder_controls": conditions['reorder_controls']})
     setup_location.add_option("transaction", 'ACTIVE')
+    setup_location.add_option("ohi",0)
+
     response_location = setup_location.setup()
 
     #close transaction
@@ -129,6 +133,7 @@ def test_close_transaction_by_ohi_update(api, conditions, delete_shipto):
     time.sleep(5)
     transaction = ta.get_transaction(shipto_id=response_location["shipto_id"])["entities"]
     assert transaction[0]["status"] == "DO_NOT_REORDER"
+
 
 @pytest.mark.regression
 def test_update_reorder_quantity_at_min(api, delete_shipto):
@@ -144,10 +149,14 @@ def test_update_reorder_quantity_at_min(api, delete_shipto):
     response_location = setup_location.setup()
 
     #check quantity
+    location = la.get_locations(shipto_id=response_location["shipto_id"])[0]
+    location["onHandInventory"] = response_location["location"]["orderingConfig"]["currentInventoryControls"]["min"]
+    la.update_location([location], response_location["shipto_id"])
+    time.sleep(5)
     transaction = ta.get_transaction(shipto_id=response_location["shipto_id"])["entities"]
     quantity_old = transaction[0]["reorderQuantity"]
+    
     #change OHI
-    location = la.get_locations(shipto_id=response_location["shipto_id"])[0]
     location["onHandInventory"] = response_location["location"]["orderingConfig"]["currentInventoryControls"]["min"]*0
     la.update_location([location], response_location["shipto_id"])
     time.sleep(5)
@@ -1042,6 +1051,8 @@ def test_reorder_controls_update_quantity_on_reorder_status_with_existing_active
     la.update_location([location], response_location["shipto_id"])
 
     #update status of qntyOnReorder transaction
+    transaction = ta.get_transaction(sku=response_location["product"]["partSku"], shipto_id=response_location["shipto_id"], status="SHIPPED")
+    transaction_id = transaction["entities"][-1]["id"]
     ta.update_replenishment_item(transaction_id, transaction["entities"][-1]["reorderQuantity"], "DO_NOT_REORDER")
     time.sleep(5)
 
