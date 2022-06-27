@@ -1,6 +1,8 @@
 from datetime import datetime
 import string
 import random
+from random import randrange
+from datetime import timedelta
 import os
 import yaml
 
@@ -28,3 +30,9 @@ def get_list(list_of_lists):
     for list_in_list in list_of_lists:
         simple_list.append(list_in_list[0])
     return simple_list
+
+def random_date(start, end):
+    delta = end - start
+    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+    random_second = randrange(int_delta)
+    return start + timedelta(seconds=random_second)
