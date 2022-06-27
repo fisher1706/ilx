@@ -82,7 +82,6 @@ def test_create_transaction_as_issued_by_ohi_update(api, conditions, delete_ship
     setup_location.setup_shipto.add_option("reorder_controls_settings", {"enable_reorder_control": True, "track_ohi":True, "reorder_controls": "ISSUED"})
     setup_location.setup_product.add_option("issue_quantity", 1)
     setup_location.add_option("ohi",0)
-
     response_location = setup_location.setup()
 
     #update OHi
@@ -124,7 +123,6 @@ def test_close_transaction_by_ohi_update(api, conditions, delete_shipto):
     setup_location.setup_shipto.add_option("reorder_controls_settings", {"enable_reorder_control": True, "track_ohi": True, "reorder_controls": conditions['reorder_controls']})
     setup_location.add_option("transaction", 'ACTIVE')
     setup_location.add_option("ohi",0)
-
     response_location = setup_location.setup()
 
     #close transaction
@@ -134,7 +132,6 @@ def test_close_transaction_by_ohi_update(api, conditions, delete_shipto):
     time.sleep(5)
     transaction = ta.get_transaction(shipto_id=response_location["shipto_id"])["entities"]
     assert transaction[0]["status"] == "DO_NOT_REORDER"
-
 
 @pytest.mark.regression
 def test_update_reorder_quantity_at_min(api, delete_shipto):
