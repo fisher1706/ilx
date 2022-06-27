@@ -8,8 +8,8 @@ db_keys = get_db_keys()
 NUMBER_OF_WAREHOUSES = db_keys["number_of_warehouses"]
 DISTRIBUTOR_ID = db_keys["distributor_id"]
 
-with closing(psycopg2.connect(dbname='srx_qa', user='srx_qa',
-                        password=db_keys["qa_password"], host='localhost', port='5434')) as conn:
+with closing(psycopg2.connect(dbname='srx_dev', user='srx_dev',
+                        password=db_keys["load_password"], host='localhost', port='5434')) as conn:
     with conn.cursor(cursor_factory=DictCursor) as cursor:
         warehouses_list = list()
         for _ in range(NUMBER_OF_WAREHOUSES):
@@ -30,7 +30,7 @@ with closing(psycopg2.connect(dbname='srx_qa', user='srx_qa',
                 "number": f"LOAD-{datetime.now().date()}-{random_string()}",
                 "distributor_id": DISTRIBUTOR_ID,
                 "zone_id": "America/New_York",
-                "calculate_at_last_day_of_month": False
+                # "calculate_at_last_day_of_month": False
             }
             warehouse_tuple = tuple(warehouse.values())
             warehouses_list.append(warehouse_tuple)
