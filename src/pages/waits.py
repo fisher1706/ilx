@@ -3,7 +3,7 @@ class ElementToBeEnabled():
         self.xpath = xpath
 
     def __call__(self, driver):
-        element = driver.find_element_by_xpath(self.xpath)
+        element = driver.find_element("xpath", self.xpath)
         if element.is_enabled():
             return True
         return False
@@ -23,7 +23,7 @@ class ElementsNumberToBe():
         self.xpath = xpath
 
     def __call__(self, driver):
-        elements = driver.find_elements_by_xpath(self.xpath)
+        elements = driver.find_elements("xpath", self.xpath)
         count = len(elements)
         if count == self.number:
             return True
@@ -34,7 +34,7 @@ class TextToBeEmpty():
         self.xpath = xpath
 
     def __call__(self, driver):
-        text = driver.find_element_by_xpath(self.xpath).text
+        text = driver.find_element("xpath", self.xpath).text
         if text == "":
             return True
         return False
