@@ -145,6 +145,7 @@ def test_immediately_autosubmit_for_reorder_control_transaction(api, delete_ship
     setup_location.setup_shipto.add_option("autosubmit_settings", {"enabled": True, "immediately": True, "as_order": True})
     setup_location.setup_product.add_option("issue_quantity", 1)
     setup_location.add_option("autosubmit")
+    setup_location.add_option("ohi",0)
     response_location = setup_location.setup()
 
     location = la.get_locations(shipto_id=response_location["shipto_id"])[0]
