@@ -171,7 +171,7 @@ def finalize(request, context):
                         Tools.generate_log(f"{path}{time.strftime('%Y.%m.%dT%H:%M:%S', time.localtime(time.time()))}.log", context.driver.get_log("performance"))
                         Log.info(f"URL: \n{context.driver.current_url}")
                         try:
-                            Log.info(f"TEXT: \n{context.driver.find_element_by_xpath('//body').text}")
+                            Log.info(f"TEXT: \n{context.driver.find_element('xpath', '//body').text}")
                         except:
                             Log.info("TEXT NOT FOUND")
                     comment = f"[PYTEST] Test failed\n{Log.text}"

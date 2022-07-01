@@ -90,7 +90,7 @@ class Element():
 
     def count(self):
         try:
-            elements = self.driver.find_elements_by_xpath(self.xpath)
+            elements = self.driver.find_elements("xpath", self.xpath)
         except Exception as e:
             Error.error(f"Elements '{self.xpath}' do not found.\n{e}")
         else:
