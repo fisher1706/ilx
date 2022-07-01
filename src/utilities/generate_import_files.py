@@ -28,8 +28,9 @@ pricing = []
 rfids = []
 usage_history = []
 crib_crawl = []
+customer_products = []
 body = []
-for i in range(50000):
+for i in range(999):
     SKU = random_string_u(20)
 
     product_row = [SKU, SKU, None, SKU, None, SKU, None, None, None, None, None, None, SKU, SKU, 1, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]
@@ -38,6 +39,7 @@ for i in range(50000):
     rfid_row = [SKU, SKU, SKU]
     usage_history_row = [SKU, SKU, SKU, SKU, SKU, 10, "12/30/18 10:15:30"]
     crib_crawl_row = [SKU,None,None,None,10,20,SKU,SKU,SKU,SKU,None,None,None,None,"LABEL",None,None]
+    customer_product_row = [None, SKU, SKU, None, None, SKU, None, None, None, None, None, None, None, None, None, None, 1, None, None, None, None, None, None, None, None, None, None, None, None, None]
 
     products.append(product_row)
     locations.append(location_row)
@@ -45,9 +47,8 @@ for i in range(50000):
     rfids.append(rfid_row)
     usage_history.append(usage_history_row)
     crib_crawl.append(crib_crawl_row)
+    customer_products.append(customer_product_row)
     body.append({"partSku": SKU, "quantity": 100})
-
-print(body)
 
 generate_csv("products.csv", products)
 generate_csv("locations.csv", locations)
@@ -55,3 +56,4 @@ generate_csv("pricing.csv", pricing)
 generate_csv("rfids.csv", rfids)
 generate_csv("usage_history.csv", usage_history)
 generate_csv("crib_crawl.csv", crib_crawl)
+generate_csv("customer_products.csv", customer_products)
