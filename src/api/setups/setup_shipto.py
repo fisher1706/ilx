@@ -81,7 +81,7 @@ class SetupShipto(BaseSetup):
                 }
                 self.context.dynamic_context["delete_shipto_id"].append(shipto)
             sta.set_vmi_list_integration_settings(self.shipto_id)
-            sta.set_consignments_settings(self.shipto_id)
+            sta.set_consignments_settings(self.shipto_id, valid_400=True)
 
     def set_checkout_settings(self):
         if self.options["checkout_settings"] is not None:

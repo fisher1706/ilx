@@ -245,15 +245,21 @@ class SettingsApi(API):
         else:
             Error.error(str(response.content))
 
-    def update_consignments_settings(self, dto, shipto_id):
+    def update_consignments_settings(self, dto, shipto_id, valid_400=False):
         url = self.url.get_api_url_for_env(f"/distributor-portal/distributor/customers/shiptos/{shipto_id}/consignment/settings/save")
         token = self.get_distributor_token()
         response = self.send_post(url, token, dto)
-        if response.status_code == 200:
-            Log.info(Message.entity_with_id_operation_done.format(entity="Consignments settings of ShipTo", id=shipto_id, operation="updated"))
+        valid_response = [200, 400] if valid_400 == True else [200]
+        if response.status_code in valid_response:
+            if response.status_code == 200:
+                Log.info(Message.entity_with_id_operation_done.format(entity="Consignments settings of ShipTo", id=shipto_id, operation="updated"))
+            elif response.status_code == 400 and "permissions" in str(response.content):
+                Log.info("Probably consignments feature is off for this distributor")
+            else:
+                Error.error(str(response.content))
         else:
             Error.error(str(response.content))
 
-    def set_consignments_settings(self, shipto_id):
+    def set_consignments_settings(self, shipto_id, valid_400=False):
         consignments_dto = Tools.get_dto("consignments_settings_dto.json")
-        self.update_consignments_settings(consignments_dto, shipto_id)
+        self.update_consignments_settings(consignments_dto, shipto_id, valid_400)
