@@ -233,7 +233,7 @@ def test_close_transaction_by_pack_conversion_update(api, conditions, delete_cus
     }
     ])
 @pytest.mark.regression
-def test_create_transaction_by_pack_conversion_update(api, conditions):
+def test_create_transaction_by_pack_conversion_update(api, conditions, delete_customer):
     api.testrail_case_id = conditions["testrail_case_id"]
 
     ta = TransactionApi(api)
