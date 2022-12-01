@@ -1,0 +1,49 @@
+keys:
+  #dev
+  # ILX-ERP
+  - ilx_erp_token
+
+  # EDI_856
+  - edi_856_auth_token
+  - user_name_edi_856
+  - password_edi_856
+
+  # INFOR
+  - ilx_infor_token
+
+  #qa
+  # ILX-ERP
+  - ilx_erp_token
+
+  # EDI_856
+  - edi_856_auth_token
+  - user_name_edi_856
+  - password_edi_856
+
+  # INFOR
+  - ilx_infor_token
+
+  # UI
+  - ilx_url
+  - ilx_email
+  - ilx_password
+
+  # SRX
+  - srx_url
+
+  - srx_email_dist
+  - srx_password_dist
+
+  - srx_email_customer
+  - srx_password_customer
+
+  - srx_auth
+
+  - srx_settings_email_search_product
+
+  # ALL QA
+  - ilx_qa_token
+
+  # testrail credentials
+  - ilx_testrail_email
+  - ilx_testrail_password

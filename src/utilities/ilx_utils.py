@@ -1,13 +1,20 @@
 import pysftp
 import os
+import string
+import random
 
 
 class Utils:
-
     @staticmethod
     def generate_url(uri, **kwargs):
         for arg in kwargs:
             uri += '/' + str(kwargs[arg])
+        return uri
+
+    @staticmethod
+    def generate_url_new(uri, **kwargs):
+        for arg in kwargs:
+            uri += '/' + str(kwargs[arg]) + '?' + 'orderId=' + str(kwargs[arg])
         return uri
 
     @staticmethod
@@ -68,6 +75,7 @@ class Utils:
     def upload_sftp_files(host, username, password, local_path, remote_path):
         srv = pysftp.Connection(host=host, username=username, password=password)
         srv.chdir(remotepath=remote_path)
+        # srv.chdir('/')
 
         try:
             for _file in os.listdir(local_path):
@@ -79,4 +87,16 @@ class Utils:
 
     @staticmethod
     def get_data_order_infor(order_no, data_infor):
-        return [data for data in data_infor if str (order_no) == str(data.get ('orderno'))][0]
+        return [data for data in data_infor if str(order_no) == str(data.get('orderno'))][0]
+
+    @staticmethod
+    def random_str(size=16, chars=string.ascii_letters + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))
+
+    @staticmethod
+    def get_data_billing(customer_num, data_billing):
+        return [data for data in data_billing if str(customer_num) == str(data.get('customer'))][0]
+
+
+if __name__ == '__main__':
+    u = Utils()

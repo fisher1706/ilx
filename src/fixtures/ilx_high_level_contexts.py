@@ -1,5 +1,6 @@
 import pytest
 
+
 @pytest.fixture(scope="function")
 def ui_ilx(driver_ilx, ilx_context):
     ilx_context_object = ilx_context

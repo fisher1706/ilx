@@ -9,8 +9,9 @@ from src.utilities.ilx_utils import Utils
 
 @pytest.mark.ilx
 @pytest.mark.parametrize('case, data_case, testrail_case_id', [
-    ('case1', variables.data_case_1, 10084),
-    # ('case2', variables.data_case_2, 10085),
+    # ('SIQTE-01-831784-001', variables.data_case_1, 10084),
+    # ('case1', variables.data_case_1, 10084),
+    ('case2', variables.data_case_2, 10085),
     # ('case3', variables.data_case_3, 10086),
     # ('case4', variables.data_case_4, 10087),
     # ('case5', variables.data_case_5, 10088),
@@ -22,12 +23,17 @@ from src.utilities.ilx_utils import Utils
 ])
 def test_response_ilx_sale_order_v2(ilx_context, case, data_case, testrail_case_id):
     ilx_context.ilx_testrail_case_id = testrail_case_id
-    headers = {'Authorization': ilx_context.ilx_auth_token}
-    resp = requests.get(url=Utils.generate_url(ilx_context.ilx_data.ilx_url, case=case), headers=headers)
+    headers = {'Authorization': ilx_context.ilx_erp_token}
 
-    response = Response(resp)
-    response.assert_response_status(200)
-    response.validate_response_schema(Validator)
-    response.validate_response_data(data_case)
+    """old request"""
+    # resp = requests.get(url=Utils.generate_url(ilx_context.ilx_data.ilx_url, case=case), headers=headers)
+    """new request"""
+    resp = requests.get(url=Utils.generate_url_new(ilx_context.ilx_data.ilx_url, case=case), headers=headers)
+    print(f'resp: {resp}')
 
-    print(response)
+    # response = Response(resp)
+    # response.assert_response_status(200)
+    # response.validate_response_schema(Validator)
+    # response.validate_response_data(data_case)
+
+    # print(response)

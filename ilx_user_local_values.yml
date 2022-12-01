@@ -1,0 +1,52 @@
+dev:
+  # ILX-ERP
+  ilx_erp_token: f1422b40374a49e3ad39e1c4f85b3a5a
+
+  # EDI_856
+  edi_856_auth_token: 7665f79ea9fa42a7ba940be7acded248
+  user_name_edi_856: test_edi_856
+  password_edi_856: Zapel_1706
+
+  # INFOR
+  ilx_infor_token: a552945a85364af89653fe94d91bd57f
+
+qa:
+  # ILX-ERP
+  ilx_erp_token: a552945a85364af89653fe94d91bd57f
+
+  # EDI_856
+#  edi_856_auth_token: a552945a85364af89653fe94d91bd57f
+  edi_856_auth_token: 7348f276385845cfafc8dd692d8d9a2d
+  user_name_edi_856: test_edi_856
+  password_edi_856: Zapel_1706
+
+  # INFOR
+  ilx_infor_token: a552945a85364af89653fe94d91bd57f
+
+  # UI
+  ilx_url: https://hub.qa.integrationlogix.com/
+  ilx_email: olazeba+ilx+qa@agilevision.io
+  ilx_password: '*Zapel_1706'
+
+  # ALL QA
+  ilx_qa_token: a552945a85364af89653fe94d91bd57f
+
+  # SRX
+  srx_url: https://app-qa.storeroomlogix.com/auth/sign-in
+
+  srx_email_dist: olazeba+qa+customer@agilevision.io
+  srx_password_dist: '*Zapel1706'
+
+  srx_email_customer: olazeba+test+oleg@agilevision.io
+  srx_password_customer: '*Zapel_1706'
+
+  srx_auth: eyJraWQiOiJSNWRzY2xsNEZVRWpvUSs4K05CZDRleVZhOVErVjBnTDlQSjhLbURMKys0PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI5NzdmMDRhMC1lNWY3LTQ2MzktOGMxYi02ZDJkMTNjMjQ2OTIiLCJjb2duaXRvOmdyb3VwcyI6WyJzcngtYWRtaW5zIl0sImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9kUzlsNjlqVFgiLCJjb2duaXRvOnVzZXJuYW1lIjoib2xhemViYStxYS1hZG1pbiIsImF1ZCI6IjQ5Yzk4dTlybXB2NTVhc3NkdGJlb29jZ3RuIiwiZXZlbnRfaWQiOiI5YTMwMDU5Mi1jZWIwLTQwMTQtOWIyNy01ZjRkNGU2Y2E4ZmMiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTY1NTgyNjM0NiwiZXhwIjoxNjU1ODk5MTgzLCJpYXQiOjE2NTU4OTU1ODMsImVtYWlsIjoib2xhemViYStxYS1hZG1pbkBhZ2lsZXZpc2lvbi5pbyJ9.dCMaDa96Z14LK0ivKHH3HT2AkPZ-mDQqiMB4tlPmaMkuUiBeW66SkAjT-BdJhPIcFXBP81fZkH826QmMRyy6bsF49ilUgumQ9Nvr91iPXrsBQtX-BO-OBiY-PDVaGiFyKMdzqe_26BaZqqWFu9dvvRs9bA_Bcgj0JT4HIngXCR0y04s6beq6yQokVLRvk3cPIbHJS9d-RIJgV7gQ82hdbgVcowIC8iB-mFA1VtROXLaqtaG3Vsm1F2oFRwu0qGSM4pOqedKwOAlqXqxGpgOdPXJJtPQf-E9l3xXiPZgBzTDM8_-Ylufn4QGIFKwETDjVq8F4OhMs1ku2hP7rext0sA
+
+#  srx_email_dist: vzhyhyr+vdqa@agilevision.io
+#  srx_password_dist:  111111
+
+  srx_settings_email_search_product: https://api.qa.integrationlogix.com/external-api/a568e5d3-38d4-4cd1-9aa1-3484afa78a0f/searchProduct/
+
+  #testrail credentials
+  ilx_testrail_email: olazeba@agilevision.io
+  ilx_testrail_password: 2.VyMIhcQu1I85YxR7X1-OotH2UhJ79ExYl8c03f6

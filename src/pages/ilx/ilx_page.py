@@ -1,13 +1,13 @@
 #pylint: disable=C0301
 import time
-from src.pages.ilx_base_page import IlxBase
+from src.pages.main_page import MainBase
 from src.resources.locator_ilx import LocatorIlx
 
 
-class IlxPage(IlxBase):
+class IlxPage(MainBase):
 
     def login_ilx(self):
-        self.open_browser()
+        self.open_browser(self.url_ilx)
         self.is_visible('name', LocatorIlx.ilx_email).send_keys(self.ilx_context.ilx_email)
         self.is_visible('name', LocatorIlx.ilx_password).send_keys(self.ilx_context.ilx_password)
         self.is_visible('class_name', LocatorIlx.button).click()
@@ -19,7 +19,7 @@ class IlxPage(IlxBase):
         self.is_visible('name', LocatorIlx.group_name).send_keys(group)
         self.is_visible('name', LocatorIlx.group_path).send_keys(group)
         self.is_visible('xpath', LocatorIlx.group_create).click()
-        time.sleep (2)
+        time.sleep(2)
 
         return self.get_elements(group)
 
@@ -35,7 +35,7 @@ class IlxPage(IlxBase):
         self.is_visible('xpath', LocatorIlx.input_group_edit).send_keys('-edit')
         self.is_visible('xpath', LocatorIlx.input_path_edit).send_keys('-edit')
         self.is_visible('xpath', LocatorIlx.connect_type).click()
-        self.are_visible ('tag_name', LocatorIlx.tag_name)[-1].click()
+        self.are_visible('tag_name', LocatorIlx.tag_name)[-1].click()
         self.is_present('xpath', LocatorIlx.save_edit_group).click()
         time.sleep(3)
 
@@ -57,8 +57,8 @@ class IlxPage(IlxBase):
         xpath = f'//*[@id="{group_id}"]/span/div/div[2]/button/span[1]'
         self.is_visible('xpath', xpath).click()
         self.is_visible('xpath', LocatorIlx.group_delete).click()
-        self.is_visible ('name', LocatorIlx.confirm).send_keys('Delete')
-        self.is_visible ('xpath', LocatorIlx.button_group_del).click()
+        self.is_visible('name', LocatorIlx.confirm).send_keys('Delete')
+        self.is_visible('xpath', LocatorIlx.button_group_del).click()
         time.sleep(3)
 
         return self.get_elements(group_name)
@@ -66,7 +66,7 @@ class IlxPage(IlxBase):
     def create_integration(self, integration):
         self.are_visible('class_name', LocatorIlx.button)[1].click()
         self.is_visible('xpath', LocatorIlx.int_template).click()
-        self.are_visible ('tag_name', LocatorIlx.tag_name)[-1].click()
+        self.are_visible('tag_name', LocatorIlx.tag_name)[-1].click()
         self.is_visible('name', LocatorIlx.group_name).send_keys(integration)
         self.is_visible('name', LocatorIlx.int_base_path).send_keys(integration)
         self.is_visible('name', LocatorIlx.int_group_path).send_keys(integration)
@@ -87,15 +87,15 @@ class IlxPage(IlxBase):
         # """add api key"""
         self.is_visible('xpath', LocatorIlx.int_description).click()
         self.is_visible('xpath', LocatorIlx.int_auth).click()
-        self.is_visible ('xpath', LocatorIlx.open_chose_key).click()
-        self.are_visible ('tag_name', LocatorIlx.tag_name)[-1].click()
+        self.is_visible('xpath', LocatorIlx.open_chose_key).click()
+        self.are_visible('tag_name', LocatorIlx.tag_name)[-1].click()
 
         try:
-            self.is_visible ('xpath', LocatorIlx.save_api_key).click()
+            self.is_visible('xpath', LocatorIlx.save_api_key).click()
         except:
-            self.is_visible ('xpath', LocatorIlx.open_chose_key).click ()
-            self.are_visible ('tag_name', LocatorIlx.tag_name)[-2].click ()
-            self.is_visible ('xpath', LocatorIlx.save_api_key).click ()
+            self.is_visible('xpath', LocatorIlx.open_chose_key).click()
+            self.are_visible('tag_name', LocatorIlx.tag_name)[-2].click()
+            self.is_visible('xpath', LocatorIlx.save_api_key).click()
             time.sleep(2)
 
         self.is_visible('xpath', LocatorIlx.return_to_int).click()
@@ -191,7 +191,7 @@ class IlxPage(IlxBase):
         return element
 
     def delete_connection(self):
-        self.is_visible ('xpath', LocatorIlx.access).click ()
+        self.is_visible ('xpath', LocatorIlx.access).click()
         self.is_visible ('xpath', LocatorIlx.connection).click()
         self.is_visible ('xpath', LocatorIlx.connect_chose).click()
 
